@@ -1,11 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {
-  registerCustomer,
-  getCustomerInfo,
-} = require("../controllers/userController");
+const { getCustomerInfo } = require("../controllers/userController");
+const { authMiddleware } = require("../middleware/authMiddleware");
 
-router.post("/register", registerCustomer);
-router.get("/:id", getCustomerInfo);
+router.get("/me", authMiddleware, getCustomerInfo);
 
 module.exports = router;

@@ -111,20 +111,108 @@ exports.addTravelOption = (req, res) => {
 
 exports.updateTravelOption = (req, res) => {
   const { id } = req.params;
-  const { price, seats } = req.body;
+  const {
+    type,
+    source,
+    destination,
+    date,
+    departureTime,
+    arrivalTime,
+    reachTime,
+    basePrice,
+    seats,
+  } = req.body;
+
   const travel = travelOptions.find((t) => t.id === parseInt(id));
 
-  if (!travel)
+  if (!travel) {
     return res
       .status(404)
       .json({ success: false, message: "Travel option not found" });
+  }
 
-  if (price) travel.price = price;
-  if (seats) travel.availableSeats = seats;
+  // Validate data types before updating
+  if (type && typeof type !== "string")
+    return res.status(400).json({ success: false, message: "Invalid type" });
+  if (source && typeof source !== "string")
+    return res.status(400).json({ success: false, message: "Invalid source" });
+  if (destination && typeof destination !== "string")
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid destination" });
+  if (basePrice && (typeof basePrice !== "number" || basePrice <= 0)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid base price" });
+  }
+  if (seats && !Array.isArray(seats))
+    return res
+      .status(400)
+      .json({ success: false, message: "Seats should be an array" });
 
-  res
-    .status(200)
-    .json({ success: true, message: "Travel option updated", travel });
+  try {
+    // Convert date fields to Date objects
+    if (date) {
+      const travelDate = new Date(date);
+      if (isNaN(travelDate)) throw new Error();
+      travel.date = travelDate;
+    }
+
+    if (departureTime || arrivalTime || reachTime) {
+      const depTime = departureTime
+        ? new Date(`${date || travel.date}T${departureTime}`)
+        : travel.departureTime;
+      const arrTime = arrivalTime
+        ? new Date(`${date || travel.date}T${arrivalTime}`)
+        : travel.arrivalTime;
+      const rechTime = reachTime
+        ? new Date(`${date || travel.date}T${reachTime}`)
+        : travel.reachTime;
+
+      if (isNaN(depTime) || isNaN(arrTime) || isNaN(rechTime))
+        throw new Error();
+      if (depTime >= arrTime || arrTime >= rechTime) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid travel timings" });
+      }
+
+      travel.departureTime = depTime;
+      travel.arrivalTime = arrTime;
+      travel.reachTime = rechTime;
+    }
+
+    // Validate and update seats
+    if (seats) {
+      for (let seat of seats) {
+        if (
+          typeof seat.seatNumber !== "string" ||
+          typeof seat.price !== "number" ||
+          seat.price < (basePrice || travel.basePrice)
+        ) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid seat data" });
+        }
+      }
+      travel.seats = seats;
+      travel.availableSeats = seats.length;
+    }
+
+    // Update other fields
+    if (type) travel.type = type;
+    if (source) travel.source = source;
+    if (destination) travel.destination = destination;
+    if (basePrice) travel.basePrice = basePrice;
+
+    res
+      .status(200)
+      .json({ success: true, message: "Travel option updated", travel });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid date or time format" });
+  }
 };
 
 exports.removeTravelOption = (req, res) => {

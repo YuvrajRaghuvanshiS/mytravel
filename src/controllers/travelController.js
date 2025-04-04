@@ -256,3 +256,32 @@ exports.getAgencyTravelOptions = (req, res) => {
 
   res.status(200).json({ success: true, travelOptions: agencyTravels });
 };
+
+exports.getPublicAgencyTravelOptions = (req, res) => {
+  let {
+    date,
+    source,
+    destination,
+    type,
+    minPrice,
+    maxPrice,
+    availableOnly,
+    sortBy,
+  } = req.query;
+
+  let agencyId = null;
+
+  let agencyTravels = travelOptionsFilter(
+    agencyId,
+    date,
+    source,
+    destination,
+    type,
+    minPrice,
+    maxPrice,
+    availableOnly,
+    sortBy
+  );
+
+  res.status(200).json({ success: true, travelOptions: agencyTravels });
+};

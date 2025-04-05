@@ -1,3 +1,3 @@
-const users = {}; // In memory database
-
-module.exports = { users };
+// In memory database
+export const users = {};
+export let travelOptions = [];

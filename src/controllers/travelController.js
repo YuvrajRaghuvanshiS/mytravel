@@ -1,7 +1,11 @@
-require("dotenv").config();
-const axios = require("axios");
+import dotenv from "dotenv";
+dotenv.config({ path: "./.env" });
 
-exports.getTravelOptions = async (req, res) => {
+import axios from "axios";
+
+import { travelOptions } from "../db.js";
+
+export const getTravelOptions = async (req, res) => {
   try {
     const {
       date,
@@ -15,9 +19,6 @@ exports.getTravelOptions = async (req, res) => {
     } = req.query;
 
     // Call the Travel Agency Backend
-    console.log(
-      `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/public-list`
-    );
     const response = await axios.get(
       `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/public-list`,
       {
@@ -33,7 +34,8 @@ exports.getTravelOptions = async (req, res) => {
         },
       }
     );
-
+    travelOptions.length = 0; // Clear existing entries
+    travelOptions.push(...response.data["travelOptions"]); // Append new data
     res.status(200).json(response.data);
   } catch (error) {
     console.error("Error fetching travel options:", error.message);

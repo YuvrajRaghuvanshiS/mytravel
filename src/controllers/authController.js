@@ -1,8 +1,8 @@
-const bcrypt = require("bcryptjs");
-const { signToken } = require("../utils/jwt");
-const { users } = require("../db");
+import bcrypt from "bcryptjs";
+import { signToken } from "../utils/jwt.js";
+import { users } from "../db.js";
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   const { id, name, email, phone, password } = req.body;
   if (!id || !name || !email || !phone || !password)
     return res.status(400).json({ success: false, message: "Missing fields" });
@@ -19,7 +19,7 @@ exports.register = async (req, res) => {
   res.status(201).json({ success: true, token });
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { id, password } = req.body;
   const user = users[id];
 

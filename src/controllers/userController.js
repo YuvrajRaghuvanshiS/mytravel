@@ -1,6 +1,6 @@
-const { users } = require("../db");
+import { users } from "../db.js";
 
-exports.getCustomerInfo = (req, res) => {
+export const getCustomerInfo = (req, res) => {
   const userId = req.user.id;
   console.log("User ID:", userId);
   console.log(users);

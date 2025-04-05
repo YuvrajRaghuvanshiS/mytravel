@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend for customers (MyTravel.com)",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "start": "node src/server.js"
   },
@@ -13,6 +14,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.18.2",
     "fabric-network": "^2.2.20",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "uuid": "^11.1.0"
   }
 }

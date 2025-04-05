@@ -1,6 +1,6 @@
-const { Gateway, Wallets } = require("fabric-network");
-const fs = require("fs");
-const path = require("path");
+import { Gateway, Wallets } from "fabric-network";
+import fs from "fs";
+import path from "path";
 
 const ccpPath = process.env.CONNECTION_PROFILE_PATH;
 const walletPath = process.env.WALLET_PATH;
@@ -19,12 +19,12 @@ async function getContract() {
   return network.getContract(process.env.CHAINCODE_NAME);
 }
 
-exports.registerCustomer = async (name) => {
+export const registerCustomer = async (name) => {
   const contract = await getContract();
   return await contract.submitTransaction("RegisterCustomer", name);
 };
 
-exports.getCustomerProfile = async (customerId) => {
+export const getCustomerProfile = async (customerId) => {
   const contract = await getContract();
   const result = await contract.evaluateTransaction(
     "GetCustomerProfile",

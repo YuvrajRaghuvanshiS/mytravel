@@ -5,6 +5,7 @@ const {
   removeTravelOption,
   getAgencyTravelOptions,
   getPublicAgencyTravelOptions,
+  receiveBooking,
 } = require("../controllers/travelController");
 const { authMiddleware } = require("../middleware/authMiddleware");
 
@@ -16,5 +17,7 @@ router.delete("/remove/:id", authMiddleware, removeTravelOption);
 router.get("/list", authMiddleware, getAgencyTravelOptions);
 
 router.get("/public-list", getPublicAgencyTravelOptions);
+
+router.post("/receive-booking", receiveBooking);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { travelOptions } = require("../db");
+const { agencies, travelOptions, bookings } = require("../db");
 const { travelOptionsFilter } = require("../utils/listings");
 
 exports.addTravelOption = (req, res) => {
@@ -284,4 +284,80 @@ exports.getPublicAgencyTravelOptions = (req, res) => {
   );
 
   res.status(200).json({ success: true, travelOptions: agencyTravels });
+};
+
+exports.receiveBooking = async (req, res) => {
+  const {
+    bookingID,
+    userID,
+    travelID,
+    seatNumbers,
+    totalPrice,
+    transactionID,
+    status,
+    createdAt,
+  } = req.body;
+
+  // Validate input
+  if (
+    !bookingID ||
+    !travelID ||
+    !seatNumbers ||
+    !totalPrice ||
+    !transactionID ||
+    !userID ||
+    !status ||
+    !createdAt
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid booking data" });
+  }
+
+  try {
+    // Fetch travel option
+    const travelOption = travelOptions.find((option) => option.id === travelID);
+    if (!travelOption) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Travel option not found" });
+    }
+
+    // Update seats availability
+    seatNumbers.forEach((seatNum) => {
+      const seat = travelOption.seats.find((s) => s.seatNumber === seatNum);
+      seat.booked = true;
+      seat.passenger = userID;
+    });
+
+    // Credit agency wallet
+    const agency = agencies[travelOption.agencyId];
+    if (agency) {
+      agency.balance += totalPrice;
+    }
+
+    // Save booking record
+    const booking = {
+      bookingID,
+      travelID,
+      seatNumbers,
+      totalPrice,
+      transactionID,
+      userID,
+      status,
+      createdAt,
+    };
+    bookings.push(booking);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Booking recorded", booking });
+  } catch (error) {
+    console.error("Error recording booking:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to record booking",
+      error: error.message,
+    });
+  }
 };

@@ -84,4 +84,6 @@ const travelOptions = [
   },
 ]; // Stores travel options added by agencies
 
-module.exports = { agencies, travelOptions };
+const bookings = []; // Stores bookings made by users
+
+module.exports = { agencies, travelOptions, bookings };

@@ -161,7 +161,6 @@ data:
     HBAi0bmArVbMOxLUBT/W42ycXzfFJ9c0UAEZecDu8jxgBfEGWcbeWWMX
     -----END PRIVATE KEY-----
 
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -179,9 +178,9 @@ spec:
     spec:
       containers:
         - name: main
-          image: ghcr.io/hyperledger/fabric-rest-sample
-          imagePullPolicy: IfNotPresent 
-          env: 
+          image: customer-backend-typescript:latest
+          imagePullPolicy: IfNotPresent
+          env:
             - name: LOG_LEVEL
               value: debug
             - name: HFC_LOGGING
@@ -207,11 +206,11 @@ spec:
             - name: AS_LOCAL_HOST
               value: "false"
             - name: HLF_CHAINCODE_NAME
-              value: "asset-transfer-basic"
-#            - name: REDIS_USERNAME
-#              value: redisuser
-#            - name: REDIS_PASSWORD
-#              value: redispasword
+              value: "chaincode"
+          #            - name: REDIS_USERNAME
+          #              value: redisuser
+          #            - name: REDIS_PASSWORD
+          #              value: redispasword
 
           envFrom:
             - configMapRef:
@@ -258,4 +257,3 @@ spec:
                   name: http
             path: /
             pathType: ImplementationSpecific
-

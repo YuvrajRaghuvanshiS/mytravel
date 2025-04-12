@@ -63,9 +63,26 @@ function rollout_rest_sample() {
   pop_fn
 }
 
+function prepare_rest_interface() {
+    push_fn "Preparing the typescript REST interface"
+    
+    # Remove the existing Docker image if it exists.
+    docker rmi network-test-interface:latest || true
+
+    # Build the Docker image for the customer backend service.
+    docker build -t network-test-interface network-rest-interface
+
+    # Load the image into kind.
+    kind load docker-image network-test-interface:latest
+
+    pop_fn
+}
+
 function launch_rest_sample() {
   local ns=$ORG1_NS
   construct_rest_sample_configmap
+
+  prepare_rest_interface
 
   apply_template kube/fabric-rest-sample.yaml $ns
 

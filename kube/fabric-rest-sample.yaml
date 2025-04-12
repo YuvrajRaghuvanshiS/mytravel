@@ -178,7 +178,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: customer-backend-typescript:latest
+          image: network-test-interface:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: LOG_LEVEL

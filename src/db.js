@@ -6,6 +6,7 @@ export const users = {
     email: "yuvrajpr24@iitk.ac.in",
     phone: "8126744708",
     password: "$2b$10$I4Adw6Rw1xexMNMCcyv5V.j/Na.zYSFjw7vGeq.rOhaxpTJDC.mAa",
+    balance: 1000,
     isAnonymous: true,
   },
 };

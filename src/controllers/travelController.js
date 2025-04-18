@@ -167,3 +167,19 @@ export const createBooking = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+export const getUserBookings = (req, res) => {
+  const userId = req.user.id;
+  const user = users[userId];
+
+  if (!user)
+    return res.status(404).json({ success: false, message: "User not found" });
+
+  const userBookings = bookings.filter((b) => b.userID === userId);
+
+  res.status(200).json({
+    success: true,
+    message: `Found ${userBookings.length} booking(s)`,
+    data: userBookings,
+  });
+};

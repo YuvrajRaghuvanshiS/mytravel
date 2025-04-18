@@ -32,10 +32,10 @@ export class BookingContract extends Contract {
       booking.status = status;
       booking.createdAt = createdAt;
     
-      const exists = await this.BookingExists(ctx, booking.bookingID);
-      if (exists) {
-        throw new Error(`Booking ${booking.bookingID} already exists`);
-      }
+      // const exists = await this.BookingExists(ctx, booking.bookingID);
+      // if (exists) {
+      //   throw new Error(`Booking ${booking.bookingID} already exists`);
+      // }
     
       await ctx.stub.putState(
         booking.bookingID,

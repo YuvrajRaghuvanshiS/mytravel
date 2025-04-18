@@ -1,0 +1,136 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  color: white;
+  background-color: #000;
+}
+
+/* Navbar Styling */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #f39c12;
+}
+
+/* Hero Section */
+.hero-container {
+  position: relative;
+  background-image: url('../images/travel.jpg');  /* Add your image here */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);  /* Black overlay with 50% transparency */
+  z-index: 1;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;  /* To make sure text stays above the overlay */
+}
+
+.hero-text h1 {
+  font-size: 55px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.hero-text p {
+  font-size: 20px;
+  margin-bottom: 30px;
+  color: #ddd;
+}
+
+/* Hero Buttons */
+.hero-buttons button {
+  padding: 12px 30px;
+  margin: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #e67e22;
+  color: white;
+  transition: 0.3s;
+}
+
+.hero-buttons button:hover {
+  background-color: #d35400;
+  transform: scale(1.05);
+}
+
+/* Bottom Trusted Section */
+.bottom-section {
+  padding: 60px 20px;
+  background-color: #f8f8f8;
+  text-align: center;
+  color: #333;
+}
+
+.bottom-section h2 {
+  font-weight: 400;
+  font-size: 24px;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  nav {
+    padding: 15px 25px;
+  }
+
+  .hero-text h1 {
+    font-size: 35px;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+
+  .hero-buttons button {
+    width: 80%;
+  }
+
+  .bottom-section h2 {
+    font-size: 18px;
+  }
+}

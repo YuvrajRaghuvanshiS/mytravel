@@ -1,0 +1,199 @@
+/* Base Styles */
+.user-home {
+  font-family: 'Arial', sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar - Updated with more professional styling */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background-color: #004080; /* Dark blue similar to Skyscanner */
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-links button {
+  margin-left: 15px;
+  padding: 10px 20px;
+  background-color: transparent; /* Transparent buttons */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.nav-links button.active {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.nav-links button:hover {
+  background-color: #3498db;
+  transform: translateY(-2px);
+}
+
+/* Hero Section - Improved contrast and organization */
+.hero-section_flight {
+  background-image: url('../images/flight.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly lighter overlay */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.hero-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* Text Box for Better Visibility */
+.hero-content .text-box {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(3px);
+}
+
+.hero-content h1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Search Box - Improved with clear labels and organization */
+.search-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Input Groups with Labels */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 200px;
+}
+
+.input-group label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Search Button */
+.search-box button {
+  padding: 12px 30px;
+  background-color: #3498db; /* Consistent blue like Skyscanner */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
+  letter-spacing: 0.5px;
+  margin-top: 24px; /* Align with inputs with labels */
+  align-self: flex-end;
+}
+
+.search-box button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Added Option Checkboxes (inspired by Skyscanner) */
+.search-options {
+  display: flex;
+  margin-top: 15px;
+  gap: 20px;
+}
+
+.option-checkbox {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 14px;
+}
+
+.option-checkbox input {
+  margin-right: 5px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 36px;
+  }
+  
+  .input-group {
+    width: 100%;
+  }
+  
+  .search-box button {
+    width: 100%;
+  }
+}

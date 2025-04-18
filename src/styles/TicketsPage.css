@@ -1,0 +1,197 @@
+/* TicketsPage.css */
+
+.tickets-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f2f5f9;
+  min-height: 100vh;
+}
+
+.tickets-header {
+  background-color: #0b5ed7;
+  color: white;
+  padding: 20px 50px;
+  text-align: center;
+}
+
+.tickets-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.search-summary {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #d9e6f2;
+}
+
+.tickets-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+/* Left Filters Sidebar */
+.filters-section {
+  flex: 1;
+  max-width: 250px;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  height: fit-content;
+}
+
+.filters-section h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #333;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  color: #444;
+}
+
+.filter-group input, .filter-group select {
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* Ticket List Section */
+.tickets-list {
+  flex: 3;
+}
+
+.tickets-count {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.ticket-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.route h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #0b5ed7;
+}
+
+.route span {
+  font-size: 14px;
+  color: #666;
+}
+
+.times {
+  display: flex;
+  gap: 40px;
+  margin-top: 10px;
+}
+
+.time {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.small {
+  font-size: 13px;
+  color: #888;
+  text-align: center;
+}
+
+.ticket-price {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.ticket-price h3 {
+  margin: 0;
+  color: #0b5ed7;
+  font-size: 24px;
+}
+
+.book-button {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.book-button:hover {
+  background-color: #218838;
+}
+
+.unavailable-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #dc3545;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Loading / Empty Tickets */
+.loading, .no-tickets {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  font-size: 18px;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tickets-container {
+    flex-direction: column;
+  }
+
+  .filters-section {
+    max-width: 100%;
+  }
+
+  .ticket-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .times {
+    gap: 20px;
+  }
+
+  .ticket-price {
+    width: 100%;
+    text-align: left;
+  }
+}

@@ -1,6 +1,6 @@
-const { travelOptions } = require("../db");
+import { travelOptions } from "../db.js";
 
-const travelOptionsFilter = (
+export const travelOptionsFilter = (
   agencyId,
   date,
   source,
@@ -74,8 +74,4 @@ const travelOptionsFilter = (
     }
   }
   return agencyTravels;
-};
-
-module.exports = {
-  travelOptionsFilter,
 };

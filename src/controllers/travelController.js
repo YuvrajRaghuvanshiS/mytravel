@@ -1,7 +1,7 @@
-const { agencies, travelOptions, bookings } = require("../db");
-const { travelOptionsFilter } = require("../utils/listings");
+import { agencies, travelOptions, bookings } from "../db.js";
+import { travelOptionsFilter } from "../utils/listings.js";
 
-exports.addTravelOption = (req, res) => {
+export const addTravelOption = (req, res) => {
   const agencyId = req.user.id; // Extract agency ID from JWT
   const {
     type,
@@ -110,7 +110,7 @@ exports.addTravelOption = (req, res) => {
   }
 };
 
-exports.updateTravelOption = (req, res) => {
+export const updateTravelOption = (req, res) => {
   const { id } = req.params;
   const {
     type,
@@ -216,7 +216,7 @@ exports.updateTravelOption = (req, res) => {
   }
 };
 
-exports.removeTravelOption = (req, res) => {
+export const removeTravelOption = (req, res) => {
   const { id } = req.params;
   const index = travelOptions.findIndex((t) => t.id === parseInt(id));
 
@@ -229,7 +229,7 @@ exports.removeTravelOption = (req, res) => {
   res.status(200).json({ success: true, message: "Travel option removed" });
 };
 
-exports.getAgencyTravelOptions = (req, res) => {
+export const getAgencyTravelOptions = (req, res) => {
   const agencyId = req.user.id; // Extract agency ID from JWT
   let {
     date,
@@ -257,7 +257,7 @@ exports.getAgencyTravelOptions = (req, res) => {
   res.status(200).json({ success: true, travelOptions: agencyTravels });
 };
 
-exports.getPublicAgencyTravelOptions = (req, res) => {
+export const getPublicAgencyTravelOptions = (req, res) => {
   let {
     date,
     source,
@@ -286,7 +286,7 @@ exports.getPublicAgencyTravelOptions = (req, res) => {
   res.status(200).json({ success: true, travelOptions: agencyTravels });
 };
 
-exports.receiveBooking = async (req, res) => {
+export const receiveBooking = async (req, res) => {
   const {
     bookingID,
     userID,

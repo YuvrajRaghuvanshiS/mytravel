@@ -1,13 +1,13 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getAgencyInfo,
   updateAgencyProfile,
-} = require("../controllers/agencyController.js");
-const { authMiddleware } = require("../middleware/authMiddleware.js");
+} from "../controllers/agencyController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/me", authMiddleware, getAgencyInfo);
 router.put("/update-profile", authMiddleware, updateAgencyProfile);
 
-module.exports = router;
+export default router;

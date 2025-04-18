@@ -1,13 +1,13 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   addTravelOption,
   updateTravelOption,
   removeTravelOption,
   getAgencyTravelOptions,
   getPublicAgencyTravelOptions,
   receiveBooking,
-} = require("../controllers/travelController");
-const { authMiddleware } = require("../middleware/authMiddleware");
+} from "../controllers/travelController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -20,4 +20,4 @@ router.get("/public-list", getPublicAgencyTravelOptions);
 
 router.post("/receive-booking", receiveBooking);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,12 @@
 {
+  "name": "travel-agency-backend",
+  "version": "1.0.0",
+  "description": "Backend for travel agency (MyTravel.com)",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",

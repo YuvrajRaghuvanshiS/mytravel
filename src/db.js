@@ -1,4 +1,4 @@
-const agencies = {
+export const agencies = {
   yrs: {
     id: "yrs",
     name: "Yuvraj",
@@ -15,7 +15,7 @@ const agencies = {
   },
 }; // Stores registered travel agencies
 
-const travelOptions = [
+export let travelOptions = [
   {
     id: 1,
     agencyId: "sbasia",
@@ -84,6 +84,4 @@ const travelOptions = [
   },
 ]; // Stores travel options added by agencies
 
-const bookings = []; // Stores bookings made by users
-
-module.exports = { agencies, travelOptions, bookings };
+export const bookings = []; // Stores bookings made by users

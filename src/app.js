@@ -1,10 +1,10 @@
-const express = require("express");
-const dotenv = require("dotenv");
-dotenv.config();
+import dotenv from "dotenv";
+dotenv.config({ path: "./.env" });
 
-const authRoutes = require("./routes/authRoutes");
-const travelRoutes = require("./routes/travelRoutes");
-const agencyRoutes = require("./routes/agencyRoutes");
+import express from "express";
+import authRoutes from "./routes/authRoutes.js";
+import travelRoutes from "./routes/travelRoutes.js";
+import agencyRoutes from "./routes/agencyRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -13,4 +13,4 @@ app.use("/api/auth", authRoutes);
 app.use("/api/travel", travelRoutes);
 app.use("/api/agencies", agencyRoutes);
 
-module.exports = app;
+export default app;

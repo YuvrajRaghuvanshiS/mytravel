@@ -19,6 +19,7 @@ export const register = async (req, res) => {
     email,
     phone,
     password: hashedPassword,
+    balance: 0,
     isAnonymous: true,
   };
 

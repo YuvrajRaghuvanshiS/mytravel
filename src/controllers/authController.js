@@ -13,7 +13,14 @@ export const register = async (req, res) => {
       .json({ success: false, message: "User already exists" });
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  users[id] = { id, name, email, phone, password: hashedPassword };
+  users[id] = {
+    id,
+    name,
+    email,
+    phone,
+    password: hashedPassword,
+    isAnonymous: true,
+  };
 
   const token = signToken({ id, role: "customer" });
   res.status(201).json({ success: true, token });

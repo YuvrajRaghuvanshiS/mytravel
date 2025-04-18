@@ -361,3 +361,86 @@ export const receiveBooking = async (req, res) => {
     });
   }
 };
+
+export const receiveBookingUpdate = async (req, res) => {
+  const {
+    bookingID,
+    travelID,
+    seatNumbers,
+    totalPrice,
+    updatedAt,
+    userID, // Optional: include if available
+  } = req.body;
+
+  if (!bookingID || !travelID || !seatNumbers || !totalPrice || !updatedAt) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid booking update data" });
+  }
+
+  try {
+    // Find existing booking
+    const booking = bookings.find((b) => b.bookingID === bookingID);
+    if (!booking) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Original booking not found" });
+    }
+
+    const oldTravel = travelOptions.find((t) => t.id === booking.travelID);
+    const newTravel = travelOptions.find((t) => t.id === travelID);
+
+    if (!oldTravel || !newTravel) {
+      return res.status(404).json({
+        success: false,
+        message: "Old or new travel option not found",
+      });
+    }
+
+    // Free old seats
+    booking.seatNumbers.forEach((seatNum) => {
+      const seat = oldTravel.seats.find((s) => s.seatNumber === seatNum);
+      if (seat) {
+        seat.booked = false;
+        seat.passenger = null;
+        oldTravel.availableSeats++;
+      }
+    });
+
+    // Book new seats
+    seatNumbers.forEach((seatNum) => {
+      const seat = newTravel.seats.find((s) => s.seatNumber === seatNum);
+      if (seat) {
+        seat.booked = true;
+        seat.passenger = booking.userID; // use old userID
+        newTravel.availableSeats--;
+      }
+    });
+
+    // Adjust agency balance
+    const agency = agencies[newTravel.agencyId];
+    if (agency) {
+      const diff = totalPrice - booking.totalPrice;
+      agency.balance += diff;
+    }
+
+    // Update booking fields
+    booking.travelID = travelID;
+    booking.seatNumbers = seatNumbers;
+    booking.totalPrice = totalPrice;
+    booking.updatedAt = updatedAt;
+
+    res.status(200).json({
+      success: true,
+      message: "Booking updated successfully",
+      booking,
+    });
+  } catch (err) {
+    console.error("Error updating booking:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update booking",
+      error: err.message,
+    });
+  }
+};

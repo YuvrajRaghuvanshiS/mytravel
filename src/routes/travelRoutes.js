@@ -6,6 +6,7 @@ import {
   getAgencyTravelOptions,
   getPublicAgencyTravelOptions,
   receiveBooking,
+  receiveBookingUpdate,
 } from "../controllers/travelController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -19,5 +20,6 @@ router.get("/list", authMiddleware, getAgencyTravelOptions);
 router.get("/public-list", getPublicAgencyTravelOptions);
 
 router.post("/receive-booking", receiveBooking);
+router.post("/receive-booking-update", receiveBookingUpdate);
 
 export default router;

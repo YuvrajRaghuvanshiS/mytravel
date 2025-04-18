@@ -183,3 +183,152 @@ export const getUserBookings = (req, res) => {
     data: userBookings,
   });
 };
+
+export const updateBooking = async (req, res) => {
+  const userID = req.user.id;
+  const { bookingID, newTravelID, newSeatNumbers } = req.body;
+
+  const booking = bookings.find(
+    (b) => b.bookingID === bookingID && b.userID === userID
+  );
+  if (!booking) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Booking not found" });
+  }
+
+  const oldTravel = travelOptions.find((t) => t.id === booking.travelID);
+  const newTravel = travelOptions.find((t) => t.id === newTravelID);
+  if (!oldTravel || !newTravel) {
+    return res.status(404).json({
+      success: false,
+      message: "Old or new travel option not found",
+    });
+  }
+
+  // Basic compatibility checks
+  const isSameAgency = oldTravel.agencyId === newTravel.agencyId;
+  const isSameRoute =
+    oldTravel.source === newTravel.source &&
+    oldTravel.destination === newTravel.destination &&
+    oldTravel.type === newTravel.type;
+
+  if (!isSameAgency || !isSameRoute) {
+    return res.status(400).json({
+      success: false,
+      message: "New travel option does not match agency or route",
+    });
+  }
+
+  // Validate seat numbers
+  const unavailableSeats = [];
+  const selectedSeats = [];
+
+  newSeatNumbers.forEach((seatNum) => {
+    const seat = newTravel.seats.find((s) => s.seatNumber === seatNum);
+    if (!seat || seat.booked) {
+      unavailableSeats.push(seatNum);
+    } else {
+      selectedSeats.push(seat); // valid and available
+    }
+  });
+
+  if (unavailableSeats.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message: `Seats ${unavailableSeats.join(
+        ", "
+      )} are unavailable or invalid`,
+    });
+  }
+
+  // Penalty logic: Rs. 20 penalty if changed date within 24 hours of travel
+  const now = new Date();
+  const travelDate = new Date(oldTravel.date);
+  const hoursLeft = (travelDate - now) / (1000 * 60 * 60);
+  let penalty = 0;
+  if (hoursLeft < 24) {
+    penalty = 20;
+  }
+
+  const newTotalPrice =
+    selectedSeats.reduce((sum, s) => sum + s.price, 0) + penalty;
+  const diffAmount = newTotalPrice - booking.totalPrice;
+
+  if (users[userID].balance < diffAmount) {
+    return res.status(400).json({
+      success: false,
+      message: `Insufficient balance to pay difference & penalty`,
+    });
+  }
+
+  // Free old seats
+  oldTravel.seats.forEach((seat) => {
+    if (booking.seatNumbers.includes(seat.seatNumber)) {
+      seat.booked = false;
+      seat.passenger = null;
+      oldTravel.availableSeats++;
+    }
+  });
+
+  // Book new seats
+  selectedSeats.forEach((seat) => {
+    seat.booked = true;
+    seat.passenger = userID;
+    newTravel.availableSeats--;
+  });
+
+  // Update balance
+  users[userID].balance -= diffAmount;
+
+  // Generate transaction IDs
+  const newTransactionID = `txn_${Date.now()}_${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
+
+  // Update booking
+  booking.travelID = newTravelID;
+  booking.seatNumbers = newSeatNumbers;
+  booking.totalPrice = newTotalPrice;
+  booking.updatedAt = new Date().toISOString();
+
+  try {
+    // Notify agency backend
+    await axios.post(
+      `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/receive-booking-update`,
+      booking
+    );
+
+    // Update booking on blockchain
+    const hyperledgerResp = await axios.post(
+      `${process.env.HYPPERLEDGER_REST_BASE_URL}/api/bookings`,
+      {
+        bookingID,
+        userID,
+        travelID: newTravelID,
+        seatNumbers: newSeatNumbers,
+        totalPrice: newTotalPrice,
+        transactionID: newTransactionID,
+        status: "confirmed",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        headers: {
+          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+        },
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: `Booking updated. Penalty applied: Rs. ${penalty}`,
+      booking,
+      hyperledger_response: hyperledgerResp.data,
+    });
+  } catch (err) {
+    console.error("Update error:", err.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};

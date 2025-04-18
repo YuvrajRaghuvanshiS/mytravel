@@ -5,6 +5,7 @@ export const agencies = {
     email: "yuvrajpr24@iitk.ac.in",
     phone: "8126744709",
     password: "$2b$10$NnacO/LElmHebTtyCDJ8o.bz/U.3R2g7rAqi28Lf9btXixNeLJGyW",
+    balance: 1000,
   },
   sbasia: {
     id: "sbasia",
@@ -12,6 +13,7 @@ export const agencies = {
     email: "bsahil24@iitk.ac.in",
     phone: "8126744709",
     password: "$2b$10$CyuezS77H4tSeR4Y6MaqQex5ogHYraKtnxj5Ez9i1v5Zn4mFQHSNK",
+    balance: 1000,
   },
 }; // Stores registered travel agencies
 

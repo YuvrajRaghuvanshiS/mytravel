@@ -17,6 +17,8 @@ export const getCustomerInfo = (req, res) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      balance: user.balance,
+      isAnonymous: user.isAnonymous,
     },
   });
 };

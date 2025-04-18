@@ -13,7 +13,14 @@ exports.register = async (req, res) => {
       .json({ success: false, message: "Agency already exists" });
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  agencies[id] = { id, name, email, phone, password: hashedPassword };
+  agencies[id] = {
+    id,
+    name,
+    email,
+    phone,
+    password: hashedPassword,
+    balance: 0,
+  };
 
   const token = signToken({ id, role: "agency" });
   res.status(201).json({ success: true, token });

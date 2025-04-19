@@ -332,3 +332,91 @@ export const updateBooking = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const cancelBooking = async (req, res) => {
+  const userID = req.user.id;
+  const { bookingID } = req.body;
+
+  const booking = bookings.find(
+    (b) => b.bookingID === bookingID && b.userID === userID
+  );
+
+  if (!booking) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Booking not found" });
+  }
+
+  const travel = travelOptions.find((t) => t.id === booking.travelID);
+  if (!travel) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Associated travel option not found" });
+  }
+
+  const travelDate = new Date(travel.date);
+  const now = new Date();
+  const hoursLeft = (travelDate - now) / (1000 * 60 * 60);
+
+  let penalty = 0;
+  if (hoursLeft < 24) {
+    penalty = 20; // Rs. 20 penalty for late cancellation
+  }
+
+  const refundAmount = booking.totalPrice - penalty;
+  if (refundAmount > 0) {
+    users[userID].balance += refundAmount;
+  }
+
+  // Free seats
+  travel.seats.forEach((s) => {
+    if (booking.seatNumbers.includes(s.seatNumber)) {
+      s.booked = false;
+      s.passenger = null;
+      travel.availableSeats++;
+    }
+  });
+
+  booking.status = "cancelled";
+  booking.cancelledAt = new Date().toISOString();
+  booking.refundAmount = refundAmount;
+  booking.penalty = penalty;
+
+  try {
+    // Notify travel agency
+    await axios.post(
+      `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/receive-cancel-booking`,
+      {
+        bookingID,
+        userID,
+        travelID: travel.id,
+        seatNumbers: booking.seatNumbers,
+        refundAmount,
+        penalty,
+        cancelledAt: booking.cancelledAt,
+      }
+    );
+
+    // Update on blockchain
+    const hyperledgerResp = await axios.delete(
+      `${process.env.HYPPERLEDGER_REST_BASE_URL}/api/bookings/${bookingID}`,
+      {
+        headers: {
+          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+        },
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: `Booking cancelled. Penalty: ₹${penalty}, Refunded: ₹${refundAmount}`,
+      booking,
+      hyperledger_response: hyperledgerResp.data,
+    });
+  } catch (err) {
+    console.error("Cancellation error:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};

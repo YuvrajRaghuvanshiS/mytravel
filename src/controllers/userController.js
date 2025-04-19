@@ -49,7 +49,7 @@ export const updateCustomerProfile = async (req, res) => {
   if (name) users[userId].name = name;
   if (email) users[userId].email = email;
   if (phone) users[userId].phone = phone;
-  if (typeof isAnonymous !== "boolean") users[userId].isAnonymous = isAnonymous;
+  if (typeof isAnonymous === "boolean") users[userId].isAnonymous = isAnonymous;
 
   return res.status(201).json({
     success: true,

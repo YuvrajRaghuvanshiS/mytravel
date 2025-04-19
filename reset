@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# This magical awk script led to 30 hours of debugging a "TLS handshake error"
+# moral: do not edit / alter the number of '\' in the following transform:
+function one_line_pem {
+    echo "`awk 'NF {sub(/\\n/, ""); printf "%s\\\\\\\n",$0;}' $1`"
+}
+
+# This script is used to reset the Hyperledger Fabric network and deploy the chaincode.
+# It first tears down the network and then brings it up again.
+# It also creates the channel and deploys the chaincode.
+# Usage: ./reset.sh
+
+# Takes about 15 minutes to run
+# rm -rf bin/
+# rm -rf build/
+# rm -rf builders/
+
+./network down
+./network unkind
+
+./network kind
+sleep 5
+./network cluster init
+sleep 5
+
+
+./network up
+sleep 5
+./network channel create
+sleep 5
+
+# ./network application # For creating the connection profiles and wallet identities, but backend didn't want to connect to the network so we didn't use it
+
+./network chaincode deploy chaincode chaincode/
+./network chaincode invoke chaincode '{"Args":["GetAllBookings"]}'
+sleep 5
+
+./network rest-easy # Create REST API from our implementation of fabric-samples/asset-transfer-basic/rest-api-typescript.
+# kubectl -n test-network get configmap fabric-rest-sample-config -o jsonpath='{.data}' > ../customer-backend/configmap.json # To get the configmap
+
+# Test the chaincode by invoking a transaction
+# ./network chaincode invoke chaincode '{"Args":["RecordBooking","book123","user1","trip456","A1,B2","200","txn789","confirmed","2023-05-01T12:00:00Z"]}'
+
+# kubectl -n test-network port-forward svc/org1-ca 8443:443 & # To forward the CA service to localhost:8443
+# kubectl -n test-network port-forward svc/org1-peer1 7051:7051 & # To forward the peer service to localhost:7051 (Fix for that Discovery error)
+# kubectl -n test-network port-forward svc/org1-peer2 7052:7051 & # To forward the peer service to localhost:7052 (Fix for that Discovery error)
+# jobs -l # To see the jobs running in the background
+
+# curl -k https://localhost:8443/cainfo # To get the CA info
+
+# kubectl -n test-network exec org1-peer1-7b87f585db-kj67s -- cat /var/hyperledger/fabric/config/tls/ca.crt # connection-profile -> peers -> org1-peer1 -> tlsCACerts -> pem
+
+
+# kind load docker-image customer-backend-typescript:latest # After creating docker image, pull it inside kind

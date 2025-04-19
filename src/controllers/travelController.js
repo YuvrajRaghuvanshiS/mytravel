@@ -119,6 +119,9 @@ export const createBooking = async (req, res) => {
     const booking = {
       bookingID,
       userID,
+      isUserAnonymous: users[userID].isAnonymous,
+      userName: users[userID].isAnonymous ? "" : users[userID].name,
+      userEmail: users[userID].isAnonymous ? "" : users[userID].email,
       travelID,
       seatNumbers,
       totalPrice,
@@ -141,6 +144,9 @@ export const createBooking = async (req, res) => {
       {
         bookingID,
         userID,
+        isUserAnonymous: users[userID].isAnonymous,
+        userName: users[userID].isAnonymous ? "" : users[userID].name,
+        userEmail: users[userID].isAnonymous ? "" : users[userID].email,
         travelID,
         seatNumbers,
         totalPrice,

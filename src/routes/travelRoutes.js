@@ -7,6 +7,7 @@ import {
   getPublicAgencyTravelOptions,
   receiveBooking,
   receiveBookingUpdate,
+  receiveBookingCancel,
 } from "../controllers/travelController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
@@ -21,5 +22,6 @@ router.get("/public-list", getPublicAgencyTravelOptions);
 
 router.post("/receive-booking", receiveBooking);
 router.post("/receive-booking-update", receiveBookingUpdate);
+router.post("/receive-cancel-booking", receiveBookingCancel);
 
 export default router;

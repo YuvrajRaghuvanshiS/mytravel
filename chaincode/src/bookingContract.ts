@@ -9,39 +9,47 @@ import { Booking } from './booking';
 export class BookingContract extends Contract {
 
 
-    @Transaction()
-    public async RecordBooking(
-      ctx: Context,
-      bookingID: string,
-      userID: string,
-      travelID: string,
-      seatNumbers: string,  // Pass as comma-separated string
-      totalPrice: string,
-      transactionID: string,
-      status: string,
-      createdAt: string
-    ): Promise<void> {
-      const booking = new Booking();
-      console.log('booking:', booking);
-      booking.bookingID = bookingID;
-      booking.userID = userID;
-      booking.travelID = travelID;
-      booking.seatNumbers = seatNumbers;
-      booking.totalPrice = parseFloat(totalPrice);
-      booking.transactionID = transactionID;
-      booking.status = status;
-      booking.createdAt = createdAt;
-    
-      // const exists = await this.BookingExists(ctx, booking.bookingID);
-      // if (exists) {
-      //   throw new Error(`Booking ${booking.bookingID} already exists`);
-      // }
-    
-      await ctx.stub.putState(
-        booking.bookingID,
-        Buffer.from(JSON.stringify(booking))
-      );
-    }
+  @Transaction()
+  public async RecordBooking(
+    ctx: Context,
+    bookingID: string,
+    userID: string,
+    isUserAnonymous: boolean,
+    userName: string,
+    userEmail: string,
+    travelID: string,
+    seatNumbers: string,  // Pass as comma-separated string
+    totalPrice: string,
+    transactionID: string,
+    status: string,
+    createdAt: string
+  ): Promise<void> {
+    const booking = new Booking();
+    booking.bookingID = bookingID;
+    booking.userID = userID;
+    booking.isUserAnonymous = isUserAnonymous;
+    booking.userName = userName;
+    booking.userEmail = userEmail;
+    booking.travelID = travelID;
+    booking.seatNumbers = seatNumbers;
+    booking.totalPrice = parseFloat(totalPrice);
+    booking.transactionID = transactionID;
+    booking.status = status;
+    booking.createdAt = createdAt;
+  
+    console.log('booking:', booking);
+
+    // const exists = await this.BookingExists(ctx, booking.bookingID);
+    // if (exists) {
+    //   throw new Error(`Booking ${booking.bookingID} already exists`);
+    // }
+  
+    await ctx.stub.putState(
+      booking.bookingID,
+      Buffer.from(JSON.stringify(booking))
+    );
+  }
+
   @Transaction(false)
   public async ReadBooking(ctx: Context, bookingID: string): Promise<string> {
     const data = await ctx.stub.getState(bookingID);

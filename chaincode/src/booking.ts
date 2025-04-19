@@ -13,6 +13,15 @@ export class Booking {
   public userID: string = 'First User';
 
   @Property()
+  public isUserAnonymous: boolean = true;
+
+  @Property()
+  public userName: string = 'User name';
+
+  @Property()
+  public userEmail: string = 'user@user.com';
+
+  @Property()
   public travelID: string = 'First Travel';
 
   @Property()

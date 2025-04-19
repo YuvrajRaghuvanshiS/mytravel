@@ -19,7 +19,7 @@
  */
 
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body, validationResult, param } from 'express-validator';
 import { Contract } from 'fabric-network';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { Queue } from 'bullmq';
@@ -108,6 +108,55 @@ bookingsRouter.post(
             logger.error(
                 { err },
                 'Error processing create asset request for asset ID %s',
+                bookingID
+            );
+
+            return res.status(INTERNAL_SERVER_ERROR).json({
+                status: getReasonPhrase(INTERNAL_SERVER_ERROR),
+                timestamp: new Date().toISOString(),
+            });
+        }
+    }
+);
+
+bookingsRouter.delete(
+    '/:bookingID',
+    param('bookingID', 'must be a string').notEmpty(),
+    async (req: Request, res: Response) => {
+        logger.debug(req.body, 'Delete booking request received');
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(BAD_REQUEST).json({
+                status: getReasonPhrase(BAD_REQUEST),
+                reason: 'VALIDATION_ERROR',
+                message: 'Invalid request body',
+                timestamp: new Date().toISOString(),
+                errors: errors.array(),
+            });
+        }
+
+        const mspId = req.user as string;
+        const bookingID = req.params.bookingID;
+
+        try {
+            const submitQueue = req.app.locals.jobq as Queue;
+            const jobId = await addSubmitTransactionJob(
+                submitQueue,
+                mspId,
+                'DeleteBooking',
+                bookingID,
+            );
+
+            return res.status(ACCEPTED).json({
+                status: getReasonPhrase(ACCEPTED),
+                jobId: jobId,
+                timestamp: new Date().toISOString(),
+            });
+        } catch (err) {
+            logger.error(
+                { err },
+                'Error deleting booking %s',
                 bookingID
             );
 

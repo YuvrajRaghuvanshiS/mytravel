@@ -290,6 +290,9 @@ export const receiveBooking = async (req, res) => {
   const {
     bookingID,
     userID,
+    isUserAnonymous,
+    userName,
+    userEmail,
     travelID,
     seatNumbers,
     totalPrice,
@@ -301,11 +304,11 @@ export const receiveBooking = async (req, res) => {
   // Validate input
   if (
     !bookingID ||
+    !userID ||
     !travelID ||
     !seatNumbers ||
     !totalPrice ||
     !transactionID ||
-    !userID ||
     !status ||
     !createdAt
   ) {
@@ -339,11 +342,14 @@ export const receiveBooking = async (req, res) => {
     // Save booking record
     const booking = {
       bookingID,
+      userID,
+      isUserAnonymous,
+      userName,
+      userEmail,
       travelID,
       seatNumbers,
       totalPrice,
       transactionID,
-      userID,
       status,
       createdAt,
     };

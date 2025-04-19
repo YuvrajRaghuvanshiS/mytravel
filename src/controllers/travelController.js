@@ -242,7 +242,7 @@ export const updateBooking = async (req, res) => {
     });
   }
 
-  // Penalty logic: Rs. 20 penalty if changed date within 24 hours of travel
+  // Penalty logic: ₹20 penalty if changed date within 24 hours of travel
   const now = new Date();
   const travelDate = new Date(oldTravel.date);
   const hoursLeft = (travelDate - now) / (1000 * 60 * 60);
@@ -321,7 +321,7 @@ export const updateBooking = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: `Booking updated. Penalty applied: Rs. ${penalty}`,
+      message: `Booking updated. Penalty applied: ₹${penalty}`,
       booking,
       hyperledger_response: hyperledgerResp.data,
     });
@@ -360,7 +360,7 @@ export const cancelBooking = async (req, res) => {
 
   let penalty = 0;
   if (hoursLeft < 24) {
-    penalty = 20; // Rs. 20 penalty for late cancellation
+    penalty = 20; // ₹20 penalty for late cancellation
   }
 
   const refundAmount = booking.totalPrice - penalty;

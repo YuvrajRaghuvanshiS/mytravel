@@ -66,6 +66,20 @@ function chaincode_command_group() {
   fi
 }
 
+function get_next_sequence() {
+  local channel=$1
+  local cc_name=$2
+  
+  export_peer_context org1 peer1
+
+  current_seq=$(peer lifecycle chaincode querycommitted \
+    -C $channel \
+    -n $cc_name \
+    --output json | jq -r '.sequence') || 0
+  
+  echo $((current_seq + 1))
+}
+
 # Convenience routine to "do everything" required to bring up a sample CC.
 function deploy_chaincode() {
   local cc_name=$1
@@ -134,12 +148,13 @@ function publish_chaincode_image() {
 function activate_chaincode() {
   local cc_name=$1
   local cc_package=$2
+  local next_seq_num=$(get_next_sequence ${CHANNEL_NAME} ${cc_name})
 
   set_chaincode_id    ${cc_package}
 
   install_chaincode   ${cc_package}
-  approve_chaincode   ${cc_name} ${CHAINCODE_ID}
-  commit_chaincode    ${cc_name}
+  approve_chaincode   ${cc_name} ${CHAINCODE_ID} ${next_seq_num}
+  commit_chaincode    ${cc_name} ${next_seq_num}
 }
 
 function query_chaincode() {
@@ -346,6 +361,8 @@ function approve_chaincode() {
   local peer=peer1
   local cc_name=$1
   local cc_id=$2
+  local next_seq_num=$3
+
   push_fn "Approving chaincode ${cc_name} with ID ${cc_id}"
 
   export_peer_context $org $peer
@@ -356,7 +373,7 @@ function approve_chaincode() {
     --name          ${cc_name} \
     --version       1 \
     --package-id    ${cc_id} \
-    --sequence      1 \
+    --sequence      ${next_seq_num} \
     --orderer       org0-orderer1.${DOMAIN}:${NGINX_HTTPS_PORT} \
     --connTimeout   ${ORDERER_TIMEOUT} \
     --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderer1/tls/signcerts/tls-cert.pem \
@@ -370,6 +387,8 @@ function commit_chaincode() {
   local org=org1
   local peer=peer1
   local cc_name=$1
+  local next_seq_num=$2
+
   push_fn "Committing chaincode ${cc_name}"
 
   export_peer_context $org $peer
@@ -379,7 +398,7 @@ function commit_chaincode() {
     --channelID     ${CHANNEL_NAME} \
     --name          ${cc_name} \
     --version       1 \
-    --sequence      1 \
+    --sequence      ${next_seq_num} \
     --orderer       org0-orderer1.${DOMAIN}:${NGINX_HTTPS_PORT} \
     --connTimeout   ${ORDERER_TIMEOUT} \
     --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderer1/tls/signcerts/tls-cert.pem \

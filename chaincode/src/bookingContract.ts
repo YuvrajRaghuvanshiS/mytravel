@@ -76,4 +76,13 @@ export class BookingContract extends Contract {
     await iterator.close();
     return JSON.stringify(bookings);
   }  
+
+    @Transaction()
+    public async DeleteBooking(ctx: Context, bookingID: string): Promise<void> {
+        const exists = await this.BookingExists(ctx, bookingID);
+        if (!exists) {
+            throw new Error(`The booking ${bookingID} does not exist`);
+        }
+        return ctx.stub.deleteState(bookingID);
+    }
 }

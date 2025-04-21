@@ -140,7 +140,7 @@ export const createBooking = async (req, res) => {
     );
 
     const hyperledger_resp = await axios.post(
-      `${process.env.HYPPERLEDGER_REST_BASE_URL}/api/bookings`,
+      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings`,
       {
         bookingID,
         userID,
@@ -307,7 +307,7 @@ export const updateBooking = async (req, res) => {
 
     // Update booking on blockchain
     const hyperledgerResp = await axios.post(
-      `${process.env.HYPPERLEDGER_REST_BASE_URL}/api/bookings`,
+      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings`,
       {
         bookingID,
         userID,
@@ -405,7 +405,7 @@ export const cancelBooking = async (req, res) => {
 
     // Update on blockchain
     const hyperledgerResp = await axios.delete(
-      `${process.env.HYPPERLEDGER_REST_BASE_URL}/api/bookings/${bookingID}`,
+      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings/${bookingID}`,
       {
         headers: {
           "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,

@@ -1,5 +1,6 @@
 import { agencies, travelOptions, bookings } from "../db.js";
 import { travelOptionsFilter } from "../utils/listings.js";
+import axios from "axios";
 
 export const addTravelOption = (req, res) => {
   const agencyId = req.user.id; // Extract agency ID from JWT
@@ -519,5 +520,92 @@ export const receiveBookingCancel = async (req, res) => {
       message: "Failed to record cancellation",
       error: err.message,
     });
+  }
+};
+
+export const cancelBooking = async (req, res) => {
+  const agencyID = req.user.id;
+  const { bookingID } = req.body;
+
+  const booking = bookings.find((b) => b.bookingID === bookingID);
+  if (!booking) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Booking not found" });
+  }
+
+  const travel = travelOptions.find((t) => t.id === booking.travelID);
+  if (!travel || travel.agencyId !== agencyID) {
+    return res.status(403).json({
+      success: false,
+      message:
+        "Unauthorized. Travel option not found or does not belong to this agency.",
+    });
+  }
+
+  const travelDate = new Date(travel.date);
+  const now = new Date();
+  const hoursLeft = (travelDate - now) / (1000 * 60 * 60);
+
+  let penalty = 0;
+  if (hoursLeft < 24) {
+    penalty = 20; // ₹20 penalty for late cancellation
+  }
+
+  const refundAmount = booking.totalPrice + penalty;
+  if (refundAmount > 0) {
+    agencies[agencyID].balance -= refundAmount;
+  }
+
+  // Free seats
+  travel.seats.forEach((s) => {
+    if (booking.seatNumbers.includes(s.seatNumber)) {
+      s.booked = false;
+      s.passenger = null;
+      travel.availableSeats++;
+    }
+  });
+
+  booking.status = "cancelled";
+  booking.cancelledAt = new Date().toISOString();
+  booking.refundAmount = refundAmount;
+  booking.penalty = penalty;
+
+  try {
+    // Notify customer backend and update user balance
+    await axios.post(
+      `${process.env.CUSTOMER_BACKEND_URL}/api/travel/receive-cancel-booking`,
+      {
+        bookingID,
+        userID: booking.userID,
+        travelID: travel.id,
+        seatNumbers: booking.seatNumbers,
+        refundAmount,
+        penalty,
+        cancelledAt: booking.cancelledAt,
+      }
+    );
+
+    // Update on blockchain
+    const hyperledgerResp = await axios.delete(
+      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings/${bookingID}`,
+      {
+        headers: {
+          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+        },
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: `Booking cancelled. Penalty: ₹${penalty}, Refunded: ₹${refundAmount}`,
+      booking,
+      hyperledger_response: hyperledgerResp.data,
+    });
+  } catch (err) {
+    console.error("Cancellation error:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };

@@ -426,3 +426,75 @@ export const cancelBooking = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const receiveBookingCancel = async (req, res) => {
+  const {
+    bookingID,
+    userID,
+    travelID,
+    seatNumbers,
+    refundAmount,
+    penalty,
+    cancelledAt,
+  } = req.body;
+
+  if (
+    !bookingID ||
+    !userID ||
+    !travelID ||
+    !seatNumbers ||
+    typeof refundAmount !== "number" ||
+    typeof penalty !== "number" ||
+    !cancelledAt
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid cancellation data" });
+  }
+
+  try {
+    const travel = travelOptions.find((t) => t.id === travelID);
+    if (!travel) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Travel option not found" });
+    }
+
+    const user = users[userID];
+    if (user) {
+      user.balance += refundAmount;
+    }
+
+    // Free seats
+    seatNumbers.forEach((seatNum) => {
+      const seat = travel.seats.find((s) => s.seatNumber === seatNum);
+      if (seat) {
+        seat.booked = false;
+        seat.passenger = null;
+        travel.availableSeats++;
+      }
+    });
+
+    // Update booking record
+    const booking = bookings.find((b) => b.bookingID === bookingID);
+    if (booking) {
+      booking.status = "cancelled";
+      booking.cancelledAt = cancelledAt;
+      booking.refundAmount = refundAmount;
+      booking.penalty = penalty;
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Booking cancellation recorded",
+      booking,
+    });
+  } catch (err) {
+    console.error("Cancellation update error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to record cancellation",
+      error: err.message,
+    });
+  }
+};

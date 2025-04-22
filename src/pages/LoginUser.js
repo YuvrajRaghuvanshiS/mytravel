@@ -1,28 +1,42 @@
+// src/pages/LoginUser.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/login.css";
 
 function LoginUser() {
-  const [email, setEmail] = useState("");
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");  
+  const [userType, setUserType] = useState(""); // 'user' or 'agency'
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("Logging in as:", userType);
-    console.log("Email:", email, "Password:", password);
+    if (!userType) {
+      alert("Please select login type.");
+      return;
+    }
 
-    // Authentication logic for admin credentials
-    if (userType === "user") {
-      if (email === "admin" && password === "pass") {
-        navigate("/flights"); // Redirect to FlightPage page
+    const loginURL =
+      userType === "user"
+        ? "http://localhost:3001/api/auth/login"
+        : "http://localhost:3002/api/auth/login";
+
+    try {
+      const response = await axios.post(loginURL, { id, password });
+
+      if (response.data.success) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("loggedInUser", JSON.stringify({ id, role: userType }));
+
+        alert("Login successful!");
+        navigate(userType === "user" ? "/flights" : "/agency-dashboard");
       } else {
-        alert("Invalid credentials! Please try again.");
+        alert("Login failed. Please check your credentials.");
       }
-    } else {
-      alert("Please select 'Login as User' to proceed.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Something went wrong.");
     }
   };
 
@@ -43,12 +57,12 @@ function LoginUser() {
 
             <form onSubmit={handleLogin}>
               <div className="form-group">
-                <label>Username (Email)</label>
+                <label>Username (ID)</label>
                 <input
                   type="text"
-                  value={email}
-                  placeholder="Enter your username"
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={id}
+                  placeholder="Enter your ID"
+                  onChange={(e) => setId(e.target.value)}
                   required
                 />
               </div>

@@ -1,113 +1,150 @@
 .user-home {
-    font-family: 'Arial', sans-serif;
-    color: white;
-  }
-  
-  /* Navbar */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 50px;
-    background-color: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    width: 100%;
-    z-index: 10;
-  }
-  
-  .logo {
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .nav-links button {
-    margin-left: 20px;
-    padding: 10px 20px;
-    background-color: #3498db;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .nav-links button:hover {
-    background-color: #2c80b4;
-  }
-  
-  /* Hero Section */
-  .hero-section_train {
-    background-image: url('../images/train.jpg'); /* Add your image */
-    background-size: cover;
-    background-position: center;
-    min-height: 100vh;
-    position: relative;
-  }
-  
-  .overlay {
-    background-color: rgba(0, 0, 0, 0.6);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-  }
-  
-  .hero-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 0 20px;
-  }
-  
-  .hero-content h1 {
-    font-size: 50px;
-    margin-bottom: 20px;
-  }
-  
-  .hero-content p {
-    font-size: 20px;
-    margin-bottom: 30px;
-  }
-  
-  /* Search Box */
-  .search-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 700px;
-  }
-  
-  .search-box input {
-    padding: 10px;
-    font-size: 16px;
-    width: 150px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  .search-box button {
-    padding: 10px 20px;
-    background-color: #e67e22;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
-  }
-  
-  .search-box button:hover {
-    background-color: #d35400;
-    transform: scale(1.05);
-  }
+  font-family: 'Arial', sans-serif;
+  color: white;
+}
 
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Nav Buttons */
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-links button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-links button.active {
+  background-color: #2ecc71;
+}
+
+.nav-links button:hover {
+  background-color: #2c80b4;
+}
+
+/* User Profile (top-right corner) */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+  font-size: 14px;
+}
+
+.user-profile span {
+  font-weight: 500;
+}
+
+.user-profile button {
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.user-profile button:hover {
+  background-color: #d35400;
+  transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero-section_train {
+  background-image: url('../images/train.jpg'); /* Replace with your own */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.hero-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-content h1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+}
+
+.search-box input {
+  padding: 10px;
+  font-size: 16px;
+  width: 150px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.search-box button {
+  padding: 10px 20px;
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.search-box button:hover {
+  background-color: #d35400;
+  transform: scale(1.05);
+}

@@ -12,24 +12,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 50px;
-  background-color: #004080; /* Dark blue similar to Skyscanner */
+  background-color: #004080;
   position: fixed;
   width: 100%;
-  box-sizing: border-box;
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
-.logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: white;
+.nav-links {
+  display: flex;
+  gap: 15px;
 }
 
 .nav-links button {
-  margin-left: 15px;
   padding: 10px 20px;
-  background-color: transparent; /* Transparent buttons */
+  background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 5px;
   color: white;
@@ -47,7 +45,6 @@
   background-color: #3498db;
   transform: translateY(-2px);
 }
-
 /* Hero Section - Improved contrast and organization */
 .hero-section_flight {
   background-image: url('../images/flight.jpg');
@@ -196,4 +193,33 @@
   .search-box button {
     width: 100%;
   }
+}
+
+/* css for user profile button after login in */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: white;
+  font-size: 14px;
+}
+
+.user-profile span {
+  font-weight: 500;
+}
+
+.user-profile button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.user-profile button:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
 }

@@ -1,43 +1,103 @@
-import { useState } from 'react';
+// src/pages/TrainPage.js
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../styles/TrainPage.css';
 
 function TrainPage() {
   const navigate = useNavigate();
 
-  // State variables for search inputs
   const [fromCity, setFromCity] = useState("");
   const [toCity, setToCity] = useState("");
   const [date, setDate] = useState("");
+  const [userInfo, setUserInfo] = useState({ name: "Guest", balance: 0 });
 
-  // Handle search form submission
-  const handleSearch = (e) => {
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const { name, balance, email, phone, isAnonymous } = res.data.data;
+        const updatedUser = { name, balance, email, phone, isAnonymous };
+
+        setUserInfo({ name, balance });
+
+        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+        localStorage.setItem("walletBalance", balance);
+      } catch (err) {
+        console.error("Failed to fetch user info:", err);
+        alert("Session expired. Please log in again.");
+        navigate("/login-user");
+      }
+    };
+
+    fetchUserInfo();
+  }, [navigate]);
+
+  const handleSearch = async (e) => {
     e.preventDefault();
+    const formattedDate = new Date(date).toISOString().slice(0, 10);
 
-    // Navigate to tickets page with search parameters
-    navigate(`/tickets`, {
-      state: {
-        mode: "train",
-        from: fromCity,
-        to: toCity,
-        date: date,
-      },
-    });
+    try {
+      // Make the API call to prefetch ticket data
+      const response = await axios.get("http://localhost:3001/api/travel/list", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        params: {
+          source: fromCity,
+          destination: toCity,
+          date: formattedDate,
+          type: "train"
+        }
+      });
+
+      const travelOptions = response.data.travelOptions || [];
+
+      navigate(`/tickets`, {
+        state: {
+          mode: "train",
+          from: fromCity,
+          to: toCity,
+          date: formattedDate,
+          preFetchedTickets: travelOptions
+        },
+      });
+    } catch (err) {
+      console.error("Error fetching travel options:", err);
+      alert("Failed to load tickets. Please try again later.");
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("walletBalance");
+    navigate("/");
   };
 
   return (
     <div className="user-home">
-      {/* Navbar */}
       <nav className="navbar">
         <div className="logo">MyTravel</div>
         <div className="nav-links">
           <button onClick={() => navigate('/flights')}>Flights</button>
           <button onClick={() => navigate('/bus')}>Bus</button>
-          <button>Train</button>
+          <button className="active">Train</button>
+        </div>
+
+        <div className="user-profile">
+          <span>Welcome, {userInfo.name}</span>
+          <span> | Wallet: ₹{userInfo.balance}</span>
+          <button onClick={() => navigate("/profile")}>Profile</button>
+          <button onClick={handleLogout}>Logout</button>
         </div>
       </nav>
 
-      {/* Hero Section */}
       <div className="hero-section_train">
         <div className="overlay"></div>
 
@@ -47,7 +107,6 @@ function TrainPage() {
             <p>Book train journeys for your next memorable trip</p>
           </div>
 
-          {/* Search Box */}
           <form className="search-box" onSubmit={handleSearch}>
             <div className="input-group">
               <label>FROM CITY</label>

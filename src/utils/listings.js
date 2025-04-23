@@ -24,7 +24,9 @@ export const travelOptionsFilter = (
     const parsedDate = new Date(date);
     if (!isNaN(parsedDate)) {
       agencyTravels = agencyTravels.filter(
-        (option) => option.date.toString().split("T")[0] === date
+        (option) =>
+          new Date(option.date).toISOString().split("T")[0] ==
+          parsedDate.toISOString().split("T")[0]
       );
     }
   }

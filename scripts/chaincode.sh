@@ -324,13 +324,15 @@ function launch_chaincode_service() {
 }
 
 function launch_chaincode() {
-  local org=org1
   local cc_name=$1
   local cc_id=$2
   local cc_image=$3
 
-  launch_chaincode_service ${org} peer1 ${cc_name} ${cc_id} ${cc_image}
-  launch_chaincode_service ${org} peer2 ${cc_name} ${cc_id} ${cc_image}
+  # Launch services in both organizations
+  for org in org1 org2; do
+    launch_chaincode_service ${org} peer1 ${cc_name} ${cc_id} ${cc_image}
+    launch_chaincode_service ${org} peer2 ${cc_name} ${cc_id} ${cc_image}
+  done
 }
 
 function install_chaincode_for() {
@@ -348,38 +350,41 @@ function install_chaincode_for() {
 
 # Package and install the chaincode, but do not activate.
 function install_chaincode() {
-  local org=org1
   local cc_package=$1
 
-  install_chaincode_for ${org} peer1 ${cc_package}
-  install_chaincode_for ${org} peer2 ${cc_package}
+  # Install on all peers in both organizations
+  for org in org1 org2; do
+    install_chaincode_for ${org} peer1 ${cc_package}
+    install_chaincode_for ${org} peer2 ${cc_package}
+  done
 }
 
 # approve the chaincode package for an org and assign a name
 function approve_chaincode() {
-  local org=org1
-  local peer=peer1
   local cc_name=$1
   local cc_id=$2
   local next_seq_num=$3
 
-  push_fn "Approving chaincode ${cc_name} with ID ${cc_id}"
+  # Approve for each organization
+  for org in org1 org2; do
+    push_fn "Approving chaincode ${cc_name} with ID ${cc_id} for ${org}"
 
-  export_peer_context $org $peer
+    export_peer_context ${org} peer1
 
-  peer lifecycle \
-    chaincode approveformyorg \
-    --channelID     ${CHANNEL_NAME} \
-    --name          ${cc_name} \
-    --version       1 \
-    --package-id    ${cc_id} \
-    --sequence      ${next_seq_num} \
-    --orderer       org0-orderer1.${DOMAIN}:${NGINX_HTTPS_PORT} \
-    --connTimeout   ${ORDERER_TIMEOUT} \
-    --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderer1/tls/signcerts/tls-cert.pem \
-    ${APPROVE_EXTRA_ARGS}
+    peer lifecycle \
+      chaincode approveformyorg \
+      --channelID     ${CHANNEL_NAME} \
+      --name          ${cc_name} \
+      --version       1 \
+      --package-id    ${cc_id} \
+      --sequence      ${next_seq_num} \
+      --orderer       org0-orderer1.${DOMAIN}:${NGINX_HTTPS_PORT} \
+      --connTimeout   ${ORDERER_TIMEOUT} \
+      --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderer1/tls/signcerts/tls-cert.pem \
+      ${APPROVE_EXTRA_ARGS}
 
-  pop_fn
+    pop_fn
+  done
 }
 
 # commit the named chaincode for an org

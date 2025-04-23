@@ -498,3 +498,86 @@ export const receiveBookingCancel = async (req, res) => {
     });
   }
 };
+
+export const verifyBookingOnBlockchain = async (req, res) => {
+  const { bookingID } = req.body;
+  const userID = req.user.id;
+
+  // Basic validation
+  if (!bookingID) {
+    return res.status(400).json({
+      success: false,
+      message: "Booking ID is required",
+    });
+  }
+
+  try {
+    // Check local booking ownership
+    const localBooking = bookings.find(
+      (b) => b.bookingID === bookingID && b.userID === userID
+    );
+
+    if (!localBooking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found or access denied",
+      });
+    }
+
+    // Get blockchain booking details
+    const bookingResponse = await axios.get(
+      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings/${bookingID}`,
+      {
+        headers: {
+          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+        },
+      }
+    );
+
+    const blockchainBooking = bookingResponse.data;
+    const hyperledgerTxId = blockchainBooking.hyperledgerTxId;
+
+    if (!hyperledgerTxId) {
+      return res.status(400).json({
+        success: false,
+        message: "Transaction ID missing from blockchain record",
+      });
+    }
+
+    // Get block height information
+    const heightResponse = await axios.get(
+      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings/${hyperledgerTxId}/blockheight`,
+      {
+        headers: {
+          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+        },
+      }
+    );
+
+    const { blockHeight, blockchainHeight } = heightResponse.data;
+    const confirmationDepth = blockchainHeight - blockHeight;
+
+    const isVerified = confirmationDepth >= 2;
+
+    return res.status(200).json({
+      success: true,
+      verified: isVerified,
+      verificationDetails: {
+        localBookingID: localBooking.bookingID,
+        blockchainTxID: hyperledgerTxId,
+        blockHeight,
+        blockchainHeight,
+        confirmationDepth,
+        verificationThreshold: 2,
+        verificationTimestamp: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Verification error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error during verification",
+    });
+  }
+};

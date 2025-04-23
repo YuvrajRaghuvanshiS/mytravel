@@ -5,3 +5,5 @@ build/
 .env
 bin/
 *.tgz
+
+*/node_modules/*

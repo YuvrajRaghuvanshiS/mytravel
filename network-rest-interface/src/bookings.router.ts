@@ -55,6 +55,36 @@ bookingsRouter.get('/', async (req: Request, res: Response) => {
     }
 });
 
+bookingsRouter.get(
+    '/:bookingID',
+    param('bookingID', 'must be a string').notEmpty(),
+    async (req: Request, res: Response) => {
+        logger.debug('Get booking by bookingID request received');
+        try {
+            const mspId = req.user as string;
+            const contract = req.app.locals[mspId]?.assetContract as Contract;
+
+            const data = await evatuateTransaction(
+                contract,
+                'ReadBooking',
+                req.params.bookingID
+            );
+            let booking = JSON.parse(data.toString());
+
+            return res.status(OK).json(booking);
+        } catch (err) {
+            logger.error(
+                { err },
+                'Error processing get booking by bookingID request'
+            );
+            return res.status(INTERNAL_SERVER_ERROR).json({
+                status: getReasonPhrase(INTERNAL_SERVER_ERROR),
+                timestamp: new Date().toISOString(),
+            });
+        }
+    }
+);
+
 bookingsRouter.post(
     '/',
     body().isObject().withMessage('body must contain a booking object'),

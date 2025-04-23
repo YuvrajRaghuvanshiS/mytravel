@@ -38,4 +38,7 @@ export class Booking {
 
   @Property()
   public createdAt: string = new Date().toISOString();
+
+  @Property()
+  public hyperledgerTxId: string = "";
 }

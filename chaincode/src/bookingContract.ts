@@ -37,6 +37,7 @@ export class BookingContract extends Contract {
     booking.transactionID = transactionID;
     booking.status = status;
     booking.createdAt = createdAt;
+    booking.hyperledgerTxId = ctx.stub.getTxID();
 
     console.log("booking:", booking);
 

@@ -24,9 +24,10 @@ import { Contract } from 'fabric-network';
 import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import { Queue } from 'bullmq';
 import { AssetNotFoundError } from './errors';
-import { evatuateTransaction } from './fabric';
+import { evatuateTransaction, getBlockHeight } from './fabric';
 import { addSubmitTransactionJob } from './jobs';
 import { logger } from './logger';
+import { common } from 'fabric-protos';
 
 const { ACCEPTED, BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK } =
     StatusCodes;
@@ -198,6 +199,66 @@ bookingsRouter.delete(
 
             return res.status(INTERNAL_SERVER_ERROR).json({
                 status: getReasonPhrase(INTERNAL_SERVER_ERROR),
+                timestamp: new Date().toISOString(),
+            });
+        }
+    }
+);
+
+bookingsRouter.get(
+    '/:hyperledgerTxId/blockheight',
+    param('hyperledgerTxId', 'must be a string').notEmpty(),
+    async (req: Request, res: Response) => {
+        logger.debug('Get booking block height request received');
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(BAD_REQUEST).json({
+                status: getReasonPhrase(BAD_REQUEST),
+                reason: 'VALIDATION_ERROR',
+                message: 'Invalid request parameters',
+                timestamp: new Date().toISOString(),
+                errors: errors.array(),
+            });
+        }
+
+        const mspId = req.user as string;
+        const hyperledgerTxId = req.params.hyperledgerTxId;
+
+        try {
+            const contract = req.app.locals[mspId]?.qsccContract as Contract;
+
+            const blockBytes = await contract.evaluateTransaction(
+                'GetBlockByTxID',
+                'mychannel',
+                hyperledgerTxId
+            );
+
+            // Decode protobuf block
+            const block = common.Block.decode(blockBytes);
+
+            if (!block.header || !block.header.number) {
+                throw new Error('Invalid block structure received');
+            }
+
+            const blockchainHeight = await getBlockHeight(contract);
+
+            return res.status(OK).json({
+                hyperledgerTxId: hyperledgerTxId,
+                blockHeight: block.header.number.toString(),
+                blockchainHeight: blockchainHeight.toString(),
+                timestamp: new Date().toISOString(),
+            });
+        } catch (err) {
+            logger.error(
+                { err },
+                'Error getting block height for hyperledger transaction ID %s',
+                hyperledgerTxId
+            );
+
+            return res.status(INTERNAL_SERVER_ERROR).json({
+                status: getReasonPhrase(INTERNAL_SERVER_ERROR),
+                message: err,
                 timestamp: new Date().toISOString(),
             });
         }

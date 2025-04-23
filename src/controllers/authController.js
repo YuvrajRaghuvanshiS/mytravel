@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { signToken } from "../utils/jwt.js";
 import { users } from "../db.js";
+import generateHash from "../utils/hashing.js";
 
 export const register = async (req, res) => {
   const { id, name, email, phone, password } = req.body;
@@ -13,11 +14,13 @@ export const register = async (req, res) => {
       .json({ success: false, message: "User already exists" });
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  const userHash = await generateHash(id);
   users[id] = {
     id,
     name,
     email,
     phone,
+    userHash,
     password: hashedPassword,
     balance: 0,
     isAnonymous: true,

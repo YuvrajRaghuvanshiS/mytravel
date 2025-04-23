@@ -5,6 +5,8 @@ export const users = {
     name: "Yuvraj",
     email: "yuvrajpr24@iitk.ac.in",
     phone: "8126744708",
+    userHash:
+      "7b2952e91329fff26103b091e6f57ec506df2639c58763dbb03a936987078305",
     password: "$2b$10$I4Adw6Rw1xexMNMCcyv5V.j/Na.zYSFjw7vGeq.rOhaxpTJDC.mAa",
     balance: 1000,
     isAnonymous: true,

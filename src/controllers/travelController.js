@@ -61,7 +61,7 @@ export const addTravelOption = (req, res) => {
       throw new Error();
     }
 
-    if (departure >= arrival || arrival >= reach) {
+    if (arrival >= departure || arrival >= reach) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid travel timings" });

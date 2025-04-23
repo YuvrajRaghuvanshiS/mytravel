@@ -591,7 +591,7 @@ export const cancelBooking = async (req, res) => {
       `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings/${bookingID}`,
       {
         headers: {
-          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+          "X-Api-Key": process.env.HYPERLEDGER_ORG2_APIKEY,
         },
       }
     );

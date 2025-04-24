@@ -49,6 +49,7 @@ export const createBooking = async (req, res) => {
   const { travelID, seatNumbers } = req.body;
   const userID = req.user.id;
 
+  const user = users[userID];
   // Validate input
   if (!travelID || !seatNumbers || seatNumbers.length === 0) {
     return res.status(400).json({ success: false, message: "Invalid input" });
@@ -89,19 +90,19 @@ export const createBooking = async (req, res) => {
     const totalPrice = selectedSeats.reduce((sum, s) => sum + s.price, 0);
 
     // Check user balance
-    if (users[userID].balance < totalPrice) {
+    if (user.balance < totalPrice) {
       return res
         .status(400)
         .json({ success: false, message: "Insufficient balance" });
     }
 
     // Deduct user balance
-    users[userID].balance -= totalPrice;
+    user.balance -= totalPrice;
 
     // Mark seats as booked and assign passenger
     selectedSeats.forEach((seat) => {
       seat.booked = true;
-      seat.passenger = userID;
+      seat.passenger = user.userHash;
     });
 
     // Decrement availableSeats
@@ -118,16 +119,20 @@ export const createBooking = async (req, res) => {
     // Create booking record
     const booking = {
       bookingID,
-      userID,
-      isUserAnonymous: users[userID].isAnonymous,
-      userName: users[userID].isAnonymous ? "" : users[userID].name,
-      userEmail: users[userID].isAnonymous ? "" : users[userID].email,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      cancelledAt: "",
+      userHash: user.userHash,
+      isUserAnonymous: user.isAnonymous,
+      userID: user.isAnonymous ? "" : user.id,
+      agencyID: travel.agencyId,
       travelID,
       seatNumbers,
       totalPrice,
       transactionID,
       status: "confirmed",
-      createdAt: new Date().toISOString(),
+      refundAmount: 0,
+      penalty: 0,
     };
 
     // Save booking in local DB
@@ -141,19 +146,7 @@ export const createBooking = async (req, res) => {
 
     const hyperledger_resp = await axios.post(
       `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings`,
-      {
-        bookingID,
-        userID,
-        isUserAnonymous: users[userID].isAnonymous,
-        userName: users[userID].isAnonymous ? "" : users[userID].name,
-        userEmail: users[userID].isAnonymous ? "" : users[userID].email,
-        travelID,
-        seatNumbers,
-        totalPrice,
-        transactionID,
-        status: "confirmed",
-        createdAt: new Date().toISOString(),
-      },
+      booking,
       {
         headers: {
           "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
@@ -181,7 +174,7 @@ export const getUserBookings = (req, res) => {
   if (!user)
     return res.status(404).json({ success: false, message: "User not found" });
 
-  const userBookings = bookings.filter((b) => b.userID === userId);
+  const userBookings = bookings.filter((b) => b.userHash === user.userHash);
 
   res.status(200).json({
     success: true,
@@ -194,8 +187,9 @@ export const updateBooking = async (req, res) => {
   const userID = req.user.id;
   const { bookingID, newTravelID, newSeatNumbers } = req.body;
 
+  const user = users[userID];
   const booking = bookings.find(
-    (b) => b.bookingID === bookingID && b.userID === userID
+    (b) => b.bookingID === bookingID && b.userHash === user.userHash
   );
   if (!booking) {
     return res
@@ -261,7 +255,7 @@ export const updateBooking = async (req, res) => {
     selectedSeats.reduce((sum, s) => sum + s.price, 0) + penalty;
   const diffAmount = newTotalPrice - booking.totalPrice;
 
-  if (users[userID].balance < diffAmount) {
+  if (user.balance < diffAmount) {
     return res.status(400).json({
       success: false,
       message: `Insufficient balance to pay difference & penalty`,
@@ -280,12 +274,12 @@ export const updateBooking = async (req, res) => {
   // Book new seats
   selectedSeats.forEach((seat) => {
     seat.booked = true;
-    seat.passenger = userID;
+    seat.passenger = user.userHash;
     newTravel.availableSeats--;
   });
 
   // Update balance
-  users[userID].balance -= diffAmount;
+  user.balance -= diffAmount;
 
   // Generate transaction IDs
   const newTransactionID = `txn_${Date.now()}_${Math.random()
@@ -308,16 +302,7 @@ export const updateBooking = async (req, res) => {
     // Update booking on blockchain
     const hyperledgerResp = await axios.post(
       `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings`,
-      {
-        bookingID,
-        userID,
-        travelID: newTravelID,
-        seatNumbers: newSeatNumbers,
-        totalPrice: newTotalPrice,
-        transactionID: newTransactionID,
-        status: "confirmed",
-        createdAt: new Date().toISOString(),
-      },
+      booking,
       {
         headers: {
           "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
@@ -343,8 +328,9 @@ export const cancelBooking = async (req, res) => {
   const userID = req.user.id;
   const { bookingID } = req.body;
 
+  const user = users[userID];
   const booking = bookings.find(
-    (b) => b.bookingID === bookingID && b.userID === userID
+    (b) => b.bookingID === bookingID && b.userHash === user.userHash
   );
 
   if (!booking) {
@@ -371,7 +357,7 @@ export const cancelBooking = async (req, res) => {
 
   const refundAmount = booking.totalPrice - penalty;
   if (refundAmount > 0) {
-    users[userID].balance += refundAmount;
+    user.balance += refundAmount;
   }
 
   // Free seats
@@ -392,15 +378,7 @@ export const cancelBooking = async (req, res) => {
     // Notify travel agency
     await axios.post(
       `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/receive-cancel-booking`,
-      {
-        bookingID,
-        userID,
-        travelID: travel.id,
-        seatNumbers: booking.seatNumbers,
-        refundAmount,
-        penalty,
-        cancelledAt: booking.cancelledAt,
-      }
+      booking
     );
 
     // Update on blockchain
@@ -430,17 +408,17 @@ export const cancelBooking = async (req, res) => {
 export const receiveBookingCancel = async (req, res) => {
   const {
     bookingID,
-    userID,
+    cancelledAt,
+    userHash,
     travelID,
     seatNumbers,
     refundAmount,
     penalty,
-    cancelledAt,
   } = req.body;
 
   if (
     !bookingID ||
-    !userID ||
+    !userHash ||
     !travelID ||
     !seatNumbers ||
     typeof refundAmount !== "number" ||
@@ -460,7 +438,7 @@ export const receiveBookingCancel = async (req, res) => {
         .json({ success: false, message: "Travel option not found" });
     }
 
-    const user = users[userID];
+    const user = users[userHash];
     if (user) {
       user.balance += refundAmount;
     }
@@ -503,6 +481,7 @@ export const verifyBookingOnBlockchain = async (req, res) => {
   const { bookingID } = req.body;
   const userID = req.user.id;
 
+  const user = users[userID];
   // Basic validation
   if (!bookingID) {
     return res.status(400).json({
@@ -514,7 +493,7 @@ export const verifyBookingOnBlockchain = async (req, res) => {
   try {
     // Check local booking ownership
     const localBooking = bookings.find(
-      (b) => b.bookingID === bookingID && b.userID === userID
+      (b) => b.bookingID === bookingID && b.userHash === user.userHash
     );
 
     if (!localBooking) {

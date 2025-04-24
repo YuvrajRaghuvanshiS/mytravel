@@ -1,100 +1,113 @@
-## 📘 Useful `kubectl` Commands for Working with the `test-network` Namespace in Hyperledger Fabric
+# Kubernetes Commands for MyTravel.com
 
-### 🔍 **Inspecting Kubernetes Resources**
+This document provides a reference for common kubectl commands used to manage and troubleshoot the MyTravel.com Hyperledger Fabric network running on Kubernetes.
+
+## Basic kubectl Commands
+
+### Checking Cluster Status
+
+```bash
+# Get cluster information
+kubectl cluster-info
+
+# View nodes in the cluster
+kubectl get nodes
+
+# Check all resources in the test-network namespace
+kubectl -n test-network get all
+```
+
+### Pod Management
 
 ```bash
 # List all pods in the test-network namespace
 kubectl -n test-network get pods
 
-# List all services in the test-network namespace
-kubectl -n test-network get svc
+# Get detailed information about a specific pod
+kubectl -n test-network describe pod
 
-# List all configmaps
-kubectl -n test-network get configmap
+# View logs for a pod
+kubectl -n test-network logs <pod-name>
 
-# List a specific configmap and extract it to a file
-kubectl -n test-network get configmap fabric-rest-sample-config -o jsonpath='{.data}' > ../customer-backend/configmap.json
+# Follow logs in real-time
+kubectl -n test-network logs -f <pod-name>
 
-# Get endpoint details for the org1 CA
-kubectl -n test-network get endpoints org1-ca
+# Execute a command in a pod
+kubectl -n test-network exec -it -- <command>
 ```
 
----
-
-### 🔧 **Port Forwarding**
+### Service Management
 
 ```bash
-# Forward port 7050 to access the orderer service locally
-kubectl -n test-network port-forward svc/org0-orderer1 7050:7050
+# List all services
+kubectl -n test-network get services
 
-# Forward org1 CA service to access it via localhost:8443
-kubectl -n test-network port-forward svc/org1-ca 8443:443 &
-
-# Forward org1-peer2 to access peer's chaincode endpoint
-kubectl port-forward -n test-network svc/org1-peer2 7052:7051 &
+# Get details of a specific service
+kubectl -n test-network describe service <service-name>
 ```
 
-> ℹ️ Use these when you need to access Fabric services locally from your backend or testing scripts.
-
----
-
-### 📄 **Viewing Logs and Debugging**
+### Persistent Volume Claims
 
 ```bash
-# View logs of a specific CCAAS (chaincode as a service) pod
-kubectl -n test-network logs org1peer1-ccaas-chaincode-f95475dd8-h5q5l
+# List all PVCs
+kubectl -n test-network get pvc
 
-# View logs of org1 peer1 pod
-kubectl -n test-network logs org1-peer1-7b87f585db-kj67s
+# Get details of a specific PVC
+kubectl -n test-network describe pvc <pvc-name>
 ```
 
----
+## Troubleshooting Commands
 
-### 🚫 **Managing Pods**
+### Network Connectivity
 
 ```bash
-# Delete a specific pod (e.g., to force restart it)
-kubectl -n test-network delete pod fabric-rest-sample-55d555fccf-tt9gn
+# Check service endpoints
+kubectl -n test-network get endpoints
 ```
 
----
-
-### 💻 **Executing Commands Inside Pods**
+## Configuration and Secret Management
 
 ```bash
-# List all channels the peer has joined
-kubectl -n test-network exec org1-peer1-7b87f585db-tw945 -- peer channel list
+# View ConfigMaps
+kubectl -n test-network get configmaps
 
-# Get information about a specific channel
-kubectl -n test-network exec org1-peer1-7b87f585db-tw945 -- peer channel -c mychannel info
+# View specific ConfigMap
+kubectl -n test-network describe configmap <configmap-name>
 
-# Alternative command to get channel info (general)
-kubectl -n test-network exec org1-peer1-7b87f585db-tw945 -- peer channel getinfo
-
-# Get TLS certificate from inside the peer container
-kubectl -n test-network exec org1-peer1-7b87f585db-24mpm -- cat /var/hyperledger//fabric/config/tls/tls.crt
+# View Secrets (names only)
+kubectl -n test-network get secrets
 ```
 
----
-
-### ⏳ **Waiting for Resources to be Ready**
+## Deployment Management
 
 ```bash
-# Wait for the NGINX ingress controller to be ready
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=2m
+# Scale a deployment
+kubectl -n test-network scale deployment  --replicas=<num>
+
+# Restart a deployment
+kubectl -n test-network rollout restart deployment
+
+# Check rollout status
+kubectl -n test-network rollout status deployment
 ```
 
----
-
-### 🧩 Additional Helpful Commands
+## Cleanup Commands
 
 ```bash
-# Describe a specific pod for deeper debugging
-kubectl -n test-network describe pod <pod-name>
-
-# Watch resource changes in real-time
-kubectl -n test-network get pods --watch
+# Delete a specific pod (it will be recreated if managed by a controller)
+kubectl -n test-network delete pod <pod-name>
 ```
+
+## Port Forwarding for Local Testing
+
+```bash
+# Forward a local port to a pod port
+# Example: Forward local port 8080 to REST API port 3000
+kubectl -n test-network port-forward fabric-rest-sample-0 8080:3000
+```
+
+## Additional Resources
+
+- [Official Kubernetes Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+- [Kubectl Command Reference](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+- [Kubernetes Troubleshooting Guide](https://kubernetes.io/docs/tasks/debug-application-cluster/troubleshooting/)

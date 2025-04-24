@@ -1,118 +1,167 @@
-# Kubernetes Test Network 
+# MyTravel.com Hyperledger Fabric Network
 
-This project re-establishes the Hyperledger [test-network](../test-network) as a _cloud native_ application.
+This component provides the blockchain infrastructure for the MyTravel.com ticket booking system using Hyperledger Fabric running on Kubernetes.
 
-### Objectives:
+## Overview
 
-- Provide a simple, _one click_ activity for running the Fabric test network.
-- Provide a reference guide for deploying _production-style_ networks on Kubernetes.
-- Provide a _cloud ready_ platform for developing chaincode, Gateway, and blockchain apps.
-- Provide a Kube supplement to the Fabric [CA Operations and Deployment](https://hyperledger-fabric-ca.readthedocs.io/en/latest/deployguide/ca-deploy.html) guides.
-- Support a transition to [Chaincode as a Service](https://hyperledger-fabric.readthedocs.io/en/latest/cc_service.html).
-- Support a transition from the Internal, Docker daemon to [External Chaincode](https://hyperledger-fabric.readthedocs.io/en/latest/cc_launcher.html) builders.
-- Run on any Kube.
+The network is based on the [Hyperledger Fabric Kubernetes Test Network](https://github.com/hyperledger/fabric-samples/tree/main/test-network-k8s) with customizations for the ticket booking use case. It provides a distributed ledger for securely recording all ticket transactions.
 
-_Fabric, Ahoy!_ 
+## Architecture
 
+The network consists of:
 
-## Prerequisites:
+- **Ordering Service**: 3-node Raft consensus
+- **Organizations**:
+  - Org0: Operates ordering service
+  - Org1: Travel agencies
+  - Org2: Customers
+- **Certificate Authorities (CAs)**: One per organization
+- **Peers**: 2 peers per organization for redundancy
+- **Channels**: A single application channel for ticket transactions
+- **Chaincode**: Travel booking smart contracts
 
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [jq](https://stedolan.github.io/jq/)
-- [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) (`brew install gettext` on OSX)
+## Prerequisites
 
-- K8s - either:
-  - [KIND](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) + [Docker](https://www.docker.com) (resources: 8 CPU / 8 GRAM) 
-  - [Rancher Desktop](https://rancherdesktop.io) (resources: 8 CPU / 8GRAM, mobyd, and disable Traefik)
+- Kubernetes cluster (minikube, kind, or cloud-based)
+- kubectl CLI
+- Docker
+- Git
 
-## Quickstart 
+## Setup Instructions
 
-Create a KIND cluster:  
-```shell
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/mytravel-blockchain.git
+cd mytravel-blockchain/mytravel-k8s
+```
+
+### 2. Install prerequisites
+
+Run the prerequisites script to verify your environment:
+
+```bash
+./cloud_prerequisites.sh
+```
+
+### 3. Create KIND cluster
+
+```bash
 ./network kind
 ./network cluster init
 ```
-or for [Rancher / k3s](docs/KUBERNETES.md#rancher-desktop-and-k3s):
-```shell
-export TEST_NETWORK_CLUSTER_RUNTIME=k3s
 
-./network cluster init
-```
+This will:
 
-Launch the network, create a channel, and deploy the [basic-asset-transfer](../asset-transfer-basic) smart contract: 
-```shell
+- Create Kubernetes namespaces
+
+### 4. Launch the network, create a channel:
+
+```bash
 ./network up
-
 ./network channel create
-
-./network chaincode deploy asset-transfer-basic ../asset-transfer-basic/chaincode-java
 ```
 
-Invoke and query chaincode:
-```shell
-./network chaincode invoke asset-transfer-basic '{"Args":["InitLedger"]}'
-./network chaincode query  asset-transfer-basic '{"Args":["ReadAsset","asset1"]}'
+This will:
+
+- Deploy Certificate Authorities
+- Enroll network administrators
+- Deploy ordering service nodes
+- Deploy peers
+- Create the application channel
+- Join peers to the channel
+
+### 5. Deploy the Chaincode
+
+```bash
+./network chaincode deploy chaincode chaincode/
 ```
 
-Access the blockchain with a [REST API](https://github.com/hyperledger/fabric-samples/tree/main/asset-transfer-basic/rest-api-typescript): 
-```shell
+### 6. Deploy the REST API
+
+```bash
 ./network rest-easy
 ```
 
-Shut down the test network: 
-```shell
-./network down 
-```
+### 7. Stop the Network
 
-Tear down the cluster (KIND): 
-```shell
+```bash
+./network down
 ./network unkind
 ```
 
-For Rancher: Preferences -> Kubernetes Settings -> Reset Kubernetes  OR ...
-```shell
-./network cluster clean
+This will:
+
+- Delete Kubernetes namespaces
+- Delete Kubernetes confimaps
+- Tear down the network
+
+### 8. Reset the Network
+
+```bash
+./reset
 ```
 
+This will:
 
-## [Detailed Guides](docs/README.md)
+- Delete Kubernetes namespaces
+- Delete Kubernetes confimaps
+- Tear down the network
+- Run commands 1 through 6
 
-- [Working with Kubernetes](docs/KUBERNETES.md)
-- [Certificate Authorities](docs/CA.md)
-- [Launching the Test Network](docs/TEST_NETWORK.md)
-- [Working with Channels](docs/CHANNELS.md)
-- [Working with Chaincode](docs/CHAINCODE.md)
-- [Working with Applications](docs/APPLICATIONS.md)
-- [Working with BFT Orderers](docs/BFT_ORDERERS.md)
+## Network Management Commands
 
+### View Network Pods
 
-### DNS Resolution on OSX
-
-Fabric's OSX binaries have been statically linked with the golang `go` DNS resolver.  In some environments, this 
-causes a brief but [noticeable delay](https://github.com/hyperledger/fabric/issues/3372) when issuing peer commands 
-against the test network.
-
-Workarounds to improve DNS resolution time on OSX: 
-
-- Add manual DNS overrides for virtual hosts by adding to /etc/hosts:
-```
-127.0.0.1 org0-ca.localho.st
-127.0.0.1 org1-ca.localho.st
-127.0.0.1 org2-ca.localho.st
-127.0.0.1 org0-orderer1.localho.st
-127.0.0.1 org0-orderer2.localho.st
-127.0.0.1 org0-orderer3.localho.st
-127.0.0.1 org1-peer1.localho.st
-127.0.0.1 org1-peer2.localho.st
-127.0.0.1 org2-peer1.localho.st
-127.0.0.1 org2-peer2.localho.st
+```bash
+kubectl -n test-network get pods
 ```
 
-- Reduce the system resolver timeout from the default 5s by adding to /etc/resolv.conf:
-```shell
-options: timeout 2
+### View Logs of a Pod
+
+```bash
+kubectl -n test-network logs <pod-name>
 ```
 
-- Compile the [fabric binaries](https://github.com/hyperledger/fabric) on a Mac and copy `build/bin/*` outputs to 
-  `test-network-k8s/bin`.  Mac native builds are linked against the `netdns=cgo` DNS resolver, and are not
-  subject to the timeouts associated with the Golang DNS resolver.
+> Full list of network commands is available [here](docs/KUBECTL.md)
+
+## Configuration Files
+
+- **config/**: Contains configuration for each organization
+- **kube/**: Contains Kubernetes deployment files
+- **build/**: Contains generated certificates and connection profiles
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Pods stuck in pending state**: Check for resource constraints or persistent volume claims
+
+   ```bash
+   kubectl -n test-network describe pod
+   ```
+
+2. **Certificate errors**: Check CA logs
+
+   ```bash
+   kubectl -n test-network logs org1-ca-0
+   ```
+
+3. **Connection issues**: Verify network policies and service endpoints
+   ```bash
+   kubectl -n test-network get svc
+   ```
+
+### Debugging Tools
+
+Use the network-debug.log file for detailed logs:
+
+```bash
+cat network-debug.log
+```
+
+## Additional Resources
+
+- [Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/)
+- [Kubernetes Documentation](https://kubernetes.io/docs/)
+- See [docs/KUBECTL.md](./docs/KUBECTL.md) for Kubernetes commands specifically for this project

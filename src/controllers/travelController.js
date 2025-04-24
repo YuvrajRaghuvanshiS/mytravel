@@ -603,3 +603,21 @@ export const cancelBooking = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
+export const getAgencyBookings = (req, res) => {
+  const agencyID = req.user.id;
+  const agency = agencies[agencyID];
+
+  if (!agency)
+    return res
+      .status(404)
+      .json({ success: false, message: "Agency not found" });
+
+  const agencyBookings = bookings.filter((b) => b.agencyID === agency.id);
+
+  res.status(200).json({
+    success: true,
+    message: `Found ${agencyBookings.length} booking(s)`,
+    data: agencyBookings,
+  });
+};

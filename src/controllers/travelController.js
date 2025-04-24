@@ -290,28 +290,34 @@ export const getPublicAgencyTravelOptions = (req, res) => {
 export const receiveBooking = async (req, res) => {
   const {
     bookingID,
-    userID,
+    createdAt,
+    updatedAt,
+    cancelledAt,
+    userHash,
     isUserAnonymous,
-    userName,
-    userEmail,
+    userID,
+    agencyID,
     travelID,
     seatNumbers,
     totalPrice,
     transactionID,
     status,
-    createdAt,
+    refundAmount,
+    penalty,
   } = req.body;
 
   // Validate input
   if (
     !bookingID ||
-    !userID ||
+    !createdAt ||
+    !updatedAt ||
+    !userHash ||
+    !agencyID ||
     !travelID ||
     !seatNumbers ||
     !totalPrice ||
     !transactionID ||
-    !status ||
-    !createdAt
+    !status
   ) {
     return res
       .status(400)
@@ -343,16 +349,20 @@ export const receiveBooking = async (req, res) => {
     // Save booking record
     const booking = {
       bookingID,
-      userID,
+      createdAt,
+      updatedAt,
+      cancelledAt,
+      userHash,
       isUserAnonymous,
-      userName,
-      userEmail,
+      userID,
+      agencyID,
       travelID,
       seatNumbers,
       totalPrice,
       transactionID,
       status,
-      createdAt,
+      refundAmount,
+      penalty,
     };
     bookings.push(booking);
 
@@ -370,16 +380,9 @@ export const receiveBooking = async (req, res) => {
 };
 
 export const receiveBookingUpdate = async (req, res) => {
-  const {
-    bookingID,
-    travelID,
-    seatNumbers,
-    totalPrice,
-    updatedAt,
-    userID, // Optional: include if available
-  } = req.body;
+  const { bookingID, updatedAt, travelID, seatNumbers, totalPrice } = req.body;
 
-  if (!bookingID || !travelID || !seatNumbers || !totalPrice || !updatedAt) {
+  if (!bookingID || !updatedAt || !travelID || !seatNumbers || !totalPrice) {
     return res
       .status(400)
       .json({ success: false, message: "Invalid booking update data" });
@@ -419,7 +422,7 @@ export const receiveBookingUpdate = async (req, res) => {
       const seat = newTravel.seats.find((s) => s.seatNumber === seatNum);
       if (seat) {
         seat.booked = true;
-        seat.passenger = booking.userID; // use old userID
+        seat.passenger = booking.userHash; // use old userHash
         newTravel.availableSeats--;
       }
     });
@@ -455,21 +458,20 @@ export const receiveBookingUpdate = async (req, res) => {
 export const receiveBookingCancel = async (req, res) => {
   const {
     bookingID,
-    userID,
+    cancelledAt,
     travelID,
     seatNumbers,
     refundAmount,
     penalty,
-    cancelledAt,
   } = req.body;
 
   if (
     !bookingID ||
+    !cancelledAt ||
     !travelID ||
     !seatNumbers ||
     typeof refundAmount !== "number" ||
-    typeof penalty !== "number" ||
-    !cancelledAt
+    typeof penalty !== "number"
   ) {
     return res
       .status(400)
@@ -575,15 +577,7 @@ export const cancelBooking = async (req, res) => {
     // Notify customer backend and update user balance
     await axios.post(
       `${process.env.CUSTOMER_BACKEND_URL}/api/travel/receive-cancel-booking`,
-      {
-        bookingID,
-        userID: booking.userID,
-        travelID: travel.id,
-        seatNumbers: booking.seatNumbers,
-        refundAmount,
-        penalty,
-        cancelledAt: booking.cancelledAt,
-      }
+      booking
     );
 
     // Update on blockchain

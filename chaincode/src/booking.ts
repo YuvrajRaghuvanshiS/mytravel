@@ -10,19 +10,28 @@ export class Booking {
   public bookingID: string = "book_1745430810..._vxcx98...";
 
   @Property()
-  public userID: string = "yuvrajRaghuvanshiS";
+  public createdAt: string = new Date().toISOString();
+
+  @Property()
+  public updatedAt: string = new Date().toISOString();
+
+  @Property()
+  public cancelledAt: string = "";
+
+  @Property()
+  public userHash: string = "7b2952e91329ff....";
 
   @Property()
   public isUserAnonymous: boolean = true;
 
   @Property()
-  public userName: string = "Yuvraj Raghuvanshi";
+  public userID: string = "yuvrajRaghuvanshiS";
 
   @Property()
-  public userEmail: string = "not.my.email@example.com";
+  public agencyID: string = "yrs";
 
   @Property()
-  public travelID: string = "1";
+  public travelID: number = 1;
 
   @Property()
   public seatNumbers: string = "1A,1B";
@@ -37,7 +46,10 @@ export class Booking {
   public status: string = "Confirmed";
 
   @Property()
-  public createdAt: string = new Date().toISOString();
+  public refundAmount: number = 0;
+
+  @Property()
+  public penalty: number = 0;
 
   @Property()
   public hyperledgerTxId: string =

@@ -89,17 +89,31 @@ bookingsRouter.get(
 bookingsRouter.post(
     '/',
     body().isObject().withMessage('body must contain a booking object'),
-    body('bookingID', 'must be a string').notEmpty(),
-    body('userID', 'must be a string').notEmpty(),
+    body('bookingID', 'must be a string').notEmpty().isString(),
+    body('createdAt', 'must be a string representation of datetime object')
+        .notEmpty()
+        .isString(),
+    body('updatedAt', 'must be a string representation of datetime object')
+        .notEmpty()
+        .isString(),
+    body(
+        'cancelledAt',
+        'must be a string representation of datetime object, can be empty'
+    ).isString(),
+    body('userHash', 'must be a string').notEmpty().isString(),
     body('isUserAnonymous', 'must be a boolean').notEmpty().isBoolean(),
-    body('userName', 'must be a string').isString(),
-    body('userEmail', 'must be a string').isString(),
-    body('travelID', 'must be a string').notEmpty(),
-    body('seatNumbers', 'must be a string').notEmpty(),
-    body('totalPrice', 'must be a number').isNumeric(),
-    body('transactionID', 'must be a string').notEmpty(),
-    body('status', 'must be a string').notEmpty(),
-    body('createdAt', 'must be a string').notEmpty(),
+    body('userID', 'must be a string, can be empty').isString(),
+    body('agencyID', 'must be a string').notEmpty().isString(),
+    body('travelID', 'must be a number').notEmpty().isNumeric(),
+    body(
+        'seatNumbers',
+        'must be a string, comma separated for multiple seats'
+    ).notEmpty(),
+    body('totalPrice', 'must be a number').notEmpty().isNumeric(),
+    body('transactionID', 'must be a string').notEmpty().isString(),
+    body('status', 'must be a string').notEmpty().isString(),
+    body('refundAmount', 'must be a number, can be empty').isNumeric(),
+    body('penalty', 'must be a number, can be empty').isNumeric(),
     async (req: Request, res: Response) => {
         logger.debug(req.body, 'Create booking request received');
 
@@ -124,16 +138,20 @@ bookingsRouter.post(
                 mspId,
                 'RecordBooking',
                 bookingID,
-                req.body.userID,
+                req.body.createdAt,
+                req.body.updatedAt,
+                req.body.cancelledAt,
+                req.body.userHash,
                 req.body.isUserAnonymous,
-                req.body.userName,
-                req.body.userEmail,
+                req.body.userID,
+                req.body.agencyID,
                 req.body.travelID,
                 req.body.seatNumbers,
                 req.body.totalPrice,
                 req.body.transactionID,
                 req.body.status,
-                req.body.createdAt
+                req.body.refundAmount,
+                req.body.penalty
             );
 
             return res.status(ACCEPTED).json({
@@ -182,7 +200,7 @@ bookingsRouter.delete(
                 submitQueue,
                 mspId,
                 'DeleteBooking',
-                bookingID,
+                bookingID
             );
 
             return res.status(ACCEPTED).json({
@@ -191,11 +209,7 @@ bookingsRouter.delete(
                 timestamp: new Date().toISOString(),
             });
         } catch (err) {
-            logger.error(
-                { err },
-                'Error deleting booking %s',
-                bookingID
-            );
+            logger.error({ err }, 'Error deleting booking %s', bookingID);
 
             return res.status(INTERNAL_SERVER_ERROR).json({
                 status: getReasonPhrase(INTERNAL_SERVER_ERROR),

@@ -14,29 +14,37 @@ export class BookingContract extends Contract {
   public async RecordBooking(
     ctx: Context,
     bookingID: string,
-    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    cancelledAt: string,
+    userHash: string,
     isUserAnonymous: boolean,
-    userName: string,
-    userEmail: string,
-    travelID: string,
+    userID: string,
+    agencyID: string,
+    travelID: number,
     seatNumbers: string, // Pass as comma-separated string
-    totalPrice: string,
+    totalPrice: number,
     transactionID: string,
     status: string,
-    createdAt: string
+    refundAmount: number,
+    penalty: number
   ): Promise<void> {
     const booking = new Booking();
     booking.bookingID = bookingID;
-    booking.userID = userID;
+    booking.createdAt = createdAt;
+    booking.updatedAt = updatedAt;
+    booking.cancelledAt = cancelledAt;
+    booking.userHash = userHash;
     booking.isUserAnonymous = isUserAnonymous;
-    booking.userName = userName;
-    booking.userEmail = userEmail;
+    booking.userID = userID;
+    booking.agencyID = agencyID;
     booking.travelID = travelID;
     booking.seatNumbers = seatNumbers;
-    booking.totalPrice = parseFloat(totalPrice);
+    booking.totalPrice = totalPrice;
     booking.transactionID = transactionID;
     booking.status = status;
-    booking.createdAt = createdAt;
+    booking.refundAmount = refundAmount;
+    booking.penalty = penalty;
     booking.hyperledgerTxId = ctx.stub.getTxID();
 
     console.log("booking:", booking);

@@ -126,7 +126,7 @@ export const deleteAgencyAccount = async (req, res) => {
         `${process.env.CUSTOMER_BACKEND_URL}/api/travel/receive-cancel-booking`,
         {
           bookingID: booking.bookingID,
-          userID: booking.userID,
+          userHash: booking.userHash,
           travelID: travel.id,
           seatNumbers: booking.seatNumbers,
           refundAmount,
@@ -157,7 +157,7 @@ export const deleteAgencyAccount = async (req, res) => {
   travelOptions.splice(
     0,
     travelOptions.length,
-    ...travelOptions.filter((t) => t.agencyId !== agencyId)
+    ...travelOptions.filter((t) => t.agencyId != agencyId)
   );
 
   return res.status(200).json({

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import "../styles/travelPage.css";
-import heroFlight from "../images/flight.jpg";
-import heroTrain from "../images/train.jpg";
-import heroBus from "../images/bus.webp";
+import heroFlight from "../images/flight_hero-min.png";
+import heroTrain from "../images/train_hero-min.png";
+import heroBus from "../images/bus_hero-min.png";
 
 const HERO_IMAGES = {
   flight: heroFlight,

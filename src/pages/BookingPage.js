@@ -104,21 +104,6 @@ function BookingPage() {
       }
 
       if (response.data.success) {
-        // ✅ Call travel agency backend
-        await axios.post("http://localhost:3002/api/travel/receive-booking", {
-          bookingID: bookingID,
-          userID: user.id,
-          isUserAnonymous: false,
-          userName: user.id,
-          userEmail: "", // Can be left blank if not available
-          travelID: ticket.id,
-          seatNumbers: selectedSeats,
-          totalPrice: totalPrice,
-          transactionID: transactionID,
-          status: "confirmed",
-          createdAt: new Date().toISOString(),
-        });
-
         alert(isUpdate ? "✅ Booking updated successfully!" : "🎉 Booking successful!");
         navigate("/my-bookings");
       } else {

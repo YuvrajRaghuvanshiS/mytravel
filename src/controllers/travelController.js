@@ -260,6 +260,7 @@ export const getAgencyTravelOptions = (req, res) => {
 
 export const getPublicAgencyTravelOptions = (req, res) => {
   let {
+    agencyId,
     date,
     source,
     destination,
@@ -269,8 +270,6 @@ export const getPublicAgencyTravelOptions = (req, res) => {
     availableOnly,
     sortBy,
   } = req.query;
-
-  let agencyId = null;
 
   let agencyTravels = travelOptionsFilter(
     agencyId,

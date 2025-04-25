@@ -8,6 +8,7 @@ import { users, travelOptions, bookings } from "../db.js";
 export const getTravelOptions = async (req, res) => {
   try {
     const {
+      agencyId,
       date,
       source,
       destination,
@@ -23,6 +24,7 @@ export const getTravelOptions = async (req, res) => {
       `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/public-list`,
       {
         params: {
+          agencyId,
           date,
           source,
           destination,

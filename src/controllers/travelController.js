@@ -217,17 +217,106 @@ export const updateTravelOption = (req, res) => {
   }
 };
 
-export const removeTravelOption = (req, res) => {
+export const removeTravelOption = async (req, res) => {
   const { id } = req.params;
-  const index = travelOptions.findIndex((t) => t.id === parseInt(id));
+  const affectedTravel = travelOptions.find((t) => t.id == id);
 
-  if (index === -1)
+  if (!id || !affectedTravel) {
     return res
-      .status(404)
+      .status(403)
       .json({ success: false, message: "Travel option not found" });
+  }
 
-  travelOptions.splice(index, 1);
-  res.status(200).json({ success: true, message: "Travel option removed" });
+  const agencyId = req.user.id; // from JWT
+  if (affectedTravel.agencyId !== agencyId) {
+    return res.status(403).json({ success: false, message: "Unauthorized" });
+  }
+
+  const now = new Date();
+  const oneWeekLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const agency = agencies[agencyId];
+
+  const activeBookings = bookings.filter((b) => {
+    const travelDate = new Date(affectedTravel.date);
+    return (
+      b.travelID == id &&
+      // travelDate >= now && // Skip past bookings
+      b.status === "confirmed"
+    );
+  });
+
+  let totalRefund = 0;
+  let totalPenalty = 0;
+  const cancelledBookings = [];
+
+  for (const booking of activeBookings) {
+    const travelDate = new Date(affectedTravel.date);
+    let penalty = 0;
+
+    if (travelDate <= oneWeekLater) {
+      penalty = 30; // ₹30 penalty for short-notice cancellations
+    }
+
+    const refundAmount = booking.totalPrice + penalty;
+    totalRefund += refundAmount;
+    totalPenalty += penalty;
+
+    agency.balance -= refundAmount; // refund user from agency balance
+
+    // Update booking
+    booking.status = "cancelled";
+    booking.cancelledAt = new Date().toISOString();
+    booking.penalty = penalty;
+    booking.refundAmount = refundAmount;
+
+    cancelledBookings.push(booking);
+
+    // Notify customer backend
+    try {
+      await axios.post(
+        `${process.env.CUSTOMER_BACKEND_URL}/api/travel/receive-cancel-booking`,
+        {
+          bookingID: booking.bookingID,
+          userHash: booking.userHash,
+          travelID: affectedTravel.id,
+          seatNumbers: booking.seatNumbers,
+          refundAmount,
+          penalty,
+          cancelledAt: booking.cancelledAt,
+        }
+      );
+
+      // Update on blockchain
+      await axios.delete(
+        `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings/${booking.bookingID}`,
+        {
+          headers: {
+            "X-Api-Key": process.env.HYPERLEDGER_ORG2_APIKEY,
+          },
+        }
+      );
+    } catch (err) {
+      console.error(
+        `Error processing booking ${booking.bookingID}:`,
+        err.message
+      );
+    }
+  }
+
+  // Remove travel option
+  travelOptions.splice(
+    0,
+    travelOptions.length,
+    ...travelOptions.filter((t) => t.id != id)
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: `Travel option ${id} deleted successfully.`,
+    totalBookingsCancelled: cancelledBookings.length,
+    penaltyCollected: totalPenalty,
+    cancelledBookings,
+  });
 };
 
 export const getAgencyTravelOptions = (req, res) => {

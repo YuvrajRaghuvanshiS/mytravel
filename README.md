@@ -112,6 +112,7 @@ travel-agency-backend/
     ]
   }
   ```
+- **DELETE /api/travel/remove/:id**: Delete a travel listing (and refund if already booked)
 - **GET /api/travel/list**: List travel listings of current agency (with filtering)
 
 ### Booking Management

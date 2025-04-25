@@ -1,133 +1,143 @@
 .profile-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 80px 20px;
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(to bottom, #eef2f3, #ffffff);
-  min-height: 100vh;
+  max-width: 900px;
+  margin: 40px auto 0 auto;
+  padding: 32px 18px 60px 18px;
+  background: #f5f7fa;
+  min-height: 80vh;
 }
 
 .profile-container h2 {
-  margin-bottom: 25px;
-  font-size: 28px;
-  color: #2c3e50;
+  text-align: center;
+  font-size: 2rem;
+  color: #0b5ed7;
+  font-weight: 700;
+  margin-bottom: 32px;
+  letter-spacing: 0.02em;
+}
+
+.profile-main {
+  display: flex;
+  gap: 38px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .profile-card {
-  background: white;
-  padding: 35px 45px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 450px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(11, 94, 215, 0.09);
+  padding: 32px 28px 28px 28px;
+  min-width: 320px;
+  max-width: 400px;
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .profile-card label {
-  display: block;
-  margin: 15px 0 6px;
-  color: #34495e;
   font-weight: 600;
-  font-size: 14px;
+  color: #003366;
+  margin-bottom: 4px;
+  font-size: 1rem;
 }
 
-.profile-card input {
-  width: 100%;
+.profile-card input[type="text"],
+.profile-card input[type="email"],
+.profile-card input[type="tel"] {
   padding: 10px 12px;
-  border: 1px solid #ccd1d1;
   border-radius: 6px;
-  font-size: 15px;
-  background-color: #fbfbfb;
+  border: 1.5px solid #bfc9d1;
+  font-size: 1rem;
+  background: #f7f9fb;
+  color: #222;
+  transition: border-color 0.18s;
+  margin-bottom: 6px;
 }
 
 .profile-card input:focus {
+  border-color: #0b5ed7;
   outline: none;
-  border-color: #3498db;
-  background: #ffffff;
 }
 
-.profile-card input[type="checkbox"] {
-  margin-right: 8px;
+.anon-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #888;
+  margin-top: 6px;
 }
 
 .profile-actions {
+  margin-top: 18px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 25px;
+  justify-content: flex-end;
 }
 
 .profile-actions button {
-  flex: 1 1 30%;
-  padding: 10px;
+  background: #0b5ed7;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 14px;
+  border-radius: 7px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 26px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.18s, transform 0.13s;
 }
-
 .profile-actions button:hover {
-  opacity: 0.95;
+  background: #0056b3;
+  transform: scale(1.04);
 }
 
-.profile-actions button:nth-child(1) {
-  background-color: #3498db;
-  color: #fff;
+.profile-wallet-section {
+  flex: 1 1 320px;
+  min-width: 320px;
+  max-width: 350px;
+  margin-top: 8px;
 }
 
-.profile-actions button:nth-child(2) {
-  background-color: #2ecc71;
-  color: #fff;
-}
-
-.profile-actions .bookings-btn {
-  background-color: #f39c12;
-  color: #fff;
-}
-
-.back-btn {
-  margin-top: 20px;
-  background-color: #95a5a6;
-  color: white;
-  padding: 10px 22px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.back-btn:hover {
-  background-color: #7f8c8d;
-}
 .floating-right-buttons {
   position: fixed;
-  top: 100px;
-  right: 30px;
+  top: 120px;
+  right: 38px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
+  z-index: 100;
 }
 
 .floating-right-buttons button {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
+  background: #fff;
+  color: #0b5ed7;
+  border: 2px solid #0b5ed7;
+  border-radius: 18px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 12px 30px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.18s, color 0.18s, transform 0.13s;
+  box-shadow: 0 2px 8px rgba(11, 94, 215, 0.07);
 }
-
-.floating-right-buttons button:nth-child(2) {
-  background-color: #f39c12;
-}
-
 .floating-right-buttons button:hover {
-  opacity: 0.9;
+  background: #0b5ed7;
+  color: #fff;
+  transform: scale(1.04);
+}
+
+@media (max-width: 900px) {
+  .profile-main {
+    flex-direction: column;
+    gap: 24px;
+    align-items: stretch;
+  }
+  .floating-right-buttons {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 18px;
+  }
 }

@@ -86,7 +86,7 @@ function AddTravelRoute() {
 
     try {
       await axios.post(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/add`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/travel/add`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

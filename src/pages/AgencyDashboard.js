@@ -19,7 +19,7 @@ function AgencyDashboard() {
   const fetchAgencyProfile = async () => {
     try {
       const res = await axios.get(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -34,7 +34,7 @@ function AgencyDashboard() {
   const fetchAgencyListings = async () => {
     try {
       const res = await axios.get(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/list`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/travel/list`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -60,7 +60,7 @@ function AgencyDashboard() {
 
     try {
       await axios.delete(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/delete/${id}`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/travel/delete/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

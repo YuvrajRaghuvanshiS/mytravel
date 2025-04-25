@@ -94,7 +94,7 @@ function TicketsPage() {
         queryParams.type = searchParams.mode.replace(/s$/, "");
 
       const res = await axios.get(
-        `${process.env.CUSTOMER_API_BASE_URL}/api/travel/list`,
+        `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/list`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -18,14 +18,17 @@ function MyBookingsPage() {
 
         const [bookingsRes, travelRes] = await Promise.all([
           axios.get(
-            `${process.env.CUSTOMER_API_BASE_URL}/api/travel/get-all-bookings`,
+            `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/get-all-bookings`,
             {
               headers,
             }
           ),
-          axios.get(`${process.env.CUSTOMER_API_BASE_URL}/api/travel/list`, {
-            headers,
-          }),
+          axios.get(
+            `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/list`,
+            {
+              headers,
+            }
+          ),
         ]);
 
         setBookings(bookingsRes.data.data);
@@ -50,7 +53,7 @@ function MyBookingsPage() {
 
     try {
       const res = await axios.delete(
-        `${process.env.CUSTOMER_API_BASE_URL}/api/travel/book`,
+        `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/book`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

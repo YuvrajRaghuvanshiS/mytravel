@@ -17,7 +17,7 @@ function ProfilePage() {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `${process.env.CUSTOMER_API_BASE_URL}/api/users/me`,
+          `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/users/me`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -46,7 +46,7 @@ function ProfilePage() {
   const handleSave = async () => {
     try {
       const res = await axios.put(
-        `${process.env.CUSTOMER_API_BASE_URL}/api/users/update-profile`,
+        `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/users/update-profile`,
         {
           name,
           email,

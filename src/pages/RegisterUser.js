@@ -81,8 +81,8 @@ function RegisterUser() {
     const data = { id, name, email, phone, password };
     const endpoint =
       userType === "agency"
-        ? `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/auth/register`
-        : `${process.env.CUSTOMER_API_BASE_URL}/api/auth/register`;
+        ? `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/auth/register`
+        : `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/auth/register`;
 
     try {
       const res = await axios.post(endpoint, data);

@@ -37,7 +37,7 @@ function UpdateTravelRoute() {
   const fetchTravelDetails = async () => {
     try {
       const res = await axios.get(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/list`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/travel/list`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -98,7 +98,7 @@ function UpdateTravelRoute() {
 
     try {
       await axios.put(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/update/${id}`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/travel/update/${id}`,
         updatedData,
         {
           headers: { Authorization: `Bearer ${token}` },

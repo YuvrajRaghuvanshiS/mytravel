@@ -1,9 +1,12 @@
 import Dotenv from "dotenv-webpack";
 
-export default {
+const webpackConfig = {
+  // other config...
   plugins: [
     new Dotenv({
-      path: ".env", // optional
+      path: "./.env", // optional
     }),
   ],
 };
+
+export default webpackConfig;

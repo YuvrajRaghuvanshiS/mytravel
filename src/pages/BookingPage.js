@@ -81,21 +81,24 @@ function BookingPage() {
       setLoading(true);
 
       // Optionally, re-fetch latest seat status
-      await axios.get(`${process.env.CUSTOMER_API_BASE_URL}/api/travel/list`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: {
-          type: ticket.type,
-          source: ticket.source,
-          destination: ticket.destination,
-          date: ticket.date,
-        },
-      });
+      await axios.get(
+        `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/list`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            type: ticket.type,
+            source: ticket.source,
+            destination: ticket.destination,
+            date: ticket.date,
+          },
+        }
+      );
 
       let response;
 
       if (isUpdate) {
         response = await axios.put(
-          `${process.env.CUSTOMER_API_BASE_URL}/api/travel/book`,
+          `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/book`,
           {
             bookingID: ticket.bookingID,
             newTravelID: ticket.id,
@@ -107,7 +110,7 @@ function BookingPage() {
         );
       } else {
         response = await axios.post(
-          `${process.env.CUSTOMER_API_BASE_URL}/api/travel/book`,
+          `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/book`,
           {
             travelID: ticket.id,
             seatNumbers: selectedSeats,

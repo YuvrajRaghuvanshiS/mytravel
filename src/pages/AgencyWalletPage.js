@@ -13,7 +13,7 @@ function AgencyWalletPage() {
     const fetchWallet = async () => {
       try {
         const res = await axios.get(
-          `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
+          `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -42,7 +42,7 @@ function AgencyWalletPage() {
 
     try {
       const res = await axios.post(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/wallet/add-money`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/wallet/add-money`,
         { amount: Number(amount) },
         {
           headers: {

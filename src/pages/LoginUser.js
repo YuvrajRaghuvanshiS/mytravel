@@ -59,10 +59,11 @@ function LoginUser() {
         setIsLoading(false);
         return;
       }
+      console.log(process.env);
       const loginURL =
         userType === "user"
-          ? `${process.env.CUSTOMER_API_BASE_URL}/api/auth/login`
-          : `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/auth/login`;
+          ? `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/auth/login`
+          : `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/auth/login`;
       const response = await axios.post(loginURL, { id, password });
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);

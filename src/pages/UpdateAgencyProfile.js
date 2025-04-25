@@ -16,7 +16,7 @@ function UpdateAgencyProfile() {
   const fetchProfile = async () => {
     try {
       const res = await axios.get(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -37,7 +37,7 @@ function UpdateAgencyProfile() {
     e.preventDefault();
     try {
       const res = await axios.put(
-        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/update-profile`,
+        `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/agencies/update-profile`,
         { name: formData.name },
         {
           headers: { Authorization: `Bearer ${token}` },

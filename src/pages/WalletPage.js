@@ -14,7 +14,7 @@ function WalletPage() {
     const fetchWallet = async () => {
       try {
         const res = await axios.get(
-          `${process.env.CUSTOMER_API_BASE_URL}/api/users/me`,
+          `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/users/me`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -44,7 +44,7 @@ function WalletPage() {
 
     try {
       const res = await axios.post(
-        `${process.env.CUSTOMER_API_BASE_URL}/api/wallet/add-money`,
+        `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/wallet/add-money`,
         { amount: Number(amount) },
         {
           headers: {

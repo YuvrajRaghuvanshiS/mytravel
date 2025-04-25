@@ -1,5 +1,4 @@
-// src/pages/RegisterUser.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/register.css";
@@ -13,13 +12,69 @@ function RegisterUser() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  // CAPTCHA states
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaQuestion, setCaptchaQuestion] = useState("");
+  const [captchaAnswer, setCaptchaAnswer] = useState(null);
+  
   const navigate = useNavigate();
+
+  // Generate new CAPTCHA when form is loaded or user type changes
+  useEffect(() => {
+    if (userType !== "") {
+      generateCaptcha();
+    }
+  }, [userType]);
+
+  // Generate a simple math CAPTCHA
+  const generateCaptcha = () => {
+    // Generate random numbers between 1 and 20
+    const num1 = Math.floor(Math.random() * 20) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    
+    // Randomly choose between addition and subtraction
+    const isAddition = Math.random() > 0.5;
+    
+    let question, answer;
+    
+    if (isAddition) {
+      question = `${num1} + ${num2} = ?`;
+      answer = num1 + num2;
+    } else {
+      // If num1 < num2, swap them for subtraction to avoid negative results
+      const [larger, smaller] = num1 > num2 ? [num1, num2] : [num2, num1];
+      question = `${larger} - ${smaller} = ?`;
+      answer = larger - smaller;
+    }
+    
+    setCaptchaQuestion(question);
+    setCaptchaAnswer(answer);
+    setCaptchaInput("");
+  };
+
+  // Verify the CAPTCHA input
+  const verifyCaptcha = () => {
+    const userInput = Number(captchaInput);
+    
+    if (userInput === captchaAnswer) {
+      return true;
+    }
+    
+    generateCaptcha(); // Generate a new CAPTCHA if incorrect
+    return false;
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
+      return;
+    }
+
+    // Verify CAPTCHA first
+    if (!verifyCaptcha()) {
+      alert("Incorrect CAPTCHA. Please try again.");
       return;
     }
 
@@ -37,6 +92,8 @@ function RegisterUser() {
     } catch (error) {
       console.error("Registration error:", error);
       alert(error.response?.data?.message || error);
+      // Generate new CAPTCHA after failed registration
+      generateCaptcha();
     }
   };
 
@@ -133,6 +190,32 @@ function RegisterUser() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                   />
+                </div>
+
+                {/* CAPTCHA Section */}
+                <div className="form-group captcha-container">
+                  <label>Verification</label>
+                  <div className="captcha-box">
+                    <div className="captcha-question">
+                      {captchaQuestion || "Loading..."}
+                    </div>
+                  </div>
+                  <div className="captcha-input">
+                    <input
+                      type="number"
+                      value={captchaInput}
+                      placeholder="Enter the answer"
+                      onChange={(e) => setCaptchaInput(e.target.value)}
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="refresh-captcha" 
+                      onClick={generateCaptcha}
+                    >
+                      ↻
+                    </button>
+                  </div>
                 </div>
 
                 <button type="submit" className="register-button">

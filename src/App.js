@@ -4,7 +4,6 @@ import LoginUser from "./pages/LoginUser";
 import RegisterUser from "./pages/RegisterUser";
 import TicketsPage from "./pages/TicketsPage";
 import ProfilePage from "./pages/ProfilePage";
-import WalletPage from "./pages/WalletPage";
 import BookingPage from "./pages/BookingPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
 import AgencyDashboard from "./pages/AgencyDashboard"; // ✅ NEW
@@ -24,7 +23,6 @@ function App() {
         <Route path="/travel" element={<TravelPage />} />
         <Route path="/tickets" element={<TicketsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/wallet" element={<WalletPage />} />
         <Route path="/book" element={<BookingPage />} />
         <Route path="/my-bookings" element={<MyBookingsPage />} />
         <Route path="/agency-dashboard" element={<AgencyDashboard />} />

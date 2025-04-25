@@ -49,6 +49,7 @@ function BookingPage() {
       setBookedSeats(booked);
       setAvailableSeats(available);
     }
+    // Pre-select seats if updating
     if (isUpdate && ticket?.seatNumbers) {
       setSelectedSeats(ticket.seatNumbers);
     }
@@ -96,8 +97,8 @@ function BookingPage() {
       );
 
       let response;
-
       if (isUpdate) {
+        // Update existing booking
         response = await axios.put(
           `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/book`,
           {
@@ -106,10 +107,13 @@ function BookingPage() {
             newSeatNumbers: selectedSeats,
           },
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
       } else {
+        // Create new booking
         response = await axios.post(
           `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/travel/book`,
           {
@@ -132,12 +136,18 @@ function BookingPage() {
         );
         navigate("/my-bookings");
       } else {
-        alert(response.data.message || "Booking failed");
+        alert(
+          response.data.message ||
+            (isUpdate ? "Update failed" : "Booking failed")
+        );
       }
     } catch (err) {
       console.error("Booking failed:", err.response?.data || err.message);
       alert(
-        err.response?.data?.message || "Booking failed due to server error"
+        err.response?.data?.message ||
+          (isUpdate
+            ? "Booking update failed due to server error"
+            : "Booking failed due to server error")
       );
     } finally {
       setLoading(false);

@@ -92,9 +92,7 @@
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    transform 0.18s;
+  transition: background 0.2s, transform 0.18s;
 }
 
 .search-box-ticket button:hover {
@@ -273,6 +271,16 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   font-size: 18px;
   color: #555;
+}
+
+.filter-group input:disabled,
+.filter-group select:disabled,
+.search-box-ticket input:disabled {
+  background-color: #e9ecef !important;
+  color: #a0a4aa !important;
+  border-color: #d1d5db !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important; /* Keep text readable */
 }
 
 /* Responsive Design */

@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 function TicketsPage() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const searchParams = location.state || {};
 
   // State for tickets and loading
@@ -21,13 +22,13 @@ function TicketsPage() {
   const [sourceOptions, setSourceOptions] = useState([]);
   const [destinationOptions, setDestinationOptions] = useState([]);
 
+  // Determine which filters are locked
+  const isUpdateBooking = !!searchParams.updateBooking;
   // Filters state
   const [filters, setFilters] = useState({
-    agencyId: "",
-    type: "",
+    agencyId: searchParams.agencyId || "",
+    type: searchParams.type || "",
     date: "",
-    source: "",
-    destination: "",
     minPrice: "",
     maxPrice: "",
     availableOnly: false,
@@ -193,6 +194,7 @@ function TicketsPage() {
               value={searchInputs.from}
               onChange={handleSearchChange}
               list="from-cities"
+              disabled={isUpdateBooking}
             />
             <datalist id="from-cities">
               {sourceOptions.map((src) => (
@@ -205,6 +207,7 @@ function TicketsPage() {
               placeholder="To City"
               value={searchInputs.to}
               onChange={handleSearchChange}
+              disabled={isUpdateBooking}
               list="to-cities"
             />
             <datalist id="to-cities">
@@ -239,6 +242,7 @@ function TicketsPage() {
                 name="agencyId"
                 value={filters.agencyId}
                 onChange={handleFilterChange}
+                disabled={isUpdateBooking}
               >
                 <option value="">All Agencies</option>
                 {agencyOptions.map((id) => (
@@ -254,6 +258,7 @@ function TicketsPage() {
                 name="type"
                 value={filters.type}
                 onChange={handleFilterChange}
+                disabled={isUpdateBooking}
               >
                 <option value="">All Types</option>
                 {typeOptions.map((tp) => (
@@ -364,11 +369,22 @@ function TicketsPage() {
                         <button
                           className="book-button"
                           onClick={() =>
-                            navigate("/book", { state: { ticket } })
+                            navigate("/book", {
+                              state: isUpdateBooking
+                                ? {
+                                    ticket: {
+                                      ...ticket,
+                                      bookingID: searchParams.bookingID,
+                                      seatNumbers: searchParams.seatNumbers,
+                                    },
+                                    isUpdate: true,
+                                  }
+                                : { ticket },
+                            })
                           }
                           disabled={ticket.availableSeats === 0}
                         >
-                          Book Now
+                          {isUpdateBooking ? "Update Seats" : "Book Now"}
                         </button>
                       </div>
                     </div>

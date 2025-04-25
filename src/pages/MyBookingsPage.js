@@ -282,23 +282,16 @@ function MyBookingsPage() {
                     <button
                       className="update-btn blue-btn"
                       onClick={() =>
-                        navigate("/book", {
+                        navigate("/tickets", {
                           state: {
-                            ticket: {
-                              id: booking.travelID,
-                              source: travel?.source,
-                              destination: travel?.destination,
-                              departureTime: travel?.departureTime,
-                              arrivalTime: travel?.arrivalTime,
-                              basePrice:
-                                booking.totalPrice / booking.seatNumbers.length,
-                              seatNumbers: booking.seatNumbers,
-                              bookingID: booking.bookingID,
-                              type: travel?.type,
-                              date: travel?.date,
-                              seats: travel?.seats,
-                            },
-                            isUpdate: true,
+                            agencyId: travel.agencyId,
+                            from: travel.source,
+                            to: travel.destination,
+                            type: travel.type,
+                            updateBooking: true,
+                            bookingID: booking.bookingID,
+                            seatNumbers: booking.seatNumbers,
+                            travelID: booking.travelID,
                           },
                         })
                       }

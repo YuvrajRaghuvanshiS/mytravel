@@ -1,100 +1,266 @@
+body {
+  background: #f5f7fa;
+}
+
 .booking-container {
-  padding: 80px 20px 40px;
-  max-width: 800px;
-  margin: 0 auto;
-  font-family: "Segoe UI", sans-serif;
-  background: #f8f9fb;
-  min-height: 100vh;
+  max-width: 900px;
+  margin: 40px auto 0 auto;
+  padding: 32px 18px 60px 18px;
+  background: #f5f7fa;
+  min-height: 80vh;
 }
 
 .booking-container h2 {
   text-align: center;
-  color: #333;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #0b5ed7;
+  font-weight: 700;
+  margin-bottom: 32px;
+  letter-spacing: 0.02em;
 }
 
 .no-bookings {
   text-align: center;
-  color: #999;
-  font-size: 1.1rem;
+  color: #888;
+  font-size: 1.15rem;
+  margin-top: 40px;
 }
 
 .booking-list {
   list-style: none;
   padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 .booking-card {
   background: #fff;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(11, 94, 215, 0.09);
+  padding: 26px 28px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-left: 7px solid #0b5ed7;
+  position: relative;
+  transition: box-shadow 0.18s, transform 0.13s;
 }
 
-.booking-card p {
-  margin: 8px 0;
+.booking-card.cancelled {
+  opacity: 0.82;
+  border-left: 7px solid #dc3545;
+}
+
+.booking-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.booking-card-header .route {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #003366;
+}
+
+.booking-card-header .icon {
+  font-size: 1.3rem;
+  margin-right: 2px;
+}
+
+.booking-card-header .price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #28a745;
+}
+
+.booking-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  font-size: 1.01rem;
+}
+
+.booking-details p {
+  margin: 0.2em 0;
   color: #333;
 }
 
-.back-btn {
-  margin-top: 30px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #555;
-  color: white;
-  padding: 10px 25px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
+.status-badge {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 13px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  background: #e3eefd;
+  color: #0b5ed7;
+  margin-left: 4px;
 }
 
-.back-btn:hover {
-  background-color: #444;
+.status-badge.cancelled {
+  background: #ffeaea;
+  color: #dc3545;
+}
+
+.status-badge.active {
+  background: #eafbe7;
+  color: #28a745;
+}
+
+.booking-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.93rem;
+  color: #666;
+  margin-top: 6px;
+  gap: 8px;
+}
+
+.verify-section {
+  margin-left: 8px;
+}
+
+.verify-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 4px;
+  transition: background 0.13s, color 0.13s;
+}
+
+.verify-badge.verified {
+  background: #eafbe7;
+  color: #28a745;
+}
+
+.verify-badge.pending {
+  background: #fffbe7;
+  color: #f0ad4e;
+}
+
+.verify-badge.error {
+  background: #ffeaea;
+  color: #dc3545;
+}
+
+.refund-section {
+  display: flex;
+  gap: 24px;
+  font-size: 1.01rem;
+  color: #dc3545;
+  background: #fff4f4;
+  border-radius: 7px;
+  padding: 8px 14px;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.blockchain-details {
+  background: #f3f6fa;
+  border-radius: 7px;
+  padding: 12px 16px;
+  margin-top: 8px;
+  font-size: 0.96rem;
+  color: #003366;
+  word-break: break-all;
+  box-shadow: 0 1px 6px rgba(11, 94, 215, 0.08);
+}
+.blockchain-details .mono {
+  font-family: "Fira Mono", "Consolas", monospace;
+  font-size: 0.95rem;
+  color: #0b5ed7;
 }
 
 .booking-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
-.red-btn {
-  background-color: #ff4d4f;
-  color: white;
+.blue-btn,
+.red-btn,
+.update-btn,
+.cancel-btn {
+  padding: 0.5rem 1.2rem;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 7px;
+  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background 0.18s, transform 0.13s;
 }
 
-.red-btn:hover {
-  background-color: #d9363e;
+.blue-btn,
+.update-btn {
+  background: #0b5ed7;
+  color: #fff;
+}
+.blue-btn:hover,
+.update-btn:hover {
+  background: #0056b3;
+  transform: scale(1.04);
 }
 
-.blue-btn {
-  background-color: #1890ff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+.red-btn,
+.cancel-btn {
+  background: #dc3545;
+  color: #fff;
+}
+.red-btn:hover,
+.cancel-btn:hover {
+  background: #c82333;
+  transform: scale(1.04);
+}
+
+.booking-actions button:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.back-btn {
+  display: block;
+  margin: 40px auto 0 auto;
+  background: #f3f6fa;
+  color: #0b5ed7;
+  border: 2px solid #0b5ed7;
+  border-radius: 7px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 11px 36px;
   cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.13s;
+  box-shadow: 0 2px 8px rgba(11, 94, 215, 0.07);
 }
 
-.blue-btn:hover {
-  background-color: #096dd9;
+.back-btn:hover {
+  background: #0b5ed7;
+  color: #fff;
+  transform: scale(1.04);
 }
 
-.update-btn:disabled,
-.cancel-btn:disabled,
-.red-btn:disabled,
-.blue-btn:disabled {
-  background-color: #e0e0e0 !important;
-  color: #888 !important;
-  border: none !important;
-  cursor: not-allowed !important;
-  opacity: 0.7;
-  box-shadow: none !important;
+@media (max-width: 800px) {
+  .booking-list {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .booking-card {
+    padding: 16px 8px 16px 12px;
+  }
+  .booking-details {
+    flex-direction: column;
+    gap: 6px;
+  }
 }

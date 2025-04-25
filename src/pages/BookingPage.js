@@ -21,12 +21,28 @@ function BookingPage() {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookedSeats, setBookedSeats] = useState([]);
   const [availableSeats, setAvailableSeats] = useState([]);
+  const [seatPriceMap, setSeatPriceMap] = useState({});
   const [loading, setLoading] = useState(false);
 
+  // Build seat price map, booked/available seats
   useEffect(() => {
     if (ticket?.seats) {
+      const seatMap = {};
+      ticket.seats.forEach((s) => {
+        seatMap[s.seatNumber] = s.price;
+      });
+      setSeatPriceMap(seatMap);
+
       const booked = ticket.seats
-        .filter((s) => s.booked && !(isUpdate && ticket.seatNumbers.includes(s.seatNumber)))
+        .filter(
+          (s) =>
+            s.booked &&
+            !(
+              isUpdate &&
+              ticket.seatNumbers &&
+              ticket.seatNumbers.includes(s.seatNumber)
+            )
+        )
         .map((s) => s.seatNumber);
       const available = ticket.seats.map((s) => s.seatNumber);
       setBookedSeats(booked);
@@ -46,6 +62,12 @@ function BookingPage() {
     );
   };
 
+  // Calculate total price based on selected seats
+  const totalPrice = selectedSeats.reduce(
+    (sum, seat) => sum + (seatPriceMap[seat] || ticket.basePrice),
+    0
+  );
+
   const handleConfirm = async () => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -58,6 +80,7 @@ function BookingPage() {
     try {
       setLoading(true);
 
+      // Optionally, re-fetch latest seat status
       await axios.get("http://localhost:3001/api/travel/list", {
         headers: { Authorization: `Bearer ${token}` },
         params: {
@@ -69,11 +92,6 @@ function BookingPage() {
       });
 
       let response;
-      let transactionID = `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      let bookingID = isUpdate
-        ? ticket.bookingID
-        : `book_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      let totalPrice = selectedSeats.length * ticket.basePrice;
 
       if (isUpdate) {
         response = await axios.put(
@@ -87,7 +105,6 @@ function BookingPage() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        totalPrice = response.data.booking.totalPrice;
       } else {
         response = await axios.post(
           "http://localhost:3001/api/travel/book",
@@ -104,33 +121,59 @@ function BookingPage() {
       }
 
       if (response.data.success) {
-        alert(isUpdate ? "✅ Booking updated successfully!" : "🎉 Booking successful!");
+        alert(
+          isUpdate
+            ? "✅ Booking updated successfully!"
+            : "🎉 Booking successful!"
+        );
         navigate("/my-bookings");
       } else {
         alert(response.data.message || "Booking failed");
       }
     } catch (err) {
       console.error("Booking failed:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Booking failed due to server error");
+      alert(
+        err.response?.data?.message || "Booking failed due to server error"
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  if (!ticket) return <div>No ticket data found.</div>;
+  if (!ticket)
+    return (
+      <div className="booking-page">
+        <div className="no-ticket">No ticket data found.</div>
+      </div>
+    );
 
   return (
     <div className="booking-page">
       <h2>{isUpdate ? "Update Your Booking" : "Confirm Your Booking"}</h2>
       <div className="ticket-detail">
-        <p><strong>Route:</strong> {ticket.source} → {ticket.destination}</p>
-        <p><strong>Departure:</strong> {ticket.departureTime}</p>
-        <p><strong>Arrival:</strong> {ticket.arrivalTime}</p>
-        <p><strong>Price:</strong> ₹{ticket.basePrice}</p>
+        <p>
+          <strong>Route:</strong> {ticket.source} → {ticket.destination}
+        </p>
+        <p>
+          <strong>Departure:</strong>{" "}
+          {ticket.departureTime?.replace("T", " ").substring(0, 16)}
+        </p>
+        <p>
+          <strong>Arrival:</strong>{" "}
+          {ticket.arrivalTime?.replace("T", " ").substring(0, 16)}
+        </p>
+        <p>
+          <strong>Agency:</strong> {ticket.agencyId}
+        </p>
+        <p>
+          <strong>Type:</strong> {ticket.type}
+        </p>
       </div>
 
       <div className="seat-selection">
-        <label>Select Seat(s):</label>
+        <label>
+          <strong>Select Seat(s):</strong>
+        </label>
         <div className="seat-map">
           {seatLayout.map((row, i) => (
             <div key={i} className="seat-row">
@@ -145,12 +188,34 @@ function BookingPage() {
                     }`}
                     onClick={() => isAvailable(seat) && toggleSeat(seat)}
                   >
-                    {seat}
+                    <div className="seat-label">{seat}</div>
+                    <div className="seat-price">
+                      ₹{seatPriceMap[seat] || ticket.basePrice}
+                    </div>
                   </div>
                 )
               )}
             </div>
           ))}
+        </div>
+        <div className="selected-summary">
+          {selectedSeats.length > 0 ? (
+            <>
+              <div>
+                Selected:{" "}
+                {selectedSeats.map((s) => (
+                  <span key={s} className="selected-seat">
+                    {s}
+                  </span>
+                ))}
+              </div>
+              <div className="total-price">
+                Total Price: <span>₹{totalPrice}</span>
+              </div>
+            </>
+          ) : (
+            <div className="no-seat-selected">No seat selected</div>
+          )}
         </div>
       </div>
 
@@ -159,7 +224,13 @@ function BookingPage() {
         onClick={handleConfirm}
         disabled={loading || selectedSeats.length === 0}
       >
-        {loading ? (isUpdate ? "Updating..." : "Booking...") : (isUpdate ? "Update Booking" : "Confirm Booking")}
+        {loading
+          ? isUpdate
+            ? "Updating..."
+            : "Booking..."
+          : isUpdate
+          ? "Update Booking"
+          : "Confirm Booking"}
       </button>
     </div>
   );

@@ -15,9 +15,12 @@ function UpdateAgencyProfile() {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("http://localhost:3002/api/agencies/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const { name, email, phone } = res.data.data;
       setFormData({ name, email, phone });
     } catch (err) {
@@ -34,11 +37,11 @@ function UpdateAgencyProfile() {
     e.preventDefault();
     try {
       const res = await axios.put(
-        "http://localhost:3002/api/agencies/update-profile",
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/update-profile`,
         { name: formData.name },
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
       alert(res.data.message || "Profile updated successfully!");
       navigate("/agency-dashboard");

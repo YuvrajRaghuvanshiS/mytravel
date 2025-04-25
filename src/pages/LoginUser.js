@@ -61,8 +61,8 @@ function LoginUser() {
       }
       const loginURL =
         userType === "user"
-          ? "http://localhost:3001/api/auth/login"
-          : "http://localhost:3002/api/auth/login";
+          ? `${process.env.CUSTOMER_API_BASE_URL}/api/auth/login`
+          : `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/auth/login`;
       const response = await axios.post(loginURL, { id, password });
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);

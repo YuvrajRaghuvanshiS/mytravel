@@ -12,11 +12,14 @@ function AgencyWalletPage() {
   useEffect(() => {
     const fetchWallet = async () => {
       try {
-        const res = await axios.get("http://localhost:3002/api/agencies/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         const { balance } = res.data.data;
         setBalance(balance);
       } catch (error) {
@@ -39,13 +42,13 @@ function AgencyWalletPage() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3002/api/wallet/add-money",
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/wallet/add-money`,
         { amount: Number(amount) },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        },
+        }
       );
 
       const { success, message, balance: newBalance } = res.data;

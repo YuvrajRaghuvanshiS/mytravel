@@ -18,9 +18,12 @@ function AgencyDashboard() {
 
   const fetchAgencyProfile = async () => {
     try {
-      const res = await axios.get("http://localhost:3002/api/agencies/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/agencies/me`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setAgency(res.data.data);
     } catch (err) {
       console.error("Error fetching agency:", err);
@@ -30,9 +33,12 @@ function AgencyDashboard() {
 
   const fetchAgencyListings = async () => {
     try {
-      const res = await axios.get("http://localhost:3002/api/travel/list", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/list`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTravelOptions(res.data.travelOptions || []);
     } catch (err) {
       console.error("Error fetching listings:", err);
@@ -48,16 +54,19 @@ function AgencyDashboard() {
 
   const handleDeleteTravel = async (id) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this route?",
+      "Are you sure you want to delete this route?"
     );
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:3002/api/travel/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.delete(
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       alert("Travel route deleted successfully!");
       fetchAgencyListings();

@@ -36,9 +36,12 @@ function UpdateTravelRoute() {
 
   const fetchTravelDetails = async () => {
     try {
-      const res = await axios.get("http://localhost:3002/api/travel/list", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/list`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const travel = res.data.travelOptions.find((t) => t.id === parseInt(id));
       if (!travel) {
         alert("Travel route not found.");
@@ -95,18 +98,18 @@ function UpdateTravelRoute() {
 
     try {
       await axios.put(
-        `http://localhost:3002/api/travel/update/${id}`,
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/update/${id}`,
         updatedData,
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
       alert("✅ Travel route updated successfully!");
       navigate("/agency-dashboard");
     } catch (error) {
       console.error("Update failed", error.response?.data || error.message);
       alert(
-        error.response?.data?.message || "❌ Failed to update travel route",
+        error.response?.data?.message || "❌ Failed to update travel route"
       );
     }
   };
@@ -153,8 +156,8 @@ function UpdateTravelRoute() {
                   name === "basePrice"
                     ? "number"
                     : name === "date"
-                      ? "date"
-                      : "time"
+                    ? "date"
+                    : "time"
                 }
                 name={name}
                 value={form[name]}
@@ -175,12 +178,14 @@ function UpdateTravelRoute() {
                     ) : (
                       <div
                         key={seat}
-                        className={`seat-box ${selectedSeats.includes(seat) ? "selected" : ""}`}
+                        className={`seat-box ${
+                          selectedSeats.includes(seat) ? "selected" : ""
+                        }`}
                         onClick={() => toggleSeat(seat)}
                       >
                         {seat}
                       </div>
-                    ),
+                    )
                   )}
                 </div>
               ))}

@@ -13,11 +13,14 @@ function WalletPage() {
   useEffect(() => {
     const fetchWallet = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.CUSTOMER_API_BASE_URL}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         const { balance } = res.data.data;
         setBalance(balance);
         localStorage.setItem("walletBalance", balance);
@@ -41,14 +44,14 @@ function WalletPage() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/wallet/add-money",
+        `${process.env.CUSTOMER_API_BASE_URL}/api/wallet/add-money`,
         { amount: Number(amount) },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       const { success, message, balance: newBalance } = res.data;
@@ -74,7 +77,7 @@ function WalletPage() {
       const serverMsg = error?.response?.data?.message;
       console.error("Failed to add money:", serverMsg || error.message);
       alert(
-        serverMsg || "Error adding money to wallet. Please try again later.",
+        serverMsg || "Error adding money to wallet. Please try again later."
       );
     }
   };

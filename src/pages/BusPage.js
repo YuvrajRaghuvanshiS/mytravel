@@ -16,11 +16,14 @@ function BusPage() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.CUSTOMER_API_BASE_URL}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         const { name, balance, email, phone, isAnonymous } = res.data.data;
         const updatedUser = { name, balance, email, phone, isAnonymous };

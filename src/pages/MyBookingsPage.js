@@ -17,10 +17,15 @@ function MyBookingsPage() {
         const headers = { Authorization: `Bearer ${token}` };
 
         const [bookingsRes, travelRes] = await Promise.all([
-          axios.get("http://localhost:3001/api/travel/get-all-bookings", {
+          axios.get(
+            `${process.env.CUSTOMER_API_BASE_URL}/api/travel/get-all-bookings`,
+            {
+              headers,
+            }
+          ),
+          axios.get(`${process.env.CUSTOMER_API_BASE_URL}/api/travel/list`, {
             headers,
           }),
-          axios.get("http://localhost:3001/api/travel/list", { headers }),
         ]);
 
         setBookings(bookingsRes.data.data);
@@ -39,17 +44,20 @@ function MyBookingsPage() {
 
   const handleCancelBooking = async (bookingID) => {
     const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this booking?",
+      "Are you sure you want to cancel this booking?"
     );
     if (!confirmCancel) return;
 
     try {
-      const res = await axios.delete("http://localhost:3001/api/travel/book", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        data: { bookingID },
-      });
+      const res = await axios.delete(
+        `${process.env.CUSTOMER_API_BASE_URL}/api/travel/book`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          data: { bookingID },
+        }
+      );
 
       if (res.data.success) {
         alert("Booking cancelled successfully");
@@ -60,8 +68,7 @@ function MyBookingsPage() {
     } catch (err) {
       console.error("Cancellation failed:", err.response?.data || err.message);
       alert(
-        err.response?.data?.message ||
-          "Cancellation failed due to server error",
+        err.response?.data?.message || "Cancellation failed due to server error"
       );
     }
   };

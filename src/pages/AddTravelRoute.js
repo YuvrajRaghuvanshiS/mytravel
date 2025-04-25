@@ -85,15 +85,19 @@ function AddTravelRoute() {
     };
 
     try {
-      await axios.post("http://localhost:3002/api/travel/add", payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        `${process.env.TRAVEL_AGENCY_API_BASE_URL}/api/travel/add`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Travel route added successfully!");
       navigate("/agency-dashboard");
     } catch (error) {
       console.error("Failed to add travel route", error);
       alert(
-        error.response?.data?.message || "Error: Could not add travel route",
+        error.response?.data?.message || "Error: Could not add travel route"
       );
     } finally {
       setLoading(false);
@@ -143,8 +147,8 @@ function AddTravelRoute() {
                   name === "basePrice"
                     ? "number"
                     : name === "date"
-                      ? "date"
-                      : "text"
+                    ? "date"
+                    : "text"
                 }
                 name={name}
                 value={form[name]}
@@ -209,7 +213,7 @@ function AddTravelRoute() {
                           />
                         )}
                       </div>
-                    ),
+                    )
                   )}
                 </div>
               ))}

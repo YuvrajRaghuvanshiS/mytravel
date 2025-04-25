@@ -16,11 +16,14 @@ function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await axios.get(
+          `${process.env.CUSTOMER_API_BASE_URL}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         const { name, email, phone, isAnonymous } = res.data.data;
         setName(name);
@@ -43,7 +46,7 @@ function ProfilePage() {
   const handleSave = async () => {
     try {
       const res = await axios.put(
-        "http://localhost:3001/api/users/update-profile",
+        `${process.env.CUSTOMER_API_BASE_URL}/api/users/update-profile`,
         {
           name,
           email,
@@ -54,7 +57,7 @@ function ProfilePage() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        },
+        }
       );
 
       localStorage.setItem("loggedInUser", JSON.stringify(res.data.data));

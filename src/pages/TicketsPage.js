@@ -93,12 +93,15 @@ function TicketsPage() {
       if (!queryParams.type && searchParams.mode)
         queryParams.type = searchParams.mode.replace(/s$/, "");
 
-      const res = await axios.get("http://localhost:3001/api/travel/list", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: queryParams,
-      });
+      const res = await axios.get(
+        `${process.env.CUSTOMER_API_BASE_URL}/api/travel/list`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: queryParams,
+        }
+      );
 
       const apiTickets = res.data.travelOptions || [];
       setTickets(apiTickets);

@@ -143,8 +143,9 @@ function MyBookingsPage() {
                   key={booking.bookingID}
                   className={`booking-card ${isCancelled ? "cancelled" : ""}`}
                 >
+                  {/* Top: Route and Price */}
                   <div className="booking-card-header">
-                    <div className="route">
+                    <div className="route-main">
                       <span className="icon">
                         {travel?.type === "flight"
                           ? "✈️"
@@ -152,52 +153,33 @@ function MyBookingsPage() {
                           ? "🚆"
                           : "🚌"}
                       </span>
-                      <span>
-                        <strong>{travel?.source}</strong> →{" "}
-                        <strong>{travel?.destination}</strong>
+                      <span className="route-cities">
+                        <span className="city">{travel?.source}</span>
+                        <span className="arrow">→</span>
+                        <span className="city">{travel?.destination}</span>
                       </span>
                     </div>
                     <span className="price">₹{booking.totalPrice}</span>
                   </div>
 
-                  <div className="booking-details">
-                    <div>
-                      <p>
-                        <strong>Departure:</strong>{" "}
-                        {formatDate(travel?.departureTime)}
-                      </p>
-                      <p>
-                        <strong>Arrival:</strong>{" "}
-                        {formatDate(travel?.arrivalTime)}
-                      </p>
-                      <p>
-                        <strong>Date:</strong> {formatDate(travel?.date)}
-                      </p>
-                    </div>
-                    <div>
-                      <p>
-                        <strong>Type:</strong>{" "}
-                        {travel?.type?.toUpperCase() || "N/A"}
-                      </p>
-                      <p>
-                        <strong>Seats:</strong> {booking.seatNumbers.join(", ")}
-                      </p>
-                      <p>
-                        <strong>Status:</strong>{" "}
-                        <span
-                          className={`status-badge ${
-                            isCancelled ? "cancelled" : "active"
-                          }`}
-                        >
-                          {booking.status}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="booking-meta">
-                    <span>Booking ID: {booking.bookingID}</span>
-                    <span className="verify-section">
+                  {/* Agency, Type, Status */}
+                  <div className="booking-card-agency">
+                    <span className="agency-name">
+                      {"Agency: "}
+                      {travel?.agencyId || "Agency"}
+                    </span>
+                    <span className="type-badge">
+                      {travel?.type?.toUpperCase()}
+                    </span>
+                    <span
+                      className={`status-badge ${
+                        isCancelled ? "cancelled" : "active"
+                      }`}
+                      style={{ marginLeft: 12 }}
+                    >
+                      {booking.status}
+                    </span>
+                    <span className="verify-section" style={{ marginLeft: 75 }}>
                       {verify.loading ? (
                         <span className="verify-badge pending">
                           Verifying...
@@ -236,20 +218,6 @@ function MyBookingsPage() {
                     </span>
                   </div>
 
-                  {/* Refund & Penalty for cancelled bookings */}
-                  {isCancelled && (
-                    <div className="refund-section">
-                      <span>
-                        Refund:{" "}
-                        <strong>₹{booking.refundAmount ?? "0.00"}</strong>
-                      </span>
-                      <span>
-                        Penalty: <strong>₹{booking.penalty ?? "0.00"}</strong>
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Blockchain details expandable */}
                   {expandedBooking === booking.bookingID && verify.details && (
                     <div className="blockchain-details">
                       <div>
@@ -273,10 +241,97 @@ function MyBookingsPage() {
                       </div>
                       <div>
                         <strong>Verified At:</strong>{" "}
-                        {formatDate(verify.details.verificationTimestamp)}
+                        {verify.details.verificationTimestamp
+                          ? new Date(
+                              verify.details.verificationTimestamp
+                            ).toLocaleString()
+                          : "N/A"}
                       </div>
                     </div>
                   )}
+
+                  <div className="divider"></div>
+
+                  {/* Details */}
+                  <div className="booking-details">
+                    <div>
+                      <p>
+                        <strong>Booking ID:</strong> {booking.bookingID}
+                      </p>
+                      <p>
+                        <strong>Travel ID:</strong> {booking.travelID}
+                      </p>
+                      <p>
+                        <strong>Date:</strong> {formatDate(travel?.date)}
+                      </p>
+                      <p>
+                        <strong>Departure:</strong>{" "}
+                        {travel?.departureTime
+                          ?.replace("T", " ")
+                          .substring(0, 16)}
+                      </p>
+                      <p>
+                        <strong>Arrival:</strong>{" "}
+                        {travel?.arrivalTime
+                          ?.replace("T", " ")
+                          .substring(0, 16)}
+                      </p>
+                      <p>
+                        <strong>Created At:</strong>{" "}
+                        {booking.createdAt
+                          ? new Date(booking.createdAt).toLocaleString()
+                          : "N/A"}
+                      </p>
+                      <p>
+                        <strong>Updated At:</strong>{" "}
+                        {booking.updatedAt
+                          ? new Date(booking.updatedAt).toLocaleString()
+                          : "N/A"}
+                      </p>
+                      {booking.cancelledAt && (
+                        <p>
+                          <strong>Cancelled At:</strong>{" "}
+                          {new Date(booking.cancelledAt).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <p>
+                        <strong>Seats:</strong> {booking.seatNumbers.join(", ")}
+                      </p>
+                      <p>
+                        <strong>Price/Seat:</strong>{" "}
+                        {booking.seatNumbers.length > 0
+                          ? `₹${(
+                              booking.totalPrice / booking.seatNumbers.length
+                            ).toFixed(2)}`
+                          : "-"}
+                      </p>
+                      <p>
+                        <strong>Total Price:</strong> ₹{booking.totalPrice}
+                      </p>
+                      {typeof booking.refundAmount !== "undefined" &&
+                        isCancelled && (
+                          <p>
+                            <strong>Refund:</strong>{" "}
+                            <span className="refund-amount">
+                              ₹{booking.refundAmount}
+                            </span>
+                          </p>
+                        )}
+                      {typeof booking.penalty !== "undefined" &&
+                        isCancelled && (
+                          <p>
+                            <strong>Penalty:</strong>{" "}
+                            <span className="penalty-amount">
+                              ₹{booking.penalty}
+                            </span>
+                          </p>
+                        )}
+                    </div>
+                  </div>
+
+                  <div className="divider"></div>
 
                   <div className="booking-actions">
                     <button

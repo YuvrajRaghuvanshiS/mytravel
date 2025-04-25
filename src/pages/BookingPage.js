@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/BookingPage.css";
+import Navbar from "../components/Navbar";
 
 const seatLayout = [
   ["1A", "1B", "", "1C", "1D"],
@@ -151,91 +152,94 @@ function BookingPage() {
     );
 
   return (
-    <div className="booking-page">
-      <h2>{isUpdate ? "Update Your Booking" : "Confirm Your Booking"}</h2>
-      <div className="ticket-detail">
-        <p>
-          <strong>Route:</strong> {ticket.source} → {ticket.destination}
-        </p>
-        <p>
-          <strong>Departure:</strong>{" "}
-          {ticket.departureTime?.replace("T", " ").substring(0, 16)}
-        </p>
-        <p>
-          <strong>Arrival:</strong>{" "}
-          {ticket.arrivalTime?.replace("T", " ").substring(0, 16)}
-        </p>
-        <p>
-          <strong>Agency:</strong> {ticket.agencyId}
-        </p>
-        <p>
-          <strong>Type:</strong> {ticket.type}
-        </p>
-      </div>
+    <>
+      <Navbar />
+      <div className="booking-page">
+        <h2>{isUpdate ? "Update Your Booking" : "Confirm Your Booking"}</h2>
+        <div className="ticket-detail">
+          <p>
+            <strong>Route:</strong> {ticket.source} → {ticket.destination}
+          </p>
+          <p>
+            <strong>Departure:</strong>{" "}
+            {ticket.departureTime?.replace("T", " ").substring(0, 16)}
+          </p>
+          <p>
+            <strong>Arrival:</strong>{" "}
+            {ticket.arrivalTime?.replace("T", " ").substring(0, 16)}
+          </p>
+          <p>
+            <strong>Agency:</strong> {ticket.agencyId}
+          </p>
+          <p>
+            <strong>Type:</strong> {ticket.type}
+          </p>
+        </div>
 
-      <div className="seat-selection">
-        <label>
-          <strong>Select Seat(s):</strong>
-        </label>
-        <div className="seat-map">
-          {seatLayout.map((row, i) => (
-            <div key={i} className="seat-row">
-              {row.map((seat, j) =>
-                seat === "" ? (
-                  <div key={j} className="seat-gap" />
-                ) : (
-                  <div
-                    key={seat}
-                    className={`seat ${!isAvailable(seat) ? "booked" : ""} ${
-                      selectedSeats.includes(seat) ? "selected" : ""
-                    }`}
-                    onClick={() => isAvailable(seat) && toggleSeat(seat)}
-                  >
-                    <div className="seat-label">{seat}</div>
-                    <div className="seat-price">
-                      ₹{seatPriceMap[seat] || ticket.basePrice}
+        <div className="seat-selection">
+          <label>
+            <strong>Select Seat(s):</strong>
+          </label>
+          <div className="seat-map">
+            {seatLayout.map((row, i) => (
+              <div key={i} className="seat-row">
+                {row.map((seat, j) =>
+                  seat === "" ? (
+                    <div key={j} className="seat-gap" />
+                  ) : (
+                    <div
+                      key={seat}
+                      className={`seat ${!isAvailable(seat) ? "booked" : ""} ${
+                        selectedSeats.includes(seat) ? "selected" : ""
+                      }`}
+                      onClick={() => isAvailable(seat) && toggleSeat(seat)}
+                    >
+                      <div className="seat-label">{seat}</div>
+                      <div className="seat-price">
+                        ₹{seatPriceMap[seat] || ticket.basePrice}
+                      </div>
                     </div>
-                  </div>
-                )
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="selected-summary">
-          {selectedSeats.length > 0 ? (
-            <>
-              <div>
-                Selected:{" "}
-                {selectedSeats.map((s) => (
-                  <span key={s} className="selected-seat">
-                    {s}
-                  </span>
-                ))}
+                  )
+                )}
               </div>
-              <div className="total-price">
-                Total Price: <span>₹{totalPrice}</span>
-              </div>
-            </>
-          ) : (
-            <div className="no-seat-selected">No seat selected</div>
-          )}
+            ))}
+          </div>
+          <div className="selected-summary">
+            {selectedSeats.length > 0 ? (
+              <>
+                <div>
+                  Selected:{" "}
+                  {selectedSeats.map((s) => (
+                    <span key={s} className="selected-seat">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <div className="total-price">
+                  Total Price: <span>₹{totalPrice}</span>
+                </div>
+              </>
+            ) : (
+              <div className="no-seat-selected">No seat selected</div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <button
-        className="confirm-button"
-        onClick={handleConfirm}
-        disabled={loading || selectedSeats.length === 0}
-      >
-        {loading
-          ? isUpdate
-            ? "Updating..."
-            : "Booking..."
-          : isUpdate
-          ? "Update Booking"
-          : "Confirm Booking"}
-      </button>
-    </div>
+        <button
+          className="confirm-button"
+          onClick={handleConfirm}
+          disabled={loading || selectedSeats.length === 0}
+        >
+          {loading
+            ? isUpdate
+              ? "Updating..."
+              : "Booking..."
+            : isUpdate
+            ? "Update Booking"
+            : "Confirm Booking"}
+        </button>
+      </div>
+    </>
   );
 }
 

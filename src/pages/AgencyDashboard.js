@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/agencyDashboard.css";
+import Navbar from "../components/Navbar";
 
 function AgencyDashboard() {
   const [agency, setAgency] = useState(null);
@@ -86,91 +87,94 @@ function AgencyDashboard() {
   };
 
   return (
-    <div className="agency-dashboard">
-      <header className="dashboard-header">
-        <h1>🧳 Agency Dashboard</h1>
-        <div className="profile-section">
-          <button
-            className="profile-btn"
-            onClick={() => navigate("/agency-profile")}
-          >
-            Update Profile
-          </button>
-          <button
-            className="blue-btn"
-            onClick={() => navigate("/agency-wallet")}
-          >
-            Add Wallet Money
-          </button>
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      </header>
+    <>
+      <Navbar />
+      <div className="agency-dashboard">
+        <header className="dashboard-header">
+          <h1>🧳 Agency Dashboard</h1>
+          <div className="profile-section">
+            <button
+              className="profile-btn"
+              onClick={() => navigate("/agency-profile")}
+            >
+              Update Profile
+            </button>
+            <button
+              className="blue-btn"
+              onClick={() => navigate("/agency-wallet")}
+            >
+              Add Wallet Money
+            </button>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        </header>
 
-      {agency && (
-        <section className="agency-info">
-          <h2>Welcome, {agency.name}</h2>
-          <p>
-            <strong>Email:</strong> {agency.email}
-          </p>
-          <p>
-            <strong>Phone:</strong> {agency.phone}
-          </p>
-          <p>
-            <strong>Wallet Balance:</strong> ₹{agency.balance.toFixed(2)}
-          </p>
-        </section>
-      )}
-
-      <section className="travel-section">
-        <div className="travel-header">
-          <h2>Your Travel Listings</h2>
-          <button className="green-btn" onClick={handleAddTravel}>
-            + Add Travel Route
-          </button>
-        </div>
-
-        {loading ? (
-          <p>Loading listings...</p>
-        ) : travelOptions.length === 0 ? (
-          <p>No travel listings found.</p>
-        ) : (
-          <ul className="travel-list">
-            {travelOptions.map((item) => (
-              <li key={item.id} className="travel-card">
-                <div className="travel-header-row">
-                  <span className="tag">
-                    {item.mode || item.type || "Mode"}
-                  </span>
-                  <span>
-                    <strong>{item.source}</strong> →{" "}
-                    <strong>{item.destination}</strong>
-                  </span>
-                </div>
-                <p>Date: {new Date(item.date).toLocaleDateString()}</p>
-                <p>Base Price: ₹{item.basePrice}</p>
-                <p>Seats Available: {item.availableSeats}</p>
-                <div className="action-btns">
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteTravel(item.id)}
-                  >
-                    ❌ Delete Route
-                  </button>
-                  <button
-                    className="update-btn"
-                    onClick={() => handleUpdateTravel(item.id)}
-                  >
-                    ✏️ Update Route
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
+        {agency && (
+          <section className="agency-info">
+            <h2>Welcome, {agency.name}</h2>
+            <p>
+              <strong>Email:</strong> {agency.email}
+            </p>
+            <p>
+              <strong>Phone:</strong> {agency.phone}
+            </p>
+            <p>
+              <strong>Wallet Balance:</strong> ₹{agency.balance.toFixed(2)}
+            </p>
+          </section>
         )}
-      </section>
-    </div>
+
+        <section className="travel-section">
+          <div className="travel-header">
+            <h2>Your Travel Listings</h2>
+            <button className="green-btn" onClick={handleAddTravel}>
+              + Add Travel Route
+            </button>
+          </div>
+
+          {loading ? (
+            <p>Loading listings...</p>
+          ) : travelOptions.length === 0 ? (
+            <p>No travel listings found.</p>
+          ) : (
+            <ul className="travel-list">
+              {travelOptions.map((item) => (
+                <li key={item.id} className="travel-card">
+                  <div className="travel-header-row">
+                    <span className="tag">
+                      {item.mode || item.type || "Mode"}
+                    </span>
+                    <span>
+                      <strong>{item.source}</strong> →{" "}
+                      <strong>{item.destination}</strong>
+                    </span>
+                  </div>
+                  <p>Date: {new Date(item.date).toLocaleDateString()}</p>
+                  <p>Base Price: ₹{item.basePrice}</p>
+                  <p>Seats Available: {item.availableSeats}</p>
+                  <div className="action-btns">
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDeleteTravel(item.id)}
+                    >
+                      ❌ Delete Route
+                    </button>
+                    <button
+                      className="update-btn"
+                      onClick={() => handleUpdateTravel(item.id)}
+                    >
+                      ✏️ Update Route
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+    </>
   );
 }
 

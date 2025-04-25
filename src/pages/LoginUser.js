@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/login_register.css";
 import loginImage from "../images/register_look.jpg";
+import Navbar from "../components/Navbar";
 
 function LoginUser() {
   const [id, setId] = useState("");
@@ -89,123 +90,126 @@ function LoginUser() {
   };
 
   return (
-    <div className="login-page-pro">
-      <div className="login-left">
-        <img src={loginImage} alt="Login Illustration" />
-        <h2>Welcome Back!</h2>
-        <p>
-          Access your bookings, manage your account, and explore new
-          destinations.
-        </p>
-      </div>
-      <div className="login-right">
-        <div className="login-container-pro">
-          {userType === "" ? (
-            <>
-              <h2>Sign in to your account</h2>
-              <div className="user-type-buttons-pro">
-                <button onClick={() => setUserType("user")}>
-                  Login as User
-                </button>
-                <button onClick={() => setUserType("agency")}>
-                  Login as Travel Agency
-                </button>
-              </div>
-              <p className="register-link">
-                New here?{" "}
-                <span onClick={() => navigate("/register-user")}>
-                  Create an account
-                </span>
-              </p>
-            </>
-          ) : (
-            <>
-              <h2>
-                {userType === "user" ? "User Login" : "Travel Agency Login"}
-              </h2>
-              <form onSubmit={handleLogin}>
-                <div className="form-group">
-                  <label>Username (ID)</label>
-                  <div className="input-icon">
-                    <span className="input-emoji">👤</span>
-                    <input
-                      type="text"
-                      value={id}
-                      placeholder="Enter your ID"
-                      onChange={(e) => setId(e.target.value)}
-                      required
-                    />
-                  </div>
+    <>
+      <Navbar />
+      <div className="login-page-pro">
+        <div className="login-left">
+          <img src={loginImage} alt="Login Illustration" />
+          <h2>Welcome Back!</h2>
+          <p>
+            Access your bookings, manage your account, and explore new
+            destinations.
+          </p>
+        </div>
+        <div className="login-right">
+          <div className="login-container-pro">
+            {userType === "" ? (
+              <>
+                <h2>Sign in to your account</h2>
+                <div className="user-type-buttons-pro">
+                  <button onClick={() => setUserType("user")}>
+                    Login as User
+                  </button>
+                  <button onClick={() => setUserType("agency")}>
+                    Login as Travel Agency
+                  </button>
                 </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <div className="input-icon">
-                    <span className="input-emoji">🔒</span>
-                    <input
-                      type="password"
-                      value={password}
-                      placeholder="Enter your password"
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="form-group captcha-container">
-                  <label>Verification</label>
-                  <div className="captcha-box">
-                    <div className="captcha-question">
-                      {captchaQuestion || "Loading..."}
+                <p className="register-link">
+                  New here?{" "}
+                  <span onClick={() => navigate("/register-user")}>
+                    Create an account
+                  </span>
+                </p>
+              </>
+            ) : (
+              <>
+                <h2>
+                  {userType === "user" ? "User Login" : "Travel Agency Login"}
+                </h2>
+                <form onSubmit={handleLogin}>
+                  <div className="form-group">
+                    <label>Username (ID)</label>
+                    <div className="input-icon">
+                      <span className="input-emoji">👤</span>
+                      <input
+                        type="text"
+                        value={id}
+                        placeholder="Enter your ID"
+                        onChange={(e) => setId(e.target.value)}
+                        required
+                      />
                     </div>
                   </div>
-                  <div className="captcha-input">
-                    <input
-                      type="number"
-                      value={captchaInput}
-                      placeholder="Enter the answer"
-                      onChange={(e) => setCaptchaInput(e.target.value)}
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="refresh-captcha"
-                      onClick={generateCaptcha}
-                      title="Refresh CAPTCHA"
-                    >
-                      ↻
-                    </button>
+                  <div className="form-group">
+                    <label>Password</label>
+                    <div className="input-icon">
+                      <span className="input-emoji">🔒</span>
+                      <input
+                        type="password"
+                        value={password}
+                        placeholder="Enter your password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
+                  <div className="form-group captcha-container">
+                    <label>Verification</label>
+                    <div className="captcha-box">
+                      <div className="captcha-question">
+                        {captchaQuestion || "Loading..."}
+                      </div>
+                    </div>
+                    <div className="captcha-input">
+                      <input
+                        type="number"
+                        value={captchaInput}
+                        placeholder="Enter the answer"
+                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="refresh-captcha"
+                        onClick={generateCaptcha}
+                        title="Refresh CAPTCHA"
+                      >
+                        ↻
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="login-btn-pro"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Please wait..." : "Login"}
+                  </button>
+                </form>
                 <button
-                  type="submit"
-                  className="login-btn-pro"
+                  className="back-button-pro"
+                  onClick={() => setUserType("")}
                   disabled={isLoading}
                 >
-                  {isLoading ? "Please wait..." : "Login"}
+                  ← Back
                 </button>
-              </form>
-              <button
-                className="back-button-pro"
-                onClick={() => setUserType("")}
-                disabled={isLoading}
-              >
-                ← Back
-              </button>
-              <p className="register-link">
-                New here?{" "}
-                <span onClick={() => navigate("/register-user")}>
-                  Create an account
-                </span>
-              </p>
-            </>
-          )}
+                <p className="register-link">
+                  New here?{" "}
+                  <span onClick={() => navigate("/register-user")}>
+                    Create an account
+                  </span>
+                </p>
+              </>
+            )}
+          </div>
+          <footer className="login-footer">
+            <span>
+              © {new Date().getFullYear()} MyTravel.com. All rights reserved.
+            </span>
+          </footer>
         </div>
-        <footer className="login-footer">
-          <span>
-            © {new Date().getFullYear()} MyTravel.com. All rights reserved.
-          </span>
-        </footer>
       </div>
-    </div>
+    </>
   );
 }
 

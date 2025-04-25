@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/agencyDashboard.css"; // Reuse dashboard styles
+import Navbar from "../components/Navbar";
 
 function UpdateTravelRoute() {
   const [form, setForm] = useState({
@@ -121,83 +122,86 @@ function UpdateTravelRoute() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="agency-dashboard">
-      <div className="agency-profile">
-        <h2>Update Travel Route</h2>
-        <form onSubmit={handleSubmit} className="profile-form">
-          {["type", "source", "destination"].map((field) => (
-            <div key={field} className="form-group">
-              <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-              <input
-                type="text"
-                name={field}
-                value={form[field]}
-                readOnly
-                style={{ backgroundColor: "#e9ecef", color: "#6c757d" }}
-              />
-            </div>
-          ))}
+    <>
+      <Navbar />
+      <div className="agency-dashboard">
+        <div className="agency-profile">
+          <h2>Update Travel Route</h2>
+          <form onSubmit={handleSubmit} className="profile-form">
+            {["type", "source", "destination"].map((field) => (
+              <div key={field} className="form-group">
+                <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                <input
+                  type="text"
+                  name={field}
+                  value={form[field]}
+                  readOnly
+                  style={{ backgroundColor: "#e9ecef", color: "#6c757d" }}
+                />
+              </div>
+            ))}
 
-          {[
-            "date",
-            "departureTime",
-            "arrivalTime",
-            "reachTime",
-            "basePrice",
-          ].map((name) => (
-            <div key={name} className="form-group">
-              <label>
-                {name
-                  .replace("Time", " Time")
-                  .replace("basePrice", "Base Price")}
-              </label>
-              <input
-                type={
-                  name === "basePrice"
-                    ? "number"
-                    : name === "date"
-                    ? "date"
-                    : "time"
-                }
-                name={name}
-                value={form[name]}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          ))}
+            {[
+              "date",
+              "departureTime",
+              "arrivalTime",
+              "reachTime",
+              "basePrice",
+            ].map((name) => (
+              <div key={name} className="form-group">
+                <label>
+                  {name
+                    .replace("Time", " Time")
+                    .replace("basePrice", "Base Price")}
+                </label>
+                <input
+                  type={
+                    name === "basePrice"
+                      ? "number"
+                      : name === "date"
+                      ? "date"
+                      : "time"
+                  }
+                  name={name}
+                  value={form[name]}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            ))}
 
-          <div className="form-group">
-            <label>Update Seats</label>
-            <div className="seat-map">
-              {seatLayout.map((row, rowIndex) => (
-                <div key={rowIndex} className="seat-row">
-                  {row.map((seat, i) =>
-                    seat === "" ? (
-                      <div key={i} className="seat-space" />
-                    ) : (
-                      <div
-                        key={seat}
-                        className={`seat-box ${
-                          selectedSeats.includes(seat) ? "selected" : ""
-                        }`}
-                        onClick={() => toggleSeat(seat)}
-                      >
-                        {seat}
-                      </div>
-                    )
-                  )}
-                </div>
-              ))}
+            <div className="form-group">
+              <label>Update Seats</label>
+              <div className="seat-map">
+                {seatLayout.map((row, rowIndex) => (
+                  <div key={rowIndex} className="seat-row">
+                    {row.map((seat, i) =>
+                      seat === "" ? (
+                        <div key={i} className="seat-space" />
+                      ) : (
+                        <div
+                          key={seat}
+                          className={`seat-box ${
+                            selectedSeats.includes(seat) ? "selected" : ""
+                          }`}
+                          onClick={() => toggleSeat(seat)}
+                        >
+                          {seat}
+                        </div>
+                      )
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <button type="submit" className="green-btn">
-            Update Travel Route
-          </button>
-        </form>
+            <button type="submit" className="green-btn">
+              Update Travel Route
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

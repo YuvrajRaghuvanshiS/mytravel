@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/addTravelRoute.css";
+import Navbar from "../components/Navbar";
 
 const seatLayout = [
   ["1A", "1B", "", "1C", "1D"],
@@ -109,123 +110,126 @@ function AddTravelRoute() {
   };
 
   return (
-    <div className="main-div">
-      <div className="inner-div">
-        <h2>Add Travel Route</h2>
-        <form onSubmit={handleSubmit} className="profile-form">
-          <div className="form-group">
-            <label>Mode of Travel</label>
-            <div className="radio-options">
-              {["flight", "bus", "train"].map((mode) => (
-                <label key={mode} style={{ marginRight: "1rem" }}>
-                  <input
-                    type="radio"
-                    name="type"
-                    value={mode}
-                    checked={form.type === mode}
-                    onChange={handleChange}
-                  />{" "}
-                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {[
-            ["source", "Source"],
-            ["destination", "Destination"],
-            ["date", "Date"],
-            ["arrivalTime", "Arrival Time (HH:MM:SS)"],
-            ["departureTime", "Departure Time (HH:MM:SS)"],
-            ["reachTime", "Reach Time (HH:MM:SS)"],
-            ["basePrice", "Default Base Price"],
-          ].map(([name, label]) => (
-            <div key={name} className="form-group">
-              <label>{label}</label>
-              <input
-                type={
-                  name === "basePrice"
-                    ? "number"
-                    : name === "date"
-                    ? "date"
-                    : "text"
-                }
-                name={name}
-                value={form[name]}
-                placeholder={
-                  name.includes("Time") ? "e.g. 08:00:00" : undefined
-                }
-                onChange={handleChange}
-                required
-              />
-            </div>
-          ))}
-
-          <div className="form-group">
-            <label>
-              Select Seats & Set Prices
-              <span className="seat-hint">
-                {" "}
-                (Click to select. Set price for row or each seat.)
-              </span>
-            </label>
-            <div className="seat-map">
-              {seatLayout.map((row, rowIdx) => (
-                <div key={rowIdx} className="seat-row">
-                  {/* Row price input */}
-                  <div className="row-price-input">
+    <>
+      <Navbar />
+      <div className="main-div">
+        <div className="inner-div">
+          <h2>Add Travel Route</h2>
+          <form onSubmit={handleSubmit} className="profile-form">
+            <div className="form-group">
+              <label>Mode of Travel</label>
+              <div className="radio-options">
+                {["flight", "bus", "train"].map((mode) => (
+                  <label key={mode} style={{ marginRight: "1rem" }}>
                     <input
-                      type="number"
-                      min="0"
-                      placeholder="Row Price"
-                      value={rowPrices[rowIdx] || ""}
-                      onChange={(e) =>
-                        handleRowPriceChange(rowIdx, e.target.value)
-                      }
-                      disabled={row
-                        .filter(Boolean)
-                        .every((seat) => !selectedSeats.includes(seat))}
-                    />
-                  </div>
-                  {row.map((seat, i) =>
-                    seat === "" ? (
-                      <div key={i} className="seat-space" />
-                    ) : (
-                      <div
-                        key={seat}
-                        className={`seat-box ${
-                          selectedSeats.includes(seat) ? "selected" : ""
-                        }`}
-                        onClick={() => toggleSeat(seat)}
-                      >
-                        <span>{seat}</span>
-                        {selectedSeats.includes(seat) && (
-                          <input
-                            type="number"
-                            min="0"
-                            className="seat-price-input"
-                            value={seatPrices[seat] || ""}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) =>
-                              handleSeatPriceChange(seat, e.target.value)
-                            }
-                            placeholder="Price"
-                          />
-                        )}
-                      </div>
-                    )
-                  )}
-                </div>
-              ))}
+                      type="radio"
+                      name="type"
+                      value={mode}
+                      checked={form.type === mode}
+                      onChange={handleChange}
+                    />{" "}
+                    {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <button type="submit" className="green-button" disabled={loading}>
-            {loading ? "Submitting..." : "Submit Travel Route"}
-          </button>
-        </form>
+            {[
+              ["source", "Source"],
+              ["destination", "Destination"],
+              ["date", "Date"],
+              ["arrivalTime", "Arrival Time (HH:MM:SS)"],
+              ["departureTime", "Departure Time (HH:MM:SS)"],
+              ["reachTime", "Reach Time (HH:MM:SS)"],
+              ["basePrice", "Default Base Price"],
+            ].map(([name, label]) => (
+              <div key={name} className="form-group">
+                <label>{label}</label>
+                <input
+                  type={
+                    name === "basePrice"
+                      ? "number"
+                      : name === "date"
+                      ? "date"
+                      : "text"
+                  }
+                  name={name}
+                  value={form[name]}
+                  placeholder={
+                    name.includes("Time") ? "e.g. 08:00:00" : undefined
+                  }
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            ))}
+
+            <div className="form-group">
+              <label>
+                Select Seats & Set Prices
+                <span className="seat-hint">
+                  {" "}
+                  (Click to select. Set price for row or each seat.)
+                </span>
+              </label>
+              <div className="seat-map">
+                {seatLayout.map((row, rowIdx) => (
+                  <div key={rowIdx} className="seat-row">
+                    {/* Row price input */}
+                    <div className="row-price-input">
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="Row Price"
+                        value={rowPrices[rowIdx] || ""}
+                        onChange={(e) =>
+                          handleRowPriceChange(rowIdx, e.target.value)
+                        }
+                        disabled={row
+                          .filter(Boolean)
+                          .every((seat) => !selectedSeats.includes(seat))}
+                      />
+                    </div>
+                    {row.map((seat, i) =>
+                      seat === "" ? (
+                        <div key={i} className="seat-space" />
+                      ) : (
+                        <div
+                          key={seat}
+                          className={`seat-box ${
+                            selectedSeats.includes(seat) ? "selected" : ""
+                          }`}
+                          onClick={() => toggleSeat(seat)}
+                        >
+                          <span>{seat}</span>
+                          {selectedSeats.includes(seat) && (
+                            <input
+                              type="number"
+                              min="0"
+                              className="seat-price-input"
+                              value={seatPrices[seat] || ""}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) =>
+                                handleSeatPriceChange(seat, e.target.value)
+                              }
+                              placeholder="Price"
+                            />
+                          )}
+                        </div>
+                      )
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button type="submit" className="green-button" disabled={loading}>
+              {loading ? "Submitting..." : "Submit Travel Route"}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

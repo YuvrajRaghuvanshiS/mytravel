@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/TicketsPage.css";
+import Navbar from "../components/Navbar";
 
 function TicketsPage() {
   const location = useLocation();
@@ -178,205 +179,210 @@ function TicketsPage() {
   };
 
   return (
-    <div className="tickets-page">
-      <header className="tickets-header">
-        <h1>Available Tickets</h1>
+    <>
+      <Navbar />
+      <div className="tickets-page">
+        <header className="tickets-header">
+          <h1>Available Tickets</h1>
 
-        <form className="search-box-ticket" onSubmit={handleSearchSubmit}>
-          <input
-            type="text"
-            name="from"
-            placeholder="From City"
-            value={searchInputs.from}
-            onChange={handleSearchChange}
-            list="from-cities"
-          />
-          <datalist id="from-cities">
-            {sourceOptions.map((src) => (
-              <option key={src} value={src} />
-            ))}
-          </datalist>
-          <input
-            type="text"
-            name="to"
-            placeholder="To City"
-            value={searchInputs.to}
-            onChange={handleSearchChange}
-            list="to-cities"
-          />
-          <datalist id="to-cities">
-            {destinationOptions.map((dst) => (
-              <option key={dst} value={dst} />
-            ))}
-          </datalist>
-          <input
-            type="date"
-            name="date"
-            value={searchInputs.date}
-            onChange={handleSearchChange}
-            list="date-options"
-          />
-          <datalist id="date-options">
-            {dateOptions.map((dt) => (
-              <option key={dt} value={dt} />
-            ))}
-          </datalist>
-          <button type="submit">Search</button>
-        </form>
-
-        {renderFilterSummary()}
-      </header>
-
-      <div className="tickets-container">
-        <aside className="filters-section">
-          <h2>Filters</h2>
-          <div className="filter-group">
-            <label>Agency</label>
-            <select
-              name="agencyId"
-              value={filters.agencyId}
-              onChange={handleFilterChange}
-            >
-              <option value="">All Agencies</option>
-              {agencyOptions.map((id) => (
-                <option key={id} value={id}>
-                  {id}
-                </option>
+          <form className="search-box-ticket" onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              name="from"
+              placeholder="From City"
+              value={searchInputs.from}
+              onChange={handleSearchChange}
+              list="from-cities"
+            />
+            <datalist id="from-cities">
+              {sourceOptions.map((src) => (
+                <option key={src} value={src} />
               ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Type</label>
-            <select
-              name="type"
-              value={filters.type}
-              onChange={handleFilterChange}
-            >
-              <option value="">All Types</option>
-              {typeOptions.map((tp) => (
-                <option key={tp} value={tp}>
-                  {tp.charAt(0).toUpperCase() + tp.slice(1)}
-                </option>
+            </datalist>
+            <input
+              type="text"
+              name="to"
+              placeholder="To City"
+              value={searchInputs.to}
+              onChange={handleSearchChange}
+              list="to-cities"
+            />
+            <datalist id="to-cities">
+              {destinationOptions.map((dst) => (
+                <option key={dst} value={dst} />
               ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Date</label>
-            <select
+            </datalist>
+            <input
+              type="date"
               name="date"
-              value={filters.date}
-              onChange={handleFilterChange}
-            >
-              <option value="">All Dates</option>
+              value={searchInputs.date}
+              onChange={handleSearchChange}
+              list="date-options"
+            />
+            <datalist id="date-options">
               {dateOptions.map((dt) => (
-                <option key={dt} value={dt}>
-                  {dt}
-                </option>
+                <option key={dt} value={dt} />
               ))}
-            </select>
-          </div>
-          <div className="filter-group">
-            <label>Min Price (₹)</label>
-            <input
-              type="number"
-              name="minPrice"
-              min="0"
-              max={filters.maxPrice || 20000}
-              value={filters.minPrice}
-              onChange={handleFilterChange}
-              placeholder="No min"
-            />
-          </div>
-          <div className="filter-group">
-            <label>Max Price (₹)</label>
-            <input
-              type="number"
-              name="maxPrice"
-              min={filters.minPrice || 0}
-              max="20000"
-              value={filters.maxPrice}
-              onChange={handleFilterChange}
-              placeholder="No max"
-            />
-          </div>
-          <div className="filter-group">
-            <label>
-              <input
-                type="checkbox"
-                name="availableOnly"
-                checked={filters.availableOnly}
-                onChange={handleFilterChange}
-              />{" "}
-              Available Only
-            </label>
-          </div>
-          <div className="filter-group">
-            <label>Sort By</label>
-            <select
-              name="sortBy"
-              value={filters.sortBy}
-              onChange={handleFilterChange}
-            >
-              <option value="">None</option>
-              <option value="price">Price</option>
-              <option value="departureTime">Departure Time</option>
-            </select>
-          </div>
-        </aside>
+            </datalist>
+            <button type="submit">Search</button>
+          </form>
 
-        <section className="tickets-list">
-          {loading ? (
-            <div className="loading">Loading tickets...</div>
-          ) : filteredTickets.length === 0 ? (
-            <div className="no-tickets">No tickets found</div>
-          ) : (
-            <>
-              <div className="tickets-count">
-                {filteredTickets.length} Tickets Found
-              </div>
-              {filteredTickets.map((ticket) => (
-                <div key={ticket.id} className="ticket-card">
-                  <div className="ticket-info">
-                    <div className="route">
-                      <h3>
-                        {ticket.source} → {ticket.destination}
-                      </h3>
-                    </div>
-                    <div className="times">
-                      <div>
-                        <div className="time">
-                          {ticket.departureTime?.substring(11, 16)}
-                        </div>
-                        <div className="small">{ticket.source}</div>
-                      </div>
-                      <div>
-                        <div className="time">
-                          {ticket.arrivalTime?.substring(11, 16)}
-                        </div>
-                        <div className="small">{ticket.destination}</div>
-                      </div>
-                    </div>
-                    <div className="ticket-price">
-                      <h3>From ₹{ticket.basePrice}</h3>
-                      <button
-                        className="book-button"
-                        onClick={() => navigate("/book", { state: { ticket } })}
-                        disabled={ticket.availableSeats === 0}
-                      >
-                        Book Now
-                      </button>
-                    </div>
-                  </div>
-                  {ticket.availableSeats === 0 && (
-                    <div className="unavailable-badge">Not Available</div>
-                  )}
+          {renderFilterSummary()}
+        </header>
+
+        <div className="tickets-container">
+          <aside className="filters-section">
+            <h2>Filters</h2>
+            <div className="filter-group">
+              <label>Agency</label>
+              <select
+                name="agencyId"
+                value={filters.agencyId}
+                onChange={handleFilterChange}
+              >
+                <option value="">All Agencies</option>
+                {agencyOptions.map((id) => (
+                  <option key={id} value={id}>
+                    {id}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-group">
+              <label>Type</label>
+              <select
+                name="type"
+                value={filters.type}
+                onChange={handleFilterChange}
+              >
+                <option value="">All Types</option>
+                {typeOptions.map((tp) => (
+                  <option key={tp} value={tp}>
+                    {tp.charAt(0).toUpperCase() + tp.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-group">
+              <label>Date</label>
+              <select
+                name="date"
+                value={filters.date}
+                onChange={handleFilterChange}
+              >
+                <option value="">All Dates</option>
+                {dateOptions.map((dt) => (
+                  <option key={dt} value={dt}>
+                    {dt}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="filter-group">
+              <label>Min Price (₹)</label>
+              <input
+                type="number"
+                name="minPrice"
+                min="0"
+                max={filters.maxPrice || 20000}
+                value={filters.minPrice}
+                onChange={handleFilterChange}
+                placeholder="No min"
+              />
+            </div>
+            <div className="filter-group">
+              <label>Max Price (₹)</label>
+              <input
+                type="number"
+                name="maxPrice"
+                min={filters.minPrice || 0}
+                max="20000"
+                value={filters.maxPrice}
+                onChange={handleFilterChange}
+                placeholder="No max"
+              />
+            </div>
+            <div className="filter-group">
+              <label>
+                <input
+                  type="checkbox"
+                  name="availableOnly"
+                  checked={filters.availableOnly}
+                  onChange={handleFilterChange}
+                />{" "}
+                Available Only
+              </label>
+            </div>
+            <div className="filter-group">
+              <label>Sort By</label>
+              <select
+                name="sortBy"
+                value={filters.sortBy}
+                onChange={handleFilterChange}
+              >
+                <option value="">None</option>
+                <option value="price">Price</option>
+                <option value="departureTime">Departure Time</option>
+              </select>
+            </div>
+          </aside>
+
+          <section className="tickets-list">
+            {loading ? (
+              <div className="loading">Loading tickets...</div>
+            ) : filteredTickets.length === 0 ? (
+              <div className="no-tickets">No tickets found</div>
+            ) : (
+              <>
+                <div className="tickets-count">
+                  {filteredTickets.length} Tickets Found
                 </div>
-              ))}
-            </>
-          )}
-        </section>
+                {filteredTickets.map((ticket) => (
+                  <div key={ticket.id} className="ticket-card">
+                    <div className="ticket-info">
+                      <div className="route">
+                        <h3>
+                          {ticket.source} → {ticket.destination}
+                        </h3>
+                      </div>
+                      <div className="times">
+                        <div>
+                          <div className="time">
+                            {ticket.departureTime?.substring(11, 16)}
+                          </div>
+                          <div className="small">{ticket.source}</div>
+                        </div>
+                        <div>
+                          <div className="time">
+                            {ticket.arrivalTime?.substring(11, 16)}
+                          </div>
+                          <div className="small">{ticket.destination}</div>
+                        </div>
+                      </div>
+                      <div className="ticket-price">
+                        <h3>From ₹{ticket.basePrice}</h3>
+                        <button
+                          className="book-button"
+                          onClick={() =>
+                            navigate("/book", { state: { ticket } })
+                          }
+                          disabled={ticket.availableSeats === 0}
+                        >
+                          Book Now
+                        </button>
+                      </div>
+                    </div>
+                    {ticket.availableSeats === 0 && (
+                      <div className="unavailable-badge">Not Available</div>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </section>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

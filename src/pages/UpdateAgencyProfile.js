@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/agencyDashboard.css";
+import Navbar from "../components/Navbar";
 
 function UpdateAgencyProfile() {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
@@ -52,49 +53,52 @@ function UpdateAgencyProfile() {
   };
 
   return (
-    <div className="agency-dashboard">
-      <div className="agency-profile">
-        <h2>Update Profile</h2>
-        <form onSubmit={handleSubmit} className="profile-form">
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+    <>
+      <Navbar />
+      <div className="agency-dashboard">
+        <div className="agency-profile">
+          <h2>Update Profile</h2>
+          <form onSubmit={handleSubmit} className="profile-form">
+            <div className="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Email (not editable)</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              readOnly
-              style={{ backgroundColor: "#e9ecef", color: "#6c757d" }}
-            />
-          </div>
+            <div className="form-group">
+              <label>Email (not editable)</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                readOnly
+                style={{ backgroundColor: "#e9ecef", color: "#6c757d" }}
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Phone (not editable)</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              readOnly
-              style={{ backgroundColor: "#e9ecef", color: "#6c757d" }}
-            />
-          </div>
+            <div className="form-group">
+              <label>Phone (not editable)</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                readOnly
+                style={{ backgroundColor: "#e9ecef", color: "#6c757d" }}
+              />
+            </div>
 
-          <button type="submit" className="green-btn">
-            Save Changes
-          </button>
-        </form>
+            <button type="submit" className="green-btn">
+              Save Changes
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -1,111 +1,177 @@
-// src/pages/TicketsPage.js
-import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/TicketsPage.css';
+import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../styles/TicketsPage.css";
 
 function TicketsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = location.state || {};
 
+  // State for tickets and loading
   const [tickets, setTickets] = useState([]);
   const [filteredTickets, setFilteredTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // State for dropdown options
+  const [agencyOptions, setAgencyOptions] = useState([]);
+  const [typeOptions, setTypeOptions] = useState([]);
+  const [dateOptions, setDateOptions] = useState([]);
+  const [sourceOptions, setSourceOptions] = useState([]);
+  const [destinationOptions, setDestinationOptions] = useState([]);
+
+  // Filters state
   const [filters, setFilters] = useState({
-    available: false,
-    priceMax: 10000,
-    departureAfter: '',
-    class: 'All Classes'
+    agencyId: "",
+    type: "",
+    date: "",
+    source: "",
+    destination: "",
+    minPrice: "",
+    maxPrice: "",
+    availableOnly: false,
+    sortBy: "",
   });
 
+  // For search box (optional)
   const [searchInputs, setSearchInputs] = useState({
-    from: searchParams.from || '',
-    to: searchParams.to || '',
-    date: searchParams.date || ''
+    from: searchParams.from || "",
+    to: searchParams.to || "",
+    date: searchParams.date || "",
   });
 
+  // Extract unique dropdown options from ticket data
+  const extractDropdownOptions = useCallback((data) => {
+    const agencies = new Set();
+    const types = new Set();
+    const dates = new Set();
+    const sources = new Set();
+    const destinations = new Set();
+
+    data.forEach((ticket) => {
+      if (ticket.agencyId) agencies.add(ticket.agencyId);
+      if (ticket.type) types.add(ticket.type);
+      if (ticket.date) dates.add(ticket.date.split("T")[0]);
+      if (ticket.source) sources.add(ticket.source);
+      if (ticket.destination) destinations.add(ticket.destination);
+    });
+
+    setAgencyOptions(Array.from(agencies));
+    setTypeOptions(Array.from(types));
+    setDateOptions(Array.from(dates).sort());
+    setSourceOptions(Array.from(sources));
+    setDestinationOptions(Array.from(destinations));
+  }, []);
+
+  // Fetch tickets from API with filters
   const fetchTickets = useCallback(async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        alert('Session expired. Please log in again.');
-        navigate('/login-user');
+        alert("Session expired. Please log in again.");
+        navigate("/login-user");
         return;
       }
 
-      const queryParams = {
-        type: (searchParams.mode || 'flight').replace(/s$/, '')
-      };
+      // Build query params from filters
+      const queryParams = {};
+      if (filters.agencyId) queryParams.agencyId = filters.agencyId;
+      if (filters.date) queryParams.date = filters.date;
+      if (filters.type) queryParams.type = filters.type;
+      if (filters.minPrice) queryParams.minPrice = filters.minPrice;
+      if (filters.maxPrice) queryParams.maxPrice = filters.maxPrice;
+      if (filters.availableOnly) queryParams.availableOnly = "true";
+      if (filters.sortBy) queryParams.sortBy = filters.sortBy;
 
-      if (searchInputs.from.trim()) queryParams.source = searchInputs.from.trim();
-      if (searchInputs.to.trim()) queryParams.destination = searchInputs.to.trim();
+      // Optionally, support search box as quick filters
+      if (searchInputs.from) queryParams.source = searchInputs.from;
+      if (searchInputs.to) queryParams.destination = searchInputs.to;
       if (searchInputs.date) queryParams.date = searchInputs.date;
 
-      const res = await axios.get('http://localhost:3001/api/travel/list', {
+      // Default type if not set
+      if (!queryParams.type && searchParams.mode)
+        queryParams.type = searchParams.mode.replace(/s$/, "");
+
+      const res = await axios.get("http://localhost:3001/api/travel/list", {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        params: queryParams
+        params: queryParams,
       });
 
       const apiTickets = res.data.travelOptions || [];
       setTickets(apiTickets);
       setFilteredTickets(apiTickets);
+      extractDropdownOptions(apiTickets);
     } catch (error) {
-      console.error('API failed to fetch tickets:', error);
+      console.error("API failed to fetch tickets:", error);
       setTickets([]);
       setFilteredTickets([]);
     } finally {
       setLoading(false);
     }
-  }, [navigate, searchInputs.from, searchInputs.to, searchInputs.date, searchParams.mode]);
-
-  const filterTickets = useCallback(() => {
-    let result = [...tickets];
-
-    if (filters.available) {
-      result = result.filter(ticket => ticket.availableSeats > 0);
-    }
-
-    if (filters.priceMax) {
-      result = result.filter(ticket => ticket.basePrice <= filters.priceMax);
-    }
-
-    if (filters.departureAfter) {
-      result = result.filter(ticket => {
-        const ticketTime = new Date(`2000-01-01T${ticket.departureTime?.substring(11, 16)}`);
-        const filterTime = new Date(`2000-01-01T${filters.departureAfter}`);
-        return ticketTime >= filterTime;
-      });
-    }
-
-    setFilteredTickets(result);
-  }, [filters, tickets]);
+    // eslint-disable-next-line
+  }, [
+    filters,
+    searchInputs.from,
+    searchInputs.to,
+    searchInputs.date,
+    searchParams.mode,
+    navigate,
+    extractDropdownOptions,
+  ]);
 
   useEffect(() => {
     fetchTickets();
   }, [fetchTickets]);
 
-  useEffect(() => {
-    if (!loading) filterTickets();
-  }, [filters, tickets, filterTickets, loading]);
-
-  const handleSearchChange = (e) => {
-    const { name, value } = e.target;
-    setSearchInputs({ ...searchInputs, [name]: value });
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    fetchTickets();
-  };
-
+  // Handle filter changes
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFilters({ ...filters, [name]: type === 'checkbox' ? checked : value });
+    setFilters((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  // Handle search box changes
+  const handleSearchChange = (e) => {
+    const { name, value } = e.target;
+    setSearchInputs((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Submit search box (applies as filters)
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Optionally, update filters with search box values
+    setFilters((prev) => ({
+      ...prev,
+      source: searchInputs.from,
+      destination: searchInputs.to,
+      date: searchInputs.date,
+    }));
+    // fetchTickets will be triggered by filters change
+  };
+
+  // Show a summary of active filters
+  const renderFilterSummary = () => {
+    const summary = [];
+    if (filters.agencyId) summary.push(`Agency: ${filters.agencyId}`);
+    if (filters.type) summary.push(`Type: ${filters.type}`);
+    if (filters.date) summary.push(`Date: ${filters.date}`);
+    if (filters.minPrice) summary.push(`Min Price: ₹${filters.minPrice}`);
+    if (filters.maxPrice) summary.push(`Max Price: ₹${filters.maxPrice}`);
+    if (filters.availableOnly) summary.push("Available Only");
+    if (filters.sortBy) summary.push(`Sort: ${filters.sortBy}`);
+    return summary.length > 0 ? (
+      <div className="search-summary">
+        <p>{summary.join(" | ")}</p>
+      </div>
+    ) : null;
   };
 
   return (
@@ -120,63 +186,138 @@ function TicketsPage() {
             placeholder="From City"
             value={searchInputs.from}
             onChange={handleSearchChange}
+            list="from-cities"
           />
+          <datalist id="from-cities">
+            {sourceOptions.map((src) => (
+              <option key={src} value={src} />
+            ))}
+          </datalist>
           <input
             type="text"
             name="to"
             placeholder="To City"
             value={searchInputs.to}
             onChange={handleSearchChange}
+            list="to-cities"
           />
+          <datalist id="to-cities">
+            {destinationOptions.map((dst) => (
+              <option key={dst} value={dst} />
+            ))}
+          </datalist>
           <input
             type="date"
             name="date"
             value={searchInputs.date}
             onChange={handleSearchChange}
+            list="date-options"
           />
+          <datalist id="date-options">
+            {dateOptions.map((dt) => (
+              <option key={dt} value={dt} />
+            ))}
+          </datalist>
           <button type="submit">Search</button>
         </form>
 
-        {(searchInputs.from || searchInputs.to || searchInputs.date) && (
-          <div className="search-summary">
-            <p>{searchInputs.from} → {searchInputs.to} | Date: {searchInputs.date}</p>
-          </div>
-        )}
+        {renderFilterSummary()}
       </header>
 
       <div className="tickets-container">
         <aside className="filters-section">
           <h2>Filters</h2>
           <div className="filter-group">
-            <label>
-              <input
-                type="checkbox"
-                name="available"
-                checked={filters.available}
-                onChange={handleFilterChange}
-              /> Available Only
-            </label>
+            <label>Agency</label>
+            <select
+              name="agencyId"
+              value={filters.agencyId}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Agencies</option>
+              {agencyOptions.map((id) => (
+                <option key={id} value={id}>
+                  {id}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="filter-group">
+            <label>Type</label>
+            <select
+              name="type"
+              value={filters.type}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Types</option>
+              {typeOptions.map((tp) => (
+                <option key={tp} value={tp}>
+                  {tp.charAt(0).toUpperCase() + tp.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="filter-group">
+            <label>Date</label>
+            <select
+              name="date"
+              value={filters.date}
+              onChange={handleFilterChange}
+            >
+              <option value="">All Dates</option>
+              {dateOptions.map((dt) => (
+                <option key={dt} value={dt}>
+                  {dt}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="filter-group">
+            <label>Min Price (₹)</label>
+            <input
+              type="number"
+              name="minPrice"
+              min="0"
+              max={filters.maxPrice || 20000}
+              value={filters.minPrice}
+              onChange={handleFilterChange}
+              placeholder="No min"
+            />
           </div>
           <div className="filter-group">
             <label>Max Price (₹)</label>
             <input
-              type="range"
-              name="priceMax"
-              min="100"
+              type="number"
+              name="maxPrice"
+              min={filters.minPrice || 0}
               max="20000"
-              value={filters.priceMax}
+              value={filters.maxPrice}
               onChange={handleFilterChange}
+              placeholder="No max"
             />
-            <span>₹{filters.priceMax}</span>
           </div>
           <div className="filter-group">
-            <label>Departure After</label>
-            <input
-              type="time"
-              name="departureAfter"
-              value={filters.departureAfter}
+            <label>
+              <input
+                type="checkbox"
+                name="availableOnly"
+                checked={filters.availableOnly}
+                onChange={handleFilterChange}
+              />{" "}
+              Available Only
+            </label>
+          </div>
+          <div className="filter-group">
+            <label>Sort By</label>
+            <select
+              name="sortBy"
+              value={filters.sortBy}
               onChange={handleFilterChange}
-            />
+            >
+              <option value="">None</option>
+              <option value="price">Price</option>
+              <option value="departureTime">Departure Time</option>
+            </select>
           </div>
         </aside>
 
@@ -187,26 +328,38 @@ function TicketsPage() {
             <div className="no-tickets">No tickets found</div>
           ) : (
             <>
-              <div className="tickets-count">{filteredTickets.length} Tickets Found</div>
-              {filteredTickets.map(ticket => (
+              <div className="tickets-count">
+                {filteredTickets.length} Tickets Found
+              </div>
+              {filteredTickets.map((ticket) => (
                 <div key={ticket.id} className="ticket-card">
                   <div className="ticket-info">
                     <div className="route">
-                      <h3>{ticket.source} → {ticket.destination}</h3>
+                      <h3>
+                        {ticket.source} → {ticket.destination}
+                      </h3>
                     </div>
                     <div className="times">
                       <div>
-                        <div className="time">{ticket.departureTime?.substring(11, 16)}</div>
+                        <div className="time">
+                          {ticket.departureTime?.substring(11, 16)}
+                        </div>
                         <div className="small">{ticket.source}</div>
                       </div>
                       <div>
-                        <div className="time">{ticket.arrivalTime?.substring(11, 16)}</div>
+                        <div className="time">
+                          {ticket.arrivalTime?.substring(11, 16)}
+                        </div>
                         <div className="small">{ticket.destination}</div>
                       </div>
                     </div>
                     <div className="ticket-price">
                       <h3>From ₹{ticket.basePrice}</h3>
-                      <button className="book-button" onClick={() => navigate('/book', { state: { ticket } })}>
+                      <button
+                        className="book-button"
+                        onClick={() => navigate("/book", { state: { ticket } })}
+                        disabled={ticket.availableSeats === 0}
+                      >
                         Book Now
                       </button>
                     </div>

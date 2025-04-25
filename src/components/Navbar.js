@@ -14,13 +14,7 @@ function Navbar() {
       </div>
       <ul className="navbar-links">
         <li>
-          <Link to="/flights">Flights</Link>
-        </li>
-        <li>
-          <Link to="/trains">Trains</Link>
-        </li>
-        <li>
-          <Link to="/buses">Buses</Link>
+          <Link to="/travel">Let's Travel</Link>
         </li>
         <li>
           <Link to="/about">About</Link>

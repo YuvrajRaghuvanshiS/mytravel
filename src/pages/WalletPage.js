@@ -72,7 +72,7 @@ function WalletPage() {
       }
 
       alert("Money added to wallet!");
-      navigate("/flights");
+      navigate("/travel");
     } catch (error) {
       const serverMsg = error?.response?.data?.message;
       console.error("Failed to add money:", serverMsg || error.message);

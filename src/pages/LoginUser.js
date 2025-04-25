@@ -72,7 +72,7 @@ function LoginUser() {
           JSON.stringify({ id, role: userType })
         );
         alert("Login successful!");
-        navigate(userType === "user" ? "/flights" : "/agency-dashboard");
+        navigate(userType === "user" ? "/travel" : "/agency-dashboard");
       } else {
         alert("Login failed. Please check your credentials.");
         generateCaptcha();

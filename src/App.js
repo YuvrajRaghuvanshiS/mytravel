@@ -2,9 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import LoginUser from "./pages/LoginUser";
 import RegisterUser from "./pages/RegisterUser";
-import FlightPage from "./pages/FlightPage";
-import BusPage from "./pages/BusPage";
-import TrainPage from "./pages/TrainPage";
 import TicketsPage from "./pages/TicketsPage";
 import ProfilePage from "./pages/ProfilePage";
 import WalletPage from "./pages/WalletPage";
@@ -15,6 +12,7 @@ import UpdateAgencyProfile from "./pages/UpdateAgencyProfile";
 import AddTravelRoute from "./pages/AddTravelRoute";
 import UpdateTravelPage from "./pages/UpdateTravelRoute"; // at the top
 import AgencyWalletPage from "./pages/AgencyWalletPage";
+import TravelPage from "./pages/TravelPage";
 
 function App() {
   return (
@@ -23,9 +21,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login-user" element={<LoginUser />} />
         <Route path="/register-user" element={<RegisterUser />} />
-        <Route path="/flights" element={<FlightPage />} />
-        <Route path="/bus" element={<BusPage />} />
-        <Route path="/train" element={<TrainPage />} />
+        <Route path="/travel" element={<TravelPage />} />
         <Route path="/tickets" element={<TicketsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/wallet" element={<WalletPage />} />

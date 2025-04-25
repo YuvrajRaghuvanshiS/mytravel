@@ -1,0 +1,281 @@
+body {
+  background: #f3f6fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.travel-hero {
+  min-height: 420px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: 0 4px 24px rgba(11, 94, 215, 0.09);
+}
+
+.travel-hero-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 90px 0 32px 0;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.travel-navbar {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.travel-tab {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 1.04rem;
+  font-weight: 700;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s, transform 0.13s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.travel-tab.active,
+.travel-tab:hover {
+  background: #fff;
+  color: #0b5ed7;
+  transform: scale(1.08);
+}
+
+.travel-tab-icon {
+  font-size: 1.18rem;
+}
+
+.travel-hero-content h1 {
+  font-size: 2.3rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.travel-hero-content p {
+  font-size: 1.18rem;
+  font-weight: 400;
+  margin-bottom: 28px;
+  color: #e3eefd;
+}
+
+.travel-search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+  align-items: flex-end;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  padding: 22px 18px 14px 18px;
+  box-shadow: 0 1px 8px rgba(11, 94, 215, 0.07);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 160px;
+}
+
+.input-group label {
+  font-size: 0.98rem;
+  color: #0b5ed7;
+  font-weight: 600;
+  margin-bottom: 2px;
+  letter-spacing: 0.02em;
+}
+
+.input-group input[type="text"],
+.input-group input[type="date"] {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1.5px solid #bfc9d1;
+  font-size: 1rem;
+  background: #f7f9fb;
+  color: #222;
+  transition: border-color 0.18s;
+}
+
+.input-group input:focus {
+  border-color: #0b5ed7;
+  outline: none;
+}
+
+.travel-search-form button[type="submit"] {
+  padding: 12px 32px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.13s;
+  margin-top: 8px;
+}
+
+.travel-search-form button[type="submit"]:hover {
+  background: #218838;
+  transform: scale(1.04);
+}
+
+/* User bar on hero */
+.travel-userbar {
+  position: absolute;
+  top: 18px;
+  right: 38px;
+  background: rgba(255, 255, 255, 0.93);
+  color: #0b5ed7;
+  border-radius: 20px;
+  padding: 7px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 1px 8px rgba(11, 94, 215, 0.07);
+  z-index: 10;
+}
+
+.travel-userbar .divider {
+  color: #bfc9d1;
+  font-weight: 400;
+}
+
+.userbar-btn {
+  background: #e3eefd;
+  color: #0b5ed7;
+  border: none;
+  border-radius: 14px;
+  padding: 6px 18px;
+  font-weight: 700;
+  margin-left: 6px;
+  cursor: pointer;
+  font-size: 0.99rem;
+  transition: background 0.16s, color 0.16s, transform 0.13s;
+}
+.userbar-btn:hover {
+  background: #0b5ed7;
+  color: #fff;
+  transform: scale(1.06);
+}
+.userbar-btn.logout {
+  background: #ffeaea;
+  color: #dc3545;
+}
+.userbar-btn.logout:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+/* Features section */
+.travel-features {
+  background: #fff;
+  padding: 48px 0 36px 0;
+  text-align: center;
+}
+
+.travel-features h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0b5ed7;
+  margin-bottom: 36px;
+}
+
+.travel-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 28px;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #f3f6fa;
+  border-radius: 13px;
+  box-shadow: 0 2px 10px rgba(11, 94, 215, 0.07);
+  padding: 32px 18px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(11, 94, 215, 0.13);
+}
+
+.feature-icon {
+  font-size: 2.2rem;
+  margin-bottom: 14px;
+}
+
+.feature-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 1rem;
+  color: #333;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .travel-hero-content {
+    padding: 36px 0 22px 0;
+  }
+  .travel-features {
+    padding: 32px 0 18px 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .travel-hero-content h1 {
+    font-size: 1.3rem;
+  }
+  .travel-hero-content p {
+    font-size: 1rem;
+  }
+  .travel-navbar {
+    gap: 8px;
+  }
+  .travel-userbar {
+    position: static;
+    margin: 0 auto 10px auto;
+    right: unset;
+    top: unset;
+    padding: 7px 10px;
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .travel-search-form {
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 4px 10px 4px;
+  }
+  .travel-features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

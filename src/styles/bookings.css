@@ -87,3 +87,14 @@
     background-color: #096dd9;
   }
   
+.update-btn:disabled,
+.cancel-btn:disabled,
+.red-btn:disabled,
+.blue-btn:disabled {
+  background-color: #e0e0e0 !important;
+  color: #888 !important;
+  border: none !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  box-shadow: none !important;
+}

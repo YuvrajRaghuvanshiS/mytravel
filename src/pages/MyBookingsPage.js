@@ -79,6 +79,7 @@ function MyBookingsPage() {
         <ul className="booking-list">
           {bookings.map((booking) => {
             const travel = getTravelDetails(booking.travelID);
+            const isCancelled = booking.status && booking.status.toLowerCase() === "cancelled";
             return (
               <li key={booking.bookingID} className="booking-card">
                 <div className="booking-header">
@@ -121,12 +122,14 @@ function MyBookingsPage() {
                         isUpdate: true,
                       }
                     })}
+                    disabled={isCancelled}
                   >
                     Update
                   </button>
                   <button
                     className="cancel-btn red-btn"
                     onClick={() => handleCancelBooking(booking.bookingID)}
+                    disabled={isCancelled}
                   >
                     Cancel
                   </button>

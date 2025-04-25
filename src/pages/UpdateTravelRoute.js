@@ -94,14 +94,20 @@ function UpdateTravelRoute() {
     };
 
     try {
-      await axios.put(`http://localhost:3002/api/travel/update/${id}`, updatedData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `http://localhost:3002/api/travel/update/${id}`,
+        updatedData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       alert("✅ Travel route updated successfully!");
       navigate("/agency-dashboard");
     } catch (error) {
       console.error("Update failed", error.response?.data || error.message);
-      alert(error.response?.data?.message || "❌ Failed to update travel route");
+      alert(
+        error.response?.data?.message || "❌ Failed to update travel route",
+      );
     }
   };
 
@@ -129,13 +135,27 @@ function UpdateTravelRoute() {
             </div>
           ))}
 
-          {["date", "departureTime", "arrivalTime", "reachTime", "basePrice"].map((name) => (
+          {[
+            "date",
+            "departureTime",
+            "arrivalTime",
+            "reachTime",
+            "basePrice",
+          ].map((name) => (
             <div key={name} className="form-group">
               <label>
-                {name.replace("Time", " Time").replace("basePrice", "Base Price")}
+                {name
+                  .replace("Time", " Time")
+                  .replace("basePrice", "Base Price")}
               </label>
               <input
-                type={name === "basePrice" ? "number" : name === "date" ? "date" : "time"}
+                type={
+                  name === "basePrice"
+                    ? "number"
+                    : name === "date"
+                      ? "date"
+                      : "time"
+                }
                 name={name}
                 value={form[name]}
                 onChange={handleChange}
@@ -160,7 +180,7 @@ function UpdateTravelRoute() {
                       >
                         {seat}
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               ))}

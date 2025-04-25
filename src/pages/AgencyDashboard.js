@@ -47,7 +47,9 @@ function AgencyDashboard() {
   };
 
   const handleDeleteTravel = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this route?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this route?",
+    );
     if (!confirmDelete) return;
 
     try {
@@ -79,10 +81,16 @@ function AgencyDashboard() {
       <header className="dashboard-header">
         <h1>🧳 Agency Dashboard</h1>
         <div className="profile-section">
-          <button className="profile-btn" onClick={() => navigate("/agency-profile")}>
+          <button
+            className="profile-btn"
+            onClick={() => navigate("/agency-profile")}
+          >
             Update Profile
           </button>
-          <button className="blue-btn" onClick={() => navigate("/agency-wallet")}>
+          <button
+            className="blue-btn"
+            onClick={() => navigate("/agency-wallet")}
+          >
             Add Wallet Money
           </button>
           <button className="logout-btn" onClick={handleLogout}>
@@ -94,9 +102,15 @@ function AgencyDashboard() {
       {agency && (
         <section className="agency-info">
           <h2>Welcome, {agency.name}</h2>
-          <p><strong>Email:</strong> {agency.email}</p>
-          <p><strong>Phone:</strong> {agency.phone}</p>
-          <p><strong>Wallet Balance:</strong> ₹{agency.balance.toFixed(2)}</p>
+          <p>
+            <strong>Email:</strong> {agency.email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {agency.phone}
+          </p>
+          <p>
+            <strong>Wallet Balance:</strong> ₹{agency.balance.toFixed(2)}
+          </p>
         </section>
       )}
 
@@ -117,17 +131,28 @@ function AgencyDashboard() {
             {travelOptions.map((item) => (
               <li key={item.id} className="travel-card">
                 <div className="travel-header-row">
-                  <span className="tag">{item.mode || item.type || "Mode"}</span>
-                  <span><strong>{item.source}</strong> → <strong>{item.destination}</strong></span>
+                  <span className="tag">
+                    {item.mode || item.type || "Mode"}
+                  </span>
+                  <span>
+                    <strong>{item.source}</strong> →{" "}
+                    <strong>{item.destination}</strong>
+                  </span>
                 </div>
                 <p>Date: {new Date(item.date).toLocaleDateString()}</p>
                 <p>Base Price: ₹{item.basePrice}</p>
                 <p>Seats Available: {item.availableSeats}</p>
                 <div className="action-btns">
-                  <button className="delete-btn" onClick={() => handleDeleteTravel(item.id)}>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteTravel(item.id)}
+                  >
                     ❌ Delete Route
                   </button>
-                  <button className="update-btn" onClick={() => handleUpdateTravel(item.id)}>
+                  <button
+                    className="update-btn"
+                    onClick={() => handleUpdateTravel(item.id)}
+                  >
                     ✏️ Update Route
                   </button>
                 </div>

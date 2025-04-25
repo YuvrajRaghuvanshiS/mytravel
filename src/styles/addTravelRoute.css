@@ -159,7 +159,11 @@ input[type="number"].seat-price-input::-webkit-inner-spin-button,
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.13s;
+  transition:
+    background 0.18s,
+    border-color 0.18s,
+    color 0.18s,
+    transform 0.13s;
   position: relative;
   box-sizing: border-box;
   padding-top: 6px;
@@ -222,7 +226,9 @@ input[type="number"].seat-price-input::-webkit-inner-spin-button,
   border-radius: 8px;
   cursor: pointer;
   margin-top: 14px;
-  transition: background 0.18s, transform 0.13s;
+  transition:
+    background 0.18s,
+    transform 0.13s;
   box-shadow: 0 4px 12px rgba(40, 167, 69, 0.18);
 }
 

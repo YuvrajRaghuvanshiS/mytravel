@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 80px 20px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background: linear-gradient(to bottom, #eef2f3, #ffffff);
   min-height: 100vh;
 }

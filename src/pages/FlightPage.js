@@ -1,39 +1,39 @@
 // src/pages/FlightPage.js
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/FlightPage.css';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../styles/FlightPage.css";
 
 function FlightPage() {
   const navigate = useNavigate();
-  const [fromCity, setFromCity] = useState('');
-  const [toCity, setToCity] = useState('');
-  const [date, setDate] = useState('');
-  const [userInfo, setUserInfo] = useState({ name: 'Guest', balance: 0 });
+  const [fromCity, setFromCity] = useState("");
+  const [toCity, setToCity] = useState("");
+  const [date, setDate] = useState("");
+  const [userInfo, setUserInfo] = useState({ name: "Guest", balance: 0 });
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        alert('Session expired. Please login.');
-        navigate('/login-user');
+        alert("Session expired. Please login.");
+        navigate("/login-user");
         return;
       }
 
       try {
-        const res = await axios.get('http://localhost:3001/api/users/me', {
-          headers: { Authorization: `Bearer ${token}` }
+        const res = await axios.get("http://localhost:3001/api/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const { name, balance, email, phone, isAnonymous } = res.data.data;
         const updatedUser = { name, balance, email, phone, isAnonymous };
         setUserInfo({ name, balance });
-        localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
-        localStorage.setItem('walletBalance', balance);
+        localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+        localStorage.setItem("walletBalance", balance);
       } catch (err) {
-        console.error('User info fetch failed:', err);
-        alert('Session expired. Please login.');
-        navigate('/login-user');
+        console.error("User info fetch failed:", err);
+        alert("Session expired. Please login.");
+        navigate("/login-user");
       }
     };
 
@@ -45,25 +45,25 @@ function FlightPage() {
 
     const formattedDate = new Date(date).toISOString().slice(0, 10);
     if (!fromCity || !toCity || !date) {
-      alert('Please fill all fields');
+      alert("Please fill all fields");
       return;
     }
 
-    navigate('/tickets', {
+    navigate("/tickets", {
       state: {
-        mode: 'flight', // 👈 NOTE: Not "flights"
+        mode: "flight", // 👈 NOTE: Not "flights"
         from: fromCity,
         to: toCity,
-        date: formattedDate
-      }
+        date: formattedDate,
+      },
     });
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
-    localStorage.removeItem('walletBalance');
-    navigate('/');
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("walletBalance");
+    navigate("/");
   };
 
   return (
@@ -72,13 +72,13 @@ function FlightPage() {
         <div className="logo">MyTravel</div>
         <div className="nav-links">
           <button className="active">Flights</button>
-          <button onClick={() => navigate('/bus')}>Bus</button>
-          <button onClick={() => navigate('/train')}>Train</button>
+          <button onClick={() => navigate("/bus")}>Bus</button>
+          <button onClick={() => navigate("/train")}>Train</button>
         </div>
         <div className="user-profile">
           <span>Welcome, {userInfo.name}</span>
           <span> | Wallet: ₹{userInfo.balance}</span>
-          <button onClick={() => navigate('/profile')}>Profile</button>
+          <button onClick={() => navigate("/profile")}>Profile</button>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </nav>

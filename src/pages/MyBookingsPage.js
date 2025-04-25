@@ -17,8 +17,10 @@ function MyBookingsPage() {
         const headers = { Authorization: `Bearer ${token}` };
 
         const [bookingsRes, travelRes] = await Promise.all([
-          axios.get("http://localhost:3001/api/travel/get-all-bookings", { headers }),
-          axios.get("http://localhost:3001/api/travel/list", { headers })
+          axios.get("http://localhost:3001/api/travel/get-all-bookings", {
+            headers,
+          }),
+          axios.get("http://localhost:3001/api/travel/list", { headers }),
         ]);
 
         setBookings(bookingsRes.data.data);
@@ -36,7 +38,9 @@ function MyBookingsPage() {
   }, [navigate]);
 
   const handleCancelBooking = async (bookingID) => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
+    const confirmCancel = window.confirm(
+      "Are you sure you want to cancel this booking?",
+    );
     if (!confirmCancel) return;
 
     try {
@@ -55,7 +59,10 @@ function MyBookingsPage() {
       }
     } catch (err) {
       console.error("Cancellation failed:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Cancellation failed due to server error");
+      alert(
+        err.response?.data?.message ||
+          "Cancellation failed due to server error",
+      );
     }
   };
 
@@ -68,7 +75,8 @@ function MyBookingsPage() {
     return isoString.split("T")[0]; // Format: yyyy-mm-dd
   };
 
-  if (loading) return <div className="booking-container">Loading bookings...</div>;
+  if (loading)
+    return <div className="booking-container">Loading bookings...</div>;
 
   return (
     <div className="booking-container">
@@ -79,49 +87,69 @@ function MyBookingsPage() {
         <ul className="booking-list">
           {bookings.map((booking) => {
             const travel = getTravelDetails(booking.travelID);
-            const isCancelled = booking.status && booking.status.toLowerCase() === "cancelled";
+            const isCancelled =
+              booking.status && booking.status.toLowerCase() === "cancelled";
             return (
               <li key={booking.bookingID} className="booking-card">
                 <div className="booking-header">
                   <span className="route">
-                    <strong>{travel?.source}</strong> → <strong>{travel?.destination}</strong>
+                    <strong>{travel?.source}</strong> →{" "}
+                    <strong>{travel?.destination}</strong>
                   </span>
                   <span className="price">₹{booking.totalPrice}</span>
                 </div>
                 <div className="booking-details">
                   <div>
-                    <p><strong>Departure:</strong> {formatDate(travel?.departureTime)}</p>
-                    <p><strong>Arrival:</strong> {formatDate(travel?.arrivalTime)}</p>
-                    <p><strong>Date:</strong> {formatDate(travel?.date)}</p>
+                    <p>
+                      <strong>Departure:</strong>{" "}
+                      {formatDate(travel?.departureTime)}
+                    </p>
+                    <p>
+                      <strong>Arrival:</strong>{" "}
+                      {formatDate(travel?.arrivalTime)}
+                    </p>
+                    <p>
+                      <strong>Date:</strong> {formatDate(travel?.date)}
+                    </p>
                   </div>
                   <div>
-                    <p><strong>Type:</strong> {travel?.type?.toUpperCase() || "N/A"}</p>
-                    <p><strong>Seats:</strong> {booking.seatNumbers.join(", ")}</p>
-                    <p><strong>Status:</strong> {booking.status}</p>
+                    <p>
+                      <strong>Type:</strong>{" "}
+                      {travel?.type?.toUpperCase() || "N/A"}
+                    </p>
+                    <p>
+                      <strong>Seats:</strong> {booking.seatNumbers.join(", ")}
+                    </p>
+                    <p>
+                      <strong>Status:</strong> {booking.status}
+                    </p>
                   </div>
                 </div>
                 <p className="booking-meta">Booking ID: {booking.bookingID}</p>
                 <div className="booking-actions">
                   <button
                     className="update-btn blue-btn"
-                    onClick={() => navigate("/book", {
-                      state: {
-                        ticket: {
-                          id: booking.travelID,
-                          source: travel?.source,
-                          destination: travel?.destination,
-                          departureTime: travel?.departureTime,
-                          arrivalTime: travel?.arrivalTime,
-                          basePrice: booking.totalPrice / booking.seatNumbers.length,
-                          seatNumbers: booking.seatNumbers,
-                          bookingID: booking.bookingID,
-                          type: travel?.type,
-                          date: travel?.date,
-                          seats: travel?.seats,
+                    onClick={() =>
+                      navigate("/book", {
+                        state: {
+                          ticket: {
+                            id: booking.travelID,
+                            source: travel?.source,
+                            destination: travel?.destination,
+                            departureTime: travel?.departureTime,
+                            arrivalTime: travel?.arrivalTime,
+                            basePrice:
+                              booking.totalPrice / booking.seatNumbers.length,
+                            seatNumbers: booking.seatNumbers,
+                            bookingID: booking.bookingID,
+                            type: travel?.type,
+                            date: travel?.date,
+                            seats: travel?.seats,
+                          },
+                          isUpdate: true,
                         },
-                        isUpdate: true,
-                      }
-                    })}
+                      })
+                    }
                     disabled={isCancelled}
                   >
                     Update
@@ -140,7 +168,9 @@ function MyBookingsPage() {
         </ul>
       )}
 
-      <button className="back-btn" onClick={() => navigate('/profile')}>← Back to Profile</button>
+      <button className="back-btn" onClick={() => navigate("/profile")}>
+        ← Back to Profile
+      </button>
     </div>
   );
 }

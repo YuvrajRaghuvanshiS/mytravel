@@ -1,8 +1,8 @@
 // src/pages/BusPage.js
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/BusPage.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../styles/BusPage.css";
 
 function BusPage() {
   const navigate = useNavigate();
@@ -49,8 +49,8 @@ function BusPage() {
         mode: "bus",
         from: fromCity,
         to: toCity,
-        date: formattedDate
-      }
+        date: formattedDate,
+      },
     });
   };
 
@@ -66,9 +66,9 @@ function BusPage() {
       <nav className="navbar">
         <div className="logo">MyTravel</div>
         <div className="nav-links">
-          <button onClick={() => navigate('/flights')}>Flights</button>
+          <button onClick={() => navigate("/flights")}>Flights</button>
           <button className="active">Bus</button>
-          <button onClick={() => navigate('/train')}>Train</button>
+          <button onClick={() => navigate("/train")}>Train</button>
         </div>
 
         <div className="user-profile">

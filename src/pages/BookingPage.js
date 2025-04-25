@@ -41,7 +41,7 @@ function BookingPage() {
               isUpdate &&
               ticket.seatNumbers &&
               ticket.seatNumbers.includes(s.seatNumber)
-            )
+            ),
         )
         .map((s) => s.seatNumber);
       const available = ticket.seats.map((s) => s.seatNumber);
@@ -58,14 +58,14 @@ function BookingPage() {
 
   const toggleSeat = (seat) => {
     setSelectedSeats((prev) =>
-      prev.includes(seat) ? prev.filter((s) => s !== seat) : [...prev, seat]
+      prev.includes(seat) ? prev.filter((s) => s !== seat) : [...prev, seat],
     );
   };
 
   // Calculate total price based on selected seats
   const totalPrice = selectedSeats.reduce(
     (sum, seat) => sum + (seatPriceMap[seat] || ticket.basePrice),
-    0
+    0,
   );
 
   const handleConfirm = async () => {
@@ -103,7 +103,7 @@ function BookingPage() {
           },
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
       } else {
         response = await axios.post(
@@ -116,7 +116,7 @@ function BookingPage() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
       }
 
@@ -124,7 +124,7 @@ function BookingPage() {
         alert(
           isUpdate
             ? "✅ Booking updated successfully!"
-            : "🎉 Booking successful!"
+            : "🎉 Booking successful!",
         );
         navigate("/my-bookings");
       } else {
@@ -133,7 +133,7 @@ function BookingPage() {
     } catch (err) {
       console.error("Booking failed:", err.response?.data || err.message);
       alert(
-        err.response?.data?.message || "Booking failed due to server error"
+        err.response?.data?.message || "Booking failed due to server error",
       );
     } finally {
       setLoading(false);
@@ -193,7 +193,7 @@ function BookingPage() {
                       ₹{seatPriceMap[seat] || ticket.basePrice}
                     </div>
                   </div>
-                )
+                ),
               )}
             </div>
           ))}
@@ -229,8 +229,8 @@ function BookingPage() {
             ? "Updating..."
             : "Booking..."
           : isUpdate
-          ? "Update Booking"
-          : "Confirm Booking"}
+            ? "Update Booking"
+            : "Confirm Booking"}
       </button>
     </div>
   );

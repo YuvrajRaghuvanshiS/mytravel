@@ -1,6 +1,6 @@
 /* Base Styles */
 .user-home {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: white;
   margin: 0;
   padding: 0;
@@ -47,7 +47,7 @@
 }
 /* Hero Section - Improved contrast and organization */
 .hero-section_flight {
-  background-image: url('../images/flight.jpg');
+  background-image: url("../images/flight.jpg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -185,11 +185,11 @@
   .hero-content h1 {
     font-size: 36px;
   }
-  
+
   .input-group {
     width: 100%;
   }
-  
+
   .search-box button {
     width: 100%;
   }
@@ -216,7 +216,9 @@
   font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .user-profile button:hover {

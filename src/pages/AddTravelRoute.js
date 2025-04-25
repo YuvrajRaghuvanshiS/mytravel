@@ -93,7 +93,7 @@ function AddTravelRoute() {
     } catch (error) {
       console.error("Failed to add travel route", error);
       alert(
-        error.response?.data?.message || "Error: Could not add travel route"
+        error.response?.data?.message || "Error: Could not add travel route",
       );
     } finally {
       setLoading(false);
@@ -143,8 +143,8 @@ function AddTravelRoute() {
                   name === "basePrice"
                     ? "number"
                     : name === "date"
-                    ? "date"
-                    : "text"
+                      ? "date"
+                      : "text"
                 }
                 name={name}
                 value={form[name]}
@@ -209,7 +209,7 @@ function AddTravelRoute() {
                           />
                         )}
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               ))}

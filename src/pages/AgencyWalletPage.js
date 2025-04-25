@@ -45,7 +45,7 @@ function AgencyWalletPage() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       const { success, message, balance: newBalance } = res.data;
@@ -69,7 +69,9 @@ function AgencyWalletPage() {
   return (
     <div className="wallet-container">
       <h2>Agency Wallet</h2>
-      <p><strong>Current Balance:</strong> ₹{balance.toFixed(2)}</p>
+      <p>
+        <strong>Current Balance:</strong> ₹{balance.toFixed(2)}
+      </p>
       <input
         type="number"
         placeholder="Enter amount to add"

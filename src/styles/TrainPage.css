@@ -1,5 +1,5 @@
 .user-home {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: white;
 }
 
@@ -65,7 +65,9 @@
   font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .user-profile button:hover {
@@ -75,7 +77,7 @@
 
 /* Hero Section */
 .hero-section_train {
-  background-image: url('../images/train.jpg'); /* Replace with your own */
+  background-image: url("../images/train.jpg"); /* Replace with your own */
   background-size: cover;
   background-position: center;
   min-height: 100vh;

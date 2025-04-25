@@ -38,7 +38,7 @@ function UpdateAgencyProfile() {
         { name: formData.name },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       alert(res.data.message || "Profile updated successfully!");
       navigate("/agency-dashboard");
@@ -86,7 +86,9 @@ function UpdateAgencyProfile() {
             />
           </div>
 
-          <button type="submit" className="green-btn">Save Changes</button>
+          <button type="submit" className="green-btn">
+            Save Changes
+          </button>
         </form>
       </div>
     </div>

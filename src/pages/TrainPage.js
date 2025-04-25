@@ -1,8 +1,8 @@
 // src/pages/TrainPage.js
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/TrainPage.css';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../styles/TrainPage.css";
 
 function TrainPage() {
   const navigate = useNavigate();
@@ -44,17 +44,20 @@ function TrainPage() {
 
     try {
       // Make the API call to prefetch ticket data
-      const response = await axios.get("http://localhost:3001/api/travel/list", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = await axios.get(
+        "http://localhost:3001/api/travel/list",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          params: {
+            source: fromCity,
+            destination: toCity,
+            date: formattedDate,
+            type: "train",
+          },
         },
-        params: {
-          source: fromCity,
-          destination: toCity,
-          date: formattedDate,
-          type: "train"
-        }
-      });
+      );
 
       const travelOptions = response.data.travelOptions || [];
 
@@ -64,7 +67,7 @@ function TrainPage() {
           from: fromCity,
           to: toCity,
           date: formattedDate,
-          preFetchedTickets: travelOptions
+          preFetchedTickets: travelOptions,
         },
       });
     } catch (err) {
@@ -85,8 +88,8 @@ function TrainPage() {
       <nav className="navbar">
         <div className="logo">MyTravel</div>
         <div className="nav-links">
-          <button onClick={() => navigate('/flights')}>Flights</button>
-          <button onClick={() => navigate('/bus')}>Bus</button>
+          <button onClick={() => navigate("/flights")}>Flights</button>
+          <button onClick={() => navigate("/bus")}>Bus</button>
           <button className="active">Train</button>
         </div>
 

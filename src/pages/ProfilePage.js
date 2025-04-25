@@ -54,7 +54,7 @@ function ProfilePage() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       localStorage.setItem("loggedInUser", JSON.stringify(res.data.data));
@@ -107,7 +107,7 @@ function ProfilePage() {
           <button onClick={handleSave}>Save Changes</button>
         </div>
 
-        <button className="back-btn" onClick={() => navigate('/flights')}>
+        <button className="back-btn" onClick={() => navigate("/flights")}>
           ← Back
         </button>
       </div>

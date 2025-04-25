@@ -48,7 +48,7 @@ function WalletPage() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       const { success, message, balance: newBalance } = res.data;
@@ -73,7 +73,9 @@ function WalletPage() {
     } catch (error) {
       const serverMsg = error?.response?.data?.message;
       console.error("Failed to add money:", serverMsg || error.message);
-      alert(serverMsg || "Error adding money to wallet. Please try again later.");
+      alert(
+        serverMsg || "Error adding money to wallet. Please try again later.",
+      );
     }
   };
 
@@ -83,7 +85,9 @@ function WalletPage() {
     <div className="wallet-container">
       <div className="wallet-card">
         <h2>My Wallet</h2>
-        <p><strong>Current Balance:</strong> ₹{balance.toFixed(2)}</p>
+        <p>
+          <strong>Current Balance:</strong> ₹{balance.toFixed(2)}
+        </p>
         <input
           type="number"
           placeholder="Enter amount to add"

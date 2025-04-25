@@ -6,14 +6,14 @@ import FlightPage from "./pages/FlightPage";
 import BusPage from "./pages/BusPage";
 import TrainPage from "./pages/TrainPage";
 import TicketsPage from "./pages/TicketsPage";
-import ProfilePage from './pages/ProfilePage';
+import ProfilePage from "./pages/ProfilePage";
 import WalletPage from "./pages/WalletPage";
 import BookingPage from "./pages/BookingPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
 import AgencyDashboard from "./pages/AgencyDashboard"; // ✅ NEW
 import UpdateAgencyProfile from "./pages/UpdateAgencyProfile";
 import AddTravelRoute from "./pages/AddTravelRoute";
-import UpdateTravelPage from "./pages/UpdateTravelRoute";  // at the top
+import UpdateTravelPage from "./pages/UpdateTravelRoute"; // at the top
 import AgencyWalletPage from "./pages/AgencyWalletPage";
 
 function App() {
@@ -36,7 +36,6 @@ function App() {
         <Route path="/add-travel" element={<AddTravelRoute />} />
         <Route path="/update-travel/:id" element={<UpdateTravelPage />} />
         <Route path="/agency-wallet" element={<AgencyWalletPage />} />
-
       </Routes>
     </BrowserRouter>
   );

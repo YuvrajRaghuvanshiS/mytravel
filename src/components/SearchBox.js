@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/SearchBox.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/SearchBox.css";
 
 function SearchBox({ mode = "flights" }) {
   const navigate = useNavigate();
@@ -15,8 +15,8 @@ function SearchBox({ mode = "flights" }) {
         mode: mode,
         from: fromCity,
         to: toCity,
-        date: date
-      }
+        date: date,
+      },
     });
   };
 
@@ -24,7 +24,7 @@ function SearchBox({ mode = "flights" }) {
     <form className="search-box-container" onSubmit={handleSearch}>
       <div className="input-group">
         <label>FROM CITY</label>
-        <input 
+        <input
           type="text"
           placeholder="Enter city or airport"
           value={fromCity}
@@ -35,7 +35,7 @@ function SearchBox({ mode = "flights" }) {
 
       <div className="input-group">
         <label>TO CITY</label>
-        <input 
+        <input
           type="text"
           placeholder="Enter city or airport"
           value={toCity}
@@ -46,7 +46,7 @@ function SearchBox({ mode = "flights" }) {
 
       <div className="input-group">
         <label>TRAVEL DATE</label>
-        <input 
+        <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -54,7 +54,9 @@ function SearchBox({ mode = "flights" }) {
         />
       </div>
 
-      <button type="submit" className="search-btn">Search Flights</button>
+      <button type="submit" className="search-btn">
+        Search Flights
+      </button>
     </form>
   );
 }

@@ -16,7 +16,7 @@ function RegisterUser() {
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaQuestion, setCaptchaQuestion] = useState("");
   const [captchaAnswer, setCaptchaAnswer] = useState(null);
-  
+
   const navigate = useNavigate();
 
   // Generate new CAPTCHA when form is loaded or user type changes
@@ -31,12 +31,12 @@ function RegisterUser() {
     // Generate random numbers between 1 and 20
     const num1 = Math.floor(Math.random() * 20) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
-    
+
     // Randomly choose between addition and subtraction
     const isAddition = Math.random() > 0.5;
-    
+
     let question, answer;
-    
+
     if (isAddition) {
       question = `${num1} + ${num2} = ?`;
       answer = num1 + num2;
@@ -46,7 +46,7 @@ function RegisterUser() {
       question = `${larger} - ${smaller} = ?`;
       answer = larger - smaller;
     }
-    
+
     setCaptchaQuestion(question);
     setCaptchaAnswer(answer);
     setCaptchaInput("");
@@ -55,11 +55,11 @@ function RegisterUser() {
   // Verify the CAPTCHA input
   const verifyCaptcha = () => {
     const userInput = Number(captchaInput);
-    
+
     if (userInput === captchaAnswer) {
       return true;
     }
-    
+
     generateCaptcha(); // Generate a new CAPTCHA if incorrect
     return false;
   };
@@ -79,9 +79,10 @@ function RegisterUser() {
     }
 
     const data = { id, name, email, phone, password };
-    const endpoint = userType === "agency"
-      ? "http://localhost:3002/api/auth/register"
-      : "http://localhost:3001/api/auth/register";
+    const endpoint =
+      userType === "agency"
+        ? "http://localhost:3002/api/auth/register"
+        : "http://localhost:3001/api/auth/register";
 
     try {
       const res = await axios.post(endpoint, data);
@@ -113,8 +114,12 @@ function RegisterUser() {
             <>
               <h2>Select Registration Type</h2>
               <div className="user-type-buttons">
-                <button onClick={() => setUserType("user")}>Register as User</button>
-                <button onClick={() => setUserType("agency")}>Register as Travel Agency</button>
+                <button onClick={() => setUserType("user")}>
+                  Register as User
+                </button>
+                <button onClick={() => setUserType("agency")}>
+                  Register as Travel Agency
+                </button>
               </div>
             </>
           ) : (
@@ -208,9 +213,9 @@ function RegisterUser() {
                       onChange={(e) => setCaptchaInput(e.target.value)}
                       required
                     />
-                    <button 
-                      type="button" 
-                      className="refresh-captcha" 
+                    <button
+                      type="button"
+                      className="refresh-captcha"
                       onClick={generateCaptcha}
                     >
                       ↻
@@ -223,10 +228,12 @@ function RegisterUser() {
                 </button>
               </form>
 
-              <button className="back-button" onClick={() => setUserType("")}>← Back</button>
+              <button className="back-button" onClick={() => setUserType("")}>
+                ← Back
+              </button>
 
               <p className="login-link">
-                Already have an account? {" "}
+                Already have an account?{" "}
                 <span onClick={() => navigate("/login-user")}>Login here</span>.
               </p>
             </>

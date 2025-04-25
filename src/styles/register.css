@@ -1,119 +1,119 @@
 /* Overall Page Layout */
 .register-page {
-    display: flex;
-    height: 100vh;
+  display: flex;
+  height: 100vh;
 }
 
 /* Left Fixed Image Section */
 .image-section {
-    flex: 1;
-    background-color: #f3f4f6; /* Soft gray background for a clean look */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #333; /* Dark text for contrast */
-    padding: 20px;
-    border-right: 3px solid #8B4513; /* Darkened vertical line (brown) */
+  flex: 1;
+  background-color: #f3f4f6; /* Soft gray background for a clean look */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #333; /* Dark text for contrast */
+  padding: 20px;
+  border-right: 3px solid #8b4513; /* Darkened vertical line (brown) */
 }
 
 .image-section img {
-    width: 70%; /* Adjusted size for better proportions */
-    max-width: 300px; /* Maximum width to prevent oversized images */
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 10px solid #8B4513; /* Brown frame around the image */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  width: 70%; /* Adjusted size for better proportions */
+  max-width: 300px; /* Maximum width to prevent oversized images */
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 10px solid #8b4513; /* Brown frame around the image */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 .image-section h3 {
-    font-size: 28px; /* Slightly larger font for emphasis */
-    margin-bottom: 10px;
+  font-size: 28px; /* Slightly larger font for emphasis */
+  margin-bottom: 10px;
 }
 
 .image-section p {
-    font-size: 16px;
-    text-align: center; /* Center-align text for better readability */
+  font-size: 16px;
+  text-align: center; /* Center-align text for better readability */
 }
 
 /* Right Scrollable Form Section */
 .form-section {
-    flex: 1.5; /* Wider than the image section */
-    overflow-y: auto; /* Enable scrolling */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff; /* White background for right section */
+  flex: 1.5; /* Wider than the image section */
+  overflow-y: auto; /* Enable scrolling */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff; /* White background for right section */
 }
 
 .register-container {
-    background-color: white;
-    padding: 40px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
 /* Heading */
 .register-container h2 {
-    margin-bottom: 25px;
-    color: #333; /* Dark text for better readability */
+  margin-bottom: 25px;
+  color: #333; /* Dark text for better readability */
 }
 
 /* Form Inputs */
 .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
 }
 
 .register-container input {
-    width: calc(100% - 20px);
-    padding: 12px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    border: solid thin #ddd; /* Subtle border for inputs */
+  width: calc(100% - 20px);
+  padding: 12px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: solid thin #ddd; /* Subtle border for inputs */
 }
 
 .register-container input:focus {
-    outline-color: #555; /* Neutral focus color */
+  outline-color: #555; /* Neutral focus color */
 }
 
 /* Register Button */
 .register-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #4caf50; /* Green button for positive action */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  background-color: #4caf50; /* Green button for positive action */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 .register-button:hover {
-   background-color:#43a047; 
-   cursor:pointer; 
+  background-color: #43a047;
+  cursor: pointer;
 }
 
 /* Login Link */
 .login-link {
-   text-align:center;
-   font-size:small;
-   margin-top: 15px;
+  text-align: center;
+  font-size: small;
+  margin-top: 15px;
 }
 
 .login-link span {
-   color: #3498db;
-   cursor: pointer;
-   text-decoration: underline;
+  color: #3498db;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* user button and back button formatting */

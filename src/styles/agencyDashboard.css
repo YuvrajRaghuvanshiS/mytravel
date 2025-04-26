@@ -222,3 +222,39 @@
   width: 40px;
   height: 40px;
 }
+
+.welcome-banner {
+  background-image: url("../images/mountains.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-section {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 450px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.welcome-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+
+.travel-quote {
+  font-style: italic;
+  font-size: 1.3rem;
+  margin-bottom: 24px;
+  color: #144c43;
+  line-height: 1.5;
+}

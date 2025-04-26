@@ -91,18 +91,15 @@ function AgencyDashboard() {
       <Navbar />
       <div className="agency-dashboard">
         {agency && (
-          <section className="agency-info">
-            <h2>Welcome, {agency.name}</h2>
-            <p>
-              <strong>Email:</strong> {agency.email}
-            </p>
-            <p>
-              <strong>Phone:</strong> {agency.phone}
-            </p>
-            <p>
-              <strong>Wallet Balance:</strong> ₹{agency.balance.toFixed(2)}
-            </p>
-          </section>
+          <div className="welcome-banner">
+            <section className="agency-info welcome-section">
+              <h2>Welcome, {agency.contactPerson}</h2>
+              <blockquote className="travel-quote">
+                "The world is a book, and those who do not travel read only one
+                page."
+              </blockquote>
+            </section>
+          </div>
         )}
 
         <section className="travel-section">

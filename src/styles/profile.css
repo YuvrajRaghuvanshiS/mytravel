@@ -109,6 +109,39 @@
   z-index: 100;
 }
 
+.profile-readonly {
+  background-color: #e9ecef;
+  color: #6c757d;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1.5px solid #bfc9d1;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.profile-textarea {
+  resize: vertical;
+  min-height: 40px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #222;
+  background: #f7f9fb;
+  border-radius: 6px;
+  border: 1.5px solid #bfc9d1;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+}
+
+.profile-select {
+  border-radius: 6px;
+  border: 1.5px solid #bfc9d1;
+  padding: 10px 12px;
+  background: #f7f9fb;
+  color: #222;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
 @media (max-width: 900px) {
   .profile-main {
     flex-direction: column;

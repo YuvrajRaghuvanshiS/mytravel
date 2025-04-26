@@ -13,7 +13,7 @@ function WalletCard({ userType = "users", showBack, onBack, afterAdd }) {
         const token = localStorage.getItem("token");
 
         let baseApiUrl = "";
-        if (userType === "agency") {
+        if (userType === "agencies") {
           baseApiUrl = process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL;
         } else {
           baseApiUrl = process.env.REACT_APP_CUSTOMER_API_BASE_URL;
@@ -23,7 +23,7 @@ function WalletCard({ userType = "users", showBack, onBack, afterAdd }) {
         });
         const { balance } = res.data.data;
         setBalance(balance);
-        localStorage.setItem("walletBalance", balance);
+        localStorage.setItem("loggedInUser", JSON.stringify(res.data.data));
       } catch (error) {
         setBalance(0);
       } finally {
@@ -43,7 +43,7 @@ function WalletCard({ userType = "users", showBack, onBack, afterAdd }) {
       const token = localStorage.getItem("token");
 
       let baseApiUrl = "";
-      if (userType === "agency") {
+      if (userType === "agencies") {
         baseApiUrl = process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL;
       } else {
         baseApiUrl = process.env.REACT_APP_CUSTOMER_API_BASE_URL;
@@ -68,7 +68,6 @@ function WalletCard({ userType = "users", showBack, onBack, afterAdd }) {
 
       setBalance(newBalance);
       setAmount("");
-      localStorage.setItem("walletBalance", newBalance);
 
       const userData = JSON.parse(localStorage.getItem("loggedInUser"));
       if (userData) {
@@ -96,7 +95,7 @@ function WalletCard({ userType = "users", showBack, onBack, afterAdd }) {
 
   return (
     <div className="wallet-card">
-      <h2>{userType === "agency" ? "Agency Wallet" : "My Wallet"}</h2>
+      <h2>{userType === "agencies" ? "Agency Wallet" : "My Wallet"}</h2>
       <p>
         <strong>Current Balance:</strong>{" "}
         <span className="wallet-balance">₹{balance.toFixed(2)}</span>

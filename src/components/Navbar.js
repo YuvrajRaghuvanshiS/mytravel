@@ -6,35 +6,31 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(null);
-  const [wallet, setWallet] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [userType, setUserType] = useState("");
 
   useEffect(() => {
-    // Check login status and wallet on mount and on route change
-    const token = localStorage.getItem("token");
+    // Check login status on mount and on route change
     const loggedInUser = localStorage.getItem("loggedInUser");
-    if (token && loggedInUser) {
-      try {
-        const userObj = JSON.parse(loggedInUser);
-        setUser(userObj);
-        setWallet(
-          userObj.balance || localStorage.getItem("walletBalance") || 0
-        );
-      } catch {
-        setUser(null);
-        setWallet(0);
-      }
-    } else {
+    const lsUserType = localStorage.getItem("userType");
+    try {
+      const userObj = JSON.parse(loggedInUser);
+      setUser(userObj);
+      setBalance(userObj.balance || 0);
+      setUserType(JSON.parse(lsUserType).userType);
+    } catch {
       setUser(null);
-      setWallet(0);
+      setBalance(0);
+      setUserType("");
     }
   }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("walletBalance");
+    localStorage.removeItem("userType");
     setUser(null);
-    setWallet(0);
+    setBalance(0);
     navigate("/");
   };
 
@@ -48,7 +44,7 @@ function Navbar() {
       </div>
       <ul className="navbar-links">
         {user ? (
-          user.role === "agency" ? (
+          userType === "agencies" ? (
             <>
               <li>
                 <Link
@@ -142,7 +138,7 @@ function Navbar() {
       </ul>
       <div className="navbar-user-section">
         {user ? (
-          user.role === "agency" ? (
+          user.role === "agencies" ? (
             <>
               <span className="navbar-user-info">
                 👤 {user.name || "Agency"}
@@ -155,7 +151,7 @@ function Navbar() {
             <>
               <span className="navbar-user-info">👤 {user.name || "User"}</span>
               <span className="navbar-wallet">
-                💰 ₹{Number(wallet).toFixed(2)}
+                💰 ₹{Number(balance).toFixed(2)}
               </span>
               <button className="navbar-logout-btn" onClick={handleLogout}>
                 Logout

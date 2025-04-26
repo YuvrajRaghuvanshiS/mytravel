@@ -8,7 +8,7 @@ import "../styles/profile.css";
 function ProfilePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [userType, setUserType] = useState("users"); // default, will be set by API
+  const [userType, setUserType] = useState("");
   const [saving, setSaving] = useState(false);
 
   // Common fields
@@ -34,19 +34,15 @@ function ProfilePage() {
         const token = localStorage.getItem("token");
 
         // Try to detect from localStorage or fallback to user API
-        const stored = localStorage.getItem("loggedInUser");
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (parsed.role === "agency") {
-            baseApiUrl = process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL;
-            type = "agencies";
-          } else {
-            baseApiUrl = process.env.REACT_APP_CUSTOMER_API_BASE_URL;
-            type = "users";
-          }
+        const parsed = JSON.parse(localStorage.getItem("userType"));
+        if (parsed.userType === "agencies") {
+          baseApiUrl = process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL;
+          type = "agencies";
         } else {
-          alert("Could not find user type");
+          baseApiUrl = process.env.REACT_APP_CUSTOMER_API_BASE_URL;
+          type = "users";
         }
+
         setUserType(type);
 
         const profileResp = await axios.get(`${baseApiUrl}/api/${type}/me`, {
@@ -113,6 +109,7 @@ function ProfilePage() {
         }
       );
       localStorage.setItem("loggedInUser", JSON.stringify(res.data.data));
+      localStorage.setItem("userType", JSON.stringify({ userType }));
       alert("Profile updated successfully!");
     } catch (error) {
       alert("Failed to update profile.");
@@ -145,13 +142,15 @@ function ProfilePage() {
               value={name}
               onChange={(n) => setName(n.target.value)}
               placeholder={
-                userType === "agency" ? "Enter agency name" : "Enter full name"
+                userType === "agencies"
+                  ? "Enter agency name"
+                  : "Enter full name"
               }
               type="text"
               required
             />
 
-            <label>{userType === "agency" ? "Agency Email" : "Email"}</label>
+            <label>{userType === "agencies" ? "Agency Email" : "Email"}</label>
             <input
               name="email"
               value={email}
@@ -161,7 +160,7 @@ function ProfilePage() {
             />
 
             <label>
-              {userType === "agency" ? "Agency Phone" : "Phone Number"}
+              {userType === "agencies" ? "Agency Phone" : "Phone Number"}
             </label>
             <input
               name="phone"

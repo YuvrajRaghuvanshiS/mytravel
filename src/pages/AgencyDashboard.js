@@ -26,6 +26,11 @@ function AgencyDashboard() {
         }
       );
       setAgency(res.data.data);
+      localStorage.setItem("loggedInUser", JSON.stringify(res.data.data));
+      localStorage.setItem(
+        "userType",
+        JSON.stringify({ userType: "agencies" })
+      );
     } catch (err) {
       console.error("Error fetching agency:", err);
       alert("Failed to load agency profile.");
@@ -83,6 +88,8 @@ function AgencyDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("userType");
     navigate("/");
   };
 

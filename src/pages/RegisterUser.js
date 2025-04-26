@@ -6,7 +6,7 @@ import travelImage from "../images/register_look.jpg";
 import Navbar from "../components/Navbar";
 
 function RegisterUser() {
-  const [userType, setUserType] = useState(""); // "user" or "agency"
+  const [userType, setUserType] = useState("");
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -96,7 +96,7 @@ function RegisterUser() {
 
     let endpoint = "";
 
-    if (userType === "agency") {
+    if (userType === "agencies") {
       // Validate agency-specific fields
       if (!gstNumber || !contactPerson || !address || !agencyType) {
         alert("Please fill all agency fields.");
@@ -118,6 +118,8 @@ function RegisterUser() {
       const res = await axios.post(endpoint, data);
       const { token } = res.data;
       localStorage.setItem("token", token);
+      localStorage.setItem("loggedInUser", JSON.stringify({ id }));
+      localStorage.setItem("userType", JSON.stringify({ userType }));
       alert("Registered successfully!");
       navigate("/login-user");
     } catch (error) {
@@ -149,10 +151,10 @@ function RegisterUser() {
               <>
                 <h2>Select Registration Type</h2>
                 <div className="user-type-buttons-pro">
-                  <button onClick={() => setUserType("user")}>
+                  <button onClick={() => setUserType("users")}>
                     Register as User
                   </button>
-                  <button onClick={() => setUserType("agency")}>
+                  <button onClick={() => setUserType("agencies")}>
                     Register as Travel Agency
                   </button>
                 </div>
@@ -167,7 +169,7 @@ function RegisterUser() {
             ) : (
               <>
                 <h2>
-                  {userType === "user"
+                  {userType === "users"
                     ? "Create Your User Account"
                     : "Create Your Agency Account"}
                 </h2>
@@ -176,7 +178,7 @@ function RegisterUser() {
                   {/* Common fields */}
                   <div className="form-group">
                     <label>
-                      {userType === "agency"
+                      {userType === "agencies"
                         ? "Agency ID (username)"
                         : "Username (used as ID)"}
                     </label>
@@ -186,7 +188,7 @@ function RegisterUser() {
                         type="text"
                         value={id}
                         placeholder={
-                          userType === "agency"
+                          userType === "agencies"
                             ? "Choose a unique agency ID"
                             : "Choose a username"
                         }
@@ -197,7 +199,7 @@ function RegisterUser() {
                   </div>
                   <div className="form-group">
                     <label>
-                      {userType === "agency" ? "Agency Name" : "Full Name"}
+                      {userType === "agencies" ? "Agency Name" : "Full Name"}
                     </label>
                     <div className="input-icon">
                       <span className="input-emoji">📝</span>
@@ -205,7 +207,7 @@ function RegisterUser() {
                         type="text"
                         value={name}
                         placeholder={
-                          userType === "agency"
+                          userType === "agencies"
                             ? "Enter agency name"
                             : "Enter your full name"
                         }
@@ -242,7 +244,7 @@ function RegisterUser() {
                   </div>
 
                   {/* Agency-specific fields */}
-                  {userType === "agency" && (
+                  {userType === "agencies" && (
                     <>
                       <div className="form-group">
                         <label>GST Number</label>

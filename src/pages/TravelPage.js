@@ -44,7 +44,7 @@ function TravelPage() {
           "loggedInUser",
           JSON.stringify({ name, balance, email, phone, isAnonymous })
         );
-        localStorage.setItem("walletBalance", balance);
+        localStorage.setItem("userType", JSON.stringify({ userType: "users" }));
       } catch (err) {
         console.error("Failed to fetch user info:", err);
         alert("Session expired. Please log in again.");
@@ -78,7 +78,7 @@ function TravelPage() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("walletBalance");
+    localStorage.removeItem("userType");
     navigate("/");
   };
 

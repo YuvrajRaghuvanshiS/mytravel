@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 function LoginUser() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState(""); // 'user' or 'agency'
+  const [userType, setUserType] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaQuestion, setCaptchaQuestion] = useState("");
   const [captchaAnswer, setCaptchaAnswer] = useState(null);
@@ -62,18 +62,16 @@ function LoginUser() {
       }
       console.log(process.env);
       const loginURL =
-        userType === "user"
+        userType === "users"
           ? `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/auth/login`
           : `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/auth/login`;
       const response = await axios.post(loginURL, { id, password });
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "loggedInUser",
-          JSON.stringify({ id, role: userType })
-        );
+        localStorage.setItem("loggedInUser", JSON.stringify({ id }));
+        localStorage.setItem("userType", JSON.stringify({ userType }));
         alert("Login successful!");
-        navigate(userType === "user" ? "/travel" : "/agency-dashboard");
+        navigate(userType === "users" ? "/travel" : "/agency-dashboard");
       } else {
         alert("Login failed. Please check your credentials.");
         generateCaptcha();
@@ -107,10 +105,10 @@ function LoginUser() {
               <>
                 <h2>Sign in to your account</h2>
                 <div className="user-type-buttons-pro">
-                  <button onClick={() => setUserType("user")}>
+                  <button onClick={() => setUserType("users")}>
                     Login as User
                   </button>
-                  <button onClick={() => setUserType("agency")}>
+                  <button onClick={() => setUserType("agencies")}>
                     Login as Travel Agency
                   </button>
                 </div>
@@ -124,7 +122,7 @@ function LoginUser() {
             ) : (
               <>
                 <h2>
-                  {userType === "user" ? "User Login" : "Travel Agency Login"}
+                  {userType === "users" ? "User Login" : "Travel Agency Login"}
                 </h2>
                 <form onSubmit={handleLogin}>
                   <div className="form-group">

@@ -51,6 +51,10 @@ export const register = async (req, res) => {
     contactPerson,
     address,
     agencyType,
+    rating: {
+      totalRatings: 0,
+      totalScore: 0,
+    },
   };
 
   const token = signToken({ id, role: "agency" });

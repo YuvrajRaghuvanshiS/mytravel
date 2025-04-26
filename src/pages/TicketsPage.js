@@ -347,8 +347,49 @@ function TicketsPage() {
                     <div className="ticket-info">
                       <div className="route">
                         <h3>
-                          {ticket.source} → {ticket.destination}
+                          {ticket.source} <span className="arrow">→</span>{" "}
+                          {ticket.destination}
                         </h3>
+                        <div className="agency-row">
+                          <span className="agency-name">
+                            {ticket.agencyName}
+                          </span>
+                          <span className={`type-badge type-${ticket.type}`}>
+                            {ticket.type?.toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="agency-rating-row">
+                          {typeof ticket.agencyRating === "number" &&
+                          ticket.totalRatings > 0 ? (
+                            <>
+                              <span className="stars">
+                                {Array(5)
+                                  .fill(0)
+                                  .map((_, i) => (
+                                    <span
+                                      key={i}
+                                      className={
+                                        i < ticket.agencyRating
+                                          ? "star filled"
+                                          : "star"
+                                      }
+                                    >
+                                      ★
+                                    </span>
+                                  ))}
+                              </span>
+                              <span className="rating-value">
+                                {ticket.agencyRating}/5
+                              </span>
+                              <span className="rating-count">
+                                ({ticket.totalRatings} rating
+                                {ticket.totalRatings > 1 ? "s" : ""})
+                              </span>
+                            </>
+                          ) : (
+                            <span className="no-rating">No ratings yet</span>
+                          )}
+                        </div>
                       </div>
                       <div className="times">
                         <div>
@@ -366,6 +407,15 @@ function TicketsPage() {
                       </div>
                       <div className="ticket-price">
                         <h3>From ₹{ticket.basePrice}</h3>
+                        <div className="seats-available">
+                          <span>
+                            {ticket.availableSeats > 0
+                              ? `${ticket.availableSeats} seat${
+                                  ticket.availableSeats > 1 ? "s" : ""
+                                } available`
+                              : "No seats available"}
+                          </span>
+                        </div>
                         <button
                           className="book-button"
                           onClick={() =>

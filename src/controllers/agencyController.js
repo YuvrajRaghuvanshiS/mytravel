@@ -18,6 +18,10 @@ export const getAgencyInfo = (req, res) => {
       name: agency.name,
       email: agency.email,
       phone: agency.phone,
+      gstNumber: agency.gstNumber,
+      contactPerson: agency.contactPerson,
+      address: agency.address,
+      agencyType: agency.agencyType,
       balance: agency.balance,
     },
   });

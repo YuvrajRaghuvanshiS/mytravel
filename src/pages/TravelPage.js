@@ -164,21 +164,6 @@ function TravelPage() {
             <button type="submit">{heroContent[mode].searchBtn}</button>
           </form>
         </div>
-        <div className="travel-userbar">
-          <span>
-            Welcome, <strong>{userInfo.name}</strong>
-          </span>
-          <span className="divider">|</span>
-          <span>
-            Wallet: <strong>₹{userInfo.balance}</strong>
-          </span>
-          <button className="userbar-btn" onClick={() => navigate("/profile")}>
-            Profile
-          </button>
-          <button className="userbar-btn logout" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
       </div>
       <section className="travel-features">
         <h2>Why Book With Us?</h2>

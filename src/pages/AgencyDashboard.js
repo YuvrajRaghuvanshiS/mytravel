@@ -86,38 +86,10 @@ function AgencyDashboard() {
     navigate(`/update-travel/${id}`);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("userType");
-    navigate("/");
-  };
-
   return (
     <>
       <Navbar />
       <div className="agency-dashboard">
-        <header className="dashboard-header">
-          <h1>🧳 Agency Dashboard</h1>
-          <div className="profile-section">
-            <button
-              className="profile-btn"
-              onClick={() => navigate("/profile")}
-            >
-              Update Profile
-            </button>
-            <button
-              className="blue-btn"
-              onClick={() => navigate("/agency-wallet")}
-            >
-              Add Wallet Money
-            </button>
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-        </header>
-
         {agency && (
           <section className="agency-info">
             <h2>Welcome, {agency.name}</h2>

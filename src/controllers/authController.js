@@ -3,27 +3,65 @@ import { signToken } from "../utils/jwt.js";
 import { agencies } from "../db.js";
 
 export const register = async (req, res) => {
-  const { id, name, email, phone, password } = req.body;
-  if (!id || !name || !email || !phone || !password)
-    return res.status(400).json({ success: false, message: "Missing fields" });
+  const {
+    id,
+    name,
+    email,
+    phone,
+    password,
+    gstNumber,
+    contactPerson,
+    address,
+    agencyType,
+  } = req.body;
 
-  if (agencies[id])
+  if (
+    !id ||
+    !name ||
+    !email ||
+    !phone ||
+    !password ||
+    !gstNumber ||
+    !contactPerson ||
+    !address ||
+    !agencyType
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing required fields" });
+  }
+
+  if (agencies[id]) {
     return res
       .status(409)
       .json({ success: false, message: "Agency already exists" });
+  }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   agencies[id] = {
     id,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name,
     email,
     phone,
     password: hashedPassword,
     balance: 0,
+    gstNumber,
+    contactPerson,
+    address,
+    agencyType,
   };
 
+  console.log(agencies[id]);
+
   const token = signToken({ id, role: "agency" });
-  res.status(201).json({ success: true, token });
+
+  return res.status(201).json({
+    success: true,
+    message: "Agency registered successfully",
+    token,
+  });
 };
 
 export const login = async (req, res) => {

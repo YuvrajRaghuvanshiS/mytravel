@@ -44,7 +44,7 @@ function Navbar() {
         <span role="img" aria-label="logo" className="logo-emoji">
           🌐
         </span>
-        <span className="navbar-title">TravelEase</span>
+        <span className="navbar-title">MyTravel.com</span>
       </div>
       <ul className="navbar-links">
         {user ? (

@@ -109,35 +109,10 @@
   z-index: 100;
 }
 
-.floating-right-buttons button {
-  background: #fff;
-  color: #0b5ed7;
-  border: 2px solid #0b5ed7;
-  border-radius: 18px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  padding: 12px 30px;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, transform 0.13s;
-  box-shadow: 0 2px 8px rgba(11, 94, 215, 0.07);
-}
-.floating-right-buttons button:hover {
-  background: #0b5ed7;
-  color: #fff;
-  transform: scale(1.04);
-}
-
 @media (max-width: 900px) {
   .profile-main {
     flex-direction: column;
     gap: 24px;
     align-items: stretch;
-  }
-  .floating-right-buttons {
-    position: static;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 40px;
-    gap: 18px;
   }
 }

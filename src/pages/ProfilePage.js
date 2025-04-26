@@ -120,14 +120,6 @@ function ProfilePage() {
             <WalletCard />
           </div>
         </div>
-
-        {/* Floating action buttons */}
-        <div className="floating-right-buttons">
-          <button onClick={() => navigate("/my-bookings")}>
-            📋 My Bookings
-          </button>
-          <button onClick={() => navigate("/travel")}>🚀 Book Travel</button>
-        </div>
       </div>
     </>
   );

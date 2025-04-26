@@ -6,13 +6,20 @@ import travelImage from "../images/register_look.jpg";
 import Navbar from "../components/Navbar";
 
 function RegisterUser() {
-  const [userType, setUserType] = useState(""); // Selection step
+  const [userType, setUserType] = useState(""); // "user" or "agency"
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Agency-specific fields
+  const [gstNumber, setGstNumber] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
+  const [address, setAddress] = useState("");
+  const [agencyType, setAgencyType] = useState("");
+
   // CAPTCHA states
   const [captchaInput, setCaptchaInput] = useState("");
   const [captchaQuestion, setCaptchaQuestion] = useState("");
@@ -79,11 +86,33 @@ function RegisterUser() {
       return;
     }
 
-    const data = { id, name, email, phone, password };
-    const endpoint =
-      userType === "agency"
-        ? `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/auth/register`
-        : `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/auth/register`;
+    let data = {
+      id,
+      name,
+      email,
+      phone,
+      password,
+    };
+
+    let endpoint = "";
+
+    if (userType === "agency") {
+      // Validate agency-specific fields
+      if (!gstNumber || !contactPerson || !address || !agencyType) {
+        alert("Please fill all agency fields.");
+        return;
+      }
+      data = {
+        ...data,
+        gstNumber,
+        contactPerson,
+        address,
+        agencyType,
+      };
+      endpoint = `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/auth/register`;
+    } else {
+      endpoint = `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/auth/register`;
+    }
 
     try {
       const res = await axios.post(endpoint, data);
@@ -102,6 +131,7 @@ function RegisterUser() {
   return (
     <>
       <Navbar />
+      {/* Left Image Section */}
       <div className="register-page-pro">
         <div className="register-left">
           <img src={travelImage} alt="Travel" />
@@ -111,11 +141,13 @@ function RegisterUser() {
             unlock exclusive offers!
           </p>
         </div>
+
+        {/* Right Section */}
         <div className="register-right">
           <div className="register-container-pro">
             {userType === "" ? (
               <>
-                <h2>Choose your account type</h2>
+                <h2>Select Registration Type</h2>
                 <div className="user-type-buttons-pro">
                   <button onClick={() => setUserType("user")}>
                     Register as User
@@ -139,28 +171,44 @@ function RegisterUser() {
                     ? "Create Your User Account"
                     : "Create Your Agency Account"}
                 </h2>
+
                 <form onSubmit={handleRegister}>
+                  {/* Common fields */}
                   <div className="form-group">
-                    <label>Username (used as ID)</label>
+                    <label>
+                      {userType === "agency"
+                        ? "Agency ID (username)"
+                        : "Username (used as ID)"}
+                    </label>
                     <div className="input-icon">
                       <span className="input-emoji">👤</span>
                       <input
                         type="text"
                         value={id}
-                        placeholder="Choose a username"
+                        placeholder={
+                          userType === "agency"
+                            ? "Choose a unique agency ID"
+                            : "Choose a username"
+                        }
                         onChange={(e) => setId(e.target.value)}
                         required
                       />
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>Full Name</label>
+                    <label>
+                      {userType === "agency" ? "Agency Name" : "Full Name"}
+                    </label>
                     <div className="input-icon">
                       <span className="input-emoji">📝</span>
                       <input
                         type="text"
                         value={name}
-                        placeholder="Enter your full name"
+                        placeholder={
+                          userType === "agency"
+                            ? "Enter agency name"
+                            : "Enter your full name"
+                        }
                         onChange={(e) => setName(e.target.value)}
                         required
                       />
@@ -192,6 +240,80 @@ function RegisterUser() {
                       />
                     </div>
                   </div>
+
+                  {/* Agency-specific fields */}
+                  {userType === "agency" && (
+                    <>
+                      <div className="form-group">
+                        <label>GST Number</label>
+                        <div className="input-icon">
+                          <span className="input-emoji">🏢</span>
+                          <input
+                            type="text"
+                            value={gstNumber}
+                            placeholder="Enter GST Number"
+                            onChange={(e) => setGstNumber(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Contact Person</label>
+                        <div className="input-icon">
+                          <span className="input-emoji">🙍‍♂️</span>
+                          <input
+                            type="text"
+                            value={contactPerson}
+                            placeholder="Enter contact person name"
+                            onChange={(e) => setContactPerson(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Address</label>
+                        <div className="input-icon textarea-icon">
+                          <span className="input-emoji">📍</span>
+                          <textarea
+                            value={address}
+                            placeholder="Enter agency address"
+                            onChange={(e) => setAddress(e.target.value)}
+                            required
+                            rows={2}
+                            style={{
+                              resize: "vertical",
+                              minHeight: 40,
+                              border: "none",
+                              background: "transparent",
+                              width: "100%",
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Agency Type</label>
+                        <div className="input-icon">
+                          <span className="input-emoji">🏷️</span>
+                          <select
+                            value={agencyType}
+                            onChange={(e) => setAgencyType(e.target.value)}
+                            required
+                            style={{
+                              border: "none",
+                              background: "transparent",
+                              width: "100%",
+                              fontSize: "1rem",
+                              color: "#222",
+                            }}
+                          >
+                            <option value="">Select type</option>
+                            <option value="private">Private</option>
+                            <option value="public">Public</option>
+                          </select>
+                        </div>
+                      </div>
+                    </>
+                  )}
                   <div className="form-group">
                     <label>Password</label>
                     <div className="input-icon">
@@ -218,6 +340,8 @@ function RegisterUser() {
                       />
                     </div>
                   </div>
+
+                  {/* CAPTCHA Section */}
                   <div className="form-group captcha-container">
                     <label>Verification</label>
                     <div className="captcha-box">
@@ -242,16 +366,19 @@ function RegisterUser() {
                       </button>
                     </div>
                   </div>
+
                   <button type="submit" className="register-btn-pro">
                     Register
                   </button>
                 </form>
+
                 <button
                   className="back-button-pro"
                   onClick={() => setUserType("")}
                 >
                   ← Back
                 </button>
+
                 <p className="login-link">
                   Already have an account?{" "}
                   <span onClick={() => navigate("/login-user")}>

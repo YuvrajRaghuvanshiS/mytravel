@@ -21,6 +21,11 @@
   box-shadow: 0 2px 16px rgba(11, 94, 215, 0.07);
   min-width: 320px;
   max-width: 420px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden;
 }
 
 .login-left img,
@@ -251,6 +256,48 @@
   margin-top: 24px;
   color: #888;
   font-size: 0.97rem;
+}
+
+/* Agency-specific field tweaks */
+.input-icon.textarea-icon {
+  align-items: flex-start;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.input-icon textarea {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #222;
+  font-family: inherit;
+  padding: 0;
+  outline: none;
+  resize: vertical;
+  min-height: 40px;
+  width: 100%;
+}
+
+.input-icon select {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #222;
+  padding: 12px 8px;
+  width: 100%;
+  outline: none;
+  appearance: none;
+}
+
+.input-icon select:focus,
+.input-icon textarea:focus {
+  outline: none;
+  border: none;
+}
+
+.input-icon select option {
+  color: #222;
+  background: #fff;
 }
 
 @media (max-width: 900px) {

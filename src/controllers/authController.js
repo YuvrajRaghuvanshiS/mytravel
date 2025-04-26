@@ -53,8 +53,6 @@ export const register = async (req, res) => {
     agencyType,
   };
 
-  console.log(agencies[id]);
-
   const token = signToken({ id, role: "agency" });
 
   return res.status(201).json({

@@ -1,4 +1,5 @@
 import Navbar from "../components/Navbar";
+import HeroCarousel from "../components/HeroCarousel";
 import { useNavigate } from "react-router-dom";
 import "../styles/home.css"; // Use the new CSS file
 
@@ -9,6 +10,7 @@ function Home() {
     <>
       <Navbar />
       <div className="homepage-hero">
+        <HeroCarousel />
         <div className="homepage-hero-content">
           <h1>See Places. Travel Easy.</h1>
           <p>
@@ -30,6 +32,57 @@ function Home() {
           </div>
         </div>
       </div>
+
+      <section className="homepage-testimonials">
+        <h2>What Our Users Say</h2>
+        <div className="testimonials-grid">
+          <div className="testimonial-card">
+            <p>
+              <span className="testimonial-quote">“</span>
+              Booking my trip was effortless and secure. The Web3 ticketing is a
+              game changer!
+              <span className="testimonial-quote">”</span>
+            </p>
+            <div className="testimonial-user">
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                alt="User"
+              />
+              <span>Rahul S., Mumbai</span>
+            </div>
+          </div>
+          <div className="testimonial-card">
+            <p>
+              <span className="testimonial-quote">“</span>
+              Fast, reliable, and the best deals. I always use this platform for
+              my travels.
+              <span className="testimonial-quote">”</span>
+            </p>
+            <div className="testimonial-user">
+              <img
+                src="https://randomuser.me/api/portraits/women/44.jpg"
+                alt="User"
+              />
+              <span>Priya K., Bengaluru</span>
+            </div>
+          </div>
+          <div className="testimonial-card">
+            <p>
+              <span className="testimonial-quote">“</span>
+              The support team is amazing, and the booking process is super
+              smooth.
+              <span className="testimonial-quote">”</span>
+            </p>
+            <div className="testimonial-user">
+              <img
+                src="https://randomuser.me/api/portraits/men/65.jpg"
+                alt="User"
+              />
+              <span>Arjun T., Delhi</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="homepage-features">
         <h2>Why Choose Us?</h2>

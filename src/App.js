@@ -7,7 +7,6 @@ import ProfilePage from "./pages/ProfilePage";
 import BookingPage from "./pages/BookingPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
 import AgencyDashboard from "./pages/AgencyDashboard"; // ✅ NEW
-import UpdateAgencyProfile from "./pages/UpdateAgencyProfile";
 import AddTravelRoute from "./pages/AddTravelRoute";
 import UpdateTravelPage from "./pages/UpdateTravelRoute"; // at the top
 import AgencyWalletPage from "./pages/AgencyWalletPage";
@@ -26,7 +25,6 @@ function App() {
         <Route path="/book" element={<BookingPage />} />
         <Route path="/my-bookings" element={<MyBookingsPage />} />
         <Route path="/agency-dashboard" element={<AgencyDashboard />} />
-        <Route path="/agency-profile" element={<UpdateAgencyProfile />} />
         <Route path="/add-travel" element={<AddTravelRoute />} />
         <Route path="/update-travel/:id" element={<UpdateTravelPage />} />
         <Route path="/agency-wallet" element={<AgencyWalletPage />} />

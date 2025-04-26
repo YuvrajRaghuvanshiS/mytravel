@@ -95,7 +95,7 @@ function AgencyDashboard() {
           <div className="profile-section">
             <button
               className="profile-btn"
-              onClick={() => navigate("/agency-profile")}
+              onClick={() => navigate("/profile")}
             >
               Update Profile
             </button>

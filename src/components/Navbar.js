@@ -74,7 +74,7 @@ function Navbar() {
               </li>
               <li>
                 <Link
-                  to="/agency-profile"
+                  to="/profile"
                   className={
                     location.pathname.startsWith("/profile") ? "active" : ""
                   }

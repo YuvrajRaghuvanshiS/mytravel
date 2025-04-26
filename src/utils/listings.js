@@ -1,4 +1,4 @@
-import { travelOptions } from "../db.js";
+import { agencies, travelOptions } from "../db.js";
 
 export const travelOptionsFilter = (
   agencyId,
@@ -25,7 +25,7 @@ export const travelOptionsFilter = (
     if (!isNaN(parsedDate)) {
       agencyTravels = agencyTravels.filter(
         (option) =>
-          new Date(option.date).toISOString().split("T")[0] ==
+          new Date(option.date).toISOString().split("T")[0] ===
           parsedDate.toISOString().split("T")[0]
       );
     }
@@ -75,5 +75,23 @@ export const travelOptionsFilter = (
       );
     }
   }
+
+  // Attach agency rating
+  agencyTravels = agencyTravels.map((option) => {
+    const agency = agencies[option.agencyId];
+    let averageRating = null;
+
+    if (agency && agency.rating && agency.rating.totalRatings > 0) {
+      averageRating = agency.rating.totalScore / agency.rating.totalRatings;
+    }
+
+    return {
+      ...option,
+      agencyName: agency.name,
+      agencyRating: averageRating,
+      totalRatings: agency.rating.totalRatings,
+    };
+  });
+
   return agencyTravels;
 };

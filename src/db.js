@@ -11,8 +11,11 @@ export const agencies = {
     contactPerson: "Yuvraj Raghuvanshi",
     address: "123, Main Street, Sector 5, Mumbai, Maharashtra, India - 400001",
     agencyType: "private",
-
     balance: 1000,
+    rating: {
+      totalRatings: 20,
+      totalScore: 86,
+    },
   },
   sbasia: {
     id: "sbasia",
@@ -26,8 +29,11 @@ export const agencies = {
     contactPerson: "Sahil Basia",
     address: "123, Main Street, Sector 5, Mumbai, Maharashtra, India - 400001",
     agencyType: "private",
-
     balance: 1000,
+    rating: {
+      totalRatings: 5,
+      totalScore: 15,
+    },
   },
   sasia: {
     id: "sasia",
@@ -43,6 +49,10 @@ export const agencies = {
     address: "123, Main Street, Sector 5, Mumbai, Maharashtra, India - 400001",
     agencyType: "private",
     balance: 1000,
+    rating: {
+      totalRatings: 20,
+      totalScore: 86,
+    },
   },
 }; // Stores registered travel agencies
 

@@ -2,8 +2,6 @@ import { users } from "../db.js";
 
 export const getCustomerInfo = (req, res) => {
   const userId = req.user.id;
-  console.log("User ID:", userId);
-  console.log(users);
   const user = users[userId];
 
   if (!user) {

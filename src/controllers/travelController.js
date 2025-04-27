@@ -1,6 +1,7 @@
 import { agencies, travelOptions, bookings } from "../db.js";
 import { travelOptionsFilter } from "../utils/listings.js";
 import axios from "axios";
+import fs from "fs";
 
 export const addTravelOption = (req, res) => {
   const agencyId = req.user.id; // Extract agency ID from JWT
@@ -98,6 +99,11 @@ export const addTravelOption = (req, res) => {
     };
 
     travelOptions.push(newTravel);
+
+    fs.writeFileSync(
+      "travelOptions.json",
+      JSON.stringify(travelOptions, null, 2)
+    );
 
     res.status(201).json({
       success: true,
@@ -207,6 +213,11 @@ export const updateTravelOption = (req, res) => {
     if (destination) travel.destination = destination;
     if (basePrice) travel.basePrice = basePrice;
 
+    fs.writeFileSync(
+      "travelOptions.json",
+      JSON.stringify(travelOptions, null, 2)
+    );
+
     res
       .status(200)
       .json({ success: true, message: "Travel option updated", travel });
@@ -308,6 +319,11 @@ export const removeTravelOption = async (req, res) => {
     0,
     travelOptions.length,
     ...travelOptions.filter((t) => t.id != id)
+  );
+
+  fs.writeFileSync(
+    "travelOptions.json",
+    JSON.stringify(travelOptions, null, 2)
   );
 
   return res.status(200).json({

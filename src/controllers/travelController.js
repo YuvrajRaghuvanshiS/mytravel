@@ -144,6 +144,7 @@ export const createBooking = async (req, res) => {
         status: "confirmed",
         refundAmount: 0,
         penalty: 0,
+        availableSeats: travel.availableSeats,
       };
 
       // Save booking in local DB
@@ -305,6 +306,7 @@ export const updateBooking = async (req, res) => {
   booking.seatNumbers = newSeatNumbers;
   booking.totalPrice = newTotalPrice;
   booking.updatedAt = new Date().toISOString();
+  booking.availableSeats = newTravel.availableSeats;
 
   try {
     // Notify agency backend

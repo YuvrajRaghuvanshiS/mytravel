@@ -2,8 +2,10 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 
 import axios from "axios";
-
 import { users, travelOptions, bookings } from "../db.js";
+import { Mutex } from "async-mutex";
+
+const travelLocks = new Map(); // travelID -> mutex
 
 export const getTravelOptions = async (req, res) => {
   try {
@@ -57,116 +59,126 @@ export const createBooking = async (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid input" });
   }
 
-  try {
-    // Find the travel option
-    const travel = travelOptions.find((t) => t.id === travelID);
-    if (!travel) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Travel not found" });
-    }
-
-    // Validate seat numbers
-    const unavailableSeats = [];
-    const selectedSeats = [];
-
-    seatNumbers.forEach((seatNum) => {
-      const seat = travel.seats.find((s) => s.seatNumber === seatNum);
-      if (!seat || seat.booked) {
-        unavailableSeats.push(seatNum);
-      } else {
-        selectedSeats.push(seat); // valid and available
-      }
-    });
-
-    if (unavailableSeats.length > 0) {
-      return res.status(400).json({
-        success: false,
-        message: `Seats ${unavailableSeats.join(
-          ", "
-        )} are unavailable or invalid`,
-      });
-    }
-
-    // Calculate total price
-    const totalPrice = selectedSeats.reduce((sum, s) => sum + s.price, 0);
-
-    // Check user balance
-    if (user.balance < totalPrice) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Insufficient balance" });
-    }
-
-    // Deduct user balance
-    user.balance -= totalPrice;
-
-    // Mark seats as booked and assign passenger
-    selectedSeats.forEach((seat) => {
-      seat.booked = true;
-      seat.passenger = user.userHash;
-    });
-
-    // Decrement availableSeats
-    travel.availableSeats -= seatNumbers.length;
-
-    // Generate transaction and booking IDs
-    const transactionID = `txn_${Date.now()}_${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-    const bookingID = `book_${Date.now()}_${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-
-    // Create booking record
-    const booking = {
-      bookingID,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      cancelledAt: "",
-      userHash: user.userHash,
-      isUserAnonymous: user.isAnonymous,
-      userID: user.isAnonymous ? "" : user.id,
-      agencyID: travel.agencyId,
-      travelID,
-      seatNumbers,
-      totalPrice,
-      transactionID,
-      status: "confirmed",
-      refundAmount: 0,
-      penalty: 0,
-    };
-
-    // Save booking in local DB
-    bookings.push(booking);
-
-    // Notify Travel Agency Backend
-    await axios.post(
-      `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/receive-booking`,
-      booking
-    );
-
-    const hyperledger_resp = await axios.post(
-      `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings`,
-      booking,
-      {
-        headers: {
-          "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
-        },
-      }
-    );
-
-    // Respond to user
-    return res.status(201).json({
-      success: true,
-      message: "Booking confirmed",
-      booking,
-      hyperledger_response: hyperledger_resp.data,
-    });
-  } catch (err) {
-    console.error("Booking error:", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+  // Acquire the lock for this travelID
+  let mutex = travelLocks.get(travelID);
+  if (!mutex) {
+    mutex = new Mutex();
+    travelLocks.set(travelID, mutex);
   }
+
+  await mutex.runExclusive(async () => {
+    try {
+      const travel = travelOptions.find((t) => t.id === travelID);
+      if (!travel) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Travel not found" });
+      }
+
+      // Validate seat numbers
+      const unavailableSeats = [];
+      const selectedSeats = [];
+
+      seatNumbers.forEach((seatNum) => {
+        const seat = travel.seats.find((s) => s.seatNumber === seatNum);
+        if (!seat || seat.booked) {
+          unavailableSeats.push(seatNum);
+        } else {
+          selectedSeats.push(seat);
+        }
+      });
+
+      if (unavailableSeats.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: `Seats ${unavailableSeats.join(
+            ", "
+          )} are unavailable or invalid`,
+        });
+      }
+
+      // Calculate total price
+      const totalPrice = selectedSeats.reduce((sum, s) => sum + s.price, 0);
+
+      // Check user balance
+      if (user.balance < totalPrice) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Insufficient balance" });
+      }
+
+      // Deduct user balance
+      user.balance -= totalPrice;
+
+      // Mark seats as booked and assign passenger
+      selectedSeats.forEach((seat) => {
+        seat.booked = true;
+        seat.passenger = user.userHash;
+      });
+
+      // Decrement availableSeats
+      travel.availableSeats -= seatNumbers.length;
+
+      // Generate transaction and booking IDs
+      const transactionID = `txn_${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+      const bookingID = `book_${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+
+      // Create booking record
+      const booking = {
+        bookingID,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        cancelledAt: "",
+        userHash: user.userHash,
+        isUserAnonymous: user.isAnonymous,
+        userID: user.isAnonymous ? "" : user.id,
+        agencyID: travel.agencyId,
+        travelID,
+        seatNumbers,
+        totalPrice,
+        transactionID,
+        status: "confirmed",
+        refundAmount: 0,
+        penalty: 0,
+      };
+
+      // Save booking in local DB
+      bookings.push(booking);
+
+      // Notify Travel Agency Backend
+      await axios.post(
+        `${process.env.TRAVEL_AGENCY_BACKEND_URL}/api/travel/receive-booking`,
+        booking
+      );
+
+      const hyperledger_resp = await axios.post(
+        `${process.env.HYPERLEDGER_REST_BASE_URL}/api/bookings`,
+        booking,
+        {
+          headers: {
+            "X-Api-Key": process.env.HYPERLEDGER_ORG1_APIKEY,
+          },
+        }
+      );
+
+      // Respond to user
+      return res.status(201).json({
+        success: true,
+        message: "Booking confirmed",
+        booking,
+        hyperledger_response: hyperledger_resp.data,
+      });
+    } catch (err) {
+      console.error("Booking error:", err);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  });
 };
 
 export const getUserBookings = (req, res) => {

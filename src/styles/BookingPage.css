@@ -1,269 +1,215 @@
-/* Reset and base */
 body {
-  background-color: #f2f3f5;
+  background: #f5f5f5;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  color: #222;
 }
 
-/* Container */
 .booking-page {
   max-width: 700px;
-  margin: 40px auto 60px auto;
-  padding: 32px 36px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin: 18px auto;
+  padding: 10px 4px;
+  background: #fff;
+  border: 1px solid #bbb;
   box-sizing: border-box;
-  user-select: none;
 }
 
-/* Heading */
 .booking-page h2 {
   text-align: center;
-  margin-bottom: 36px;
-  color: #0b5ed7;
-  font-weight: 700;
-  font-size: 2rem;
-  letter-spacing: 0.03em;
+  margin-bottom: 10px;
+  color: #1976d2;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-/* Ticket details box */
 .ticket-detail {
-  background-color: #f4f7fb;
-  padding: 24px 28px;
-  border-radius: 8px;
-  margin-bottom: 36px;
-  border-left: 6px solid #0b5ed7;
-  box-shadow: 0 1px 6px rgba(11, 94, 215, 0.15);
-  font-size: 15.5px;
-  line-height: 1.5;
+  background: #f7f7f7;
+  padding: 7px 5px;
+  border-left: 3px solid #1976d2;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .ticket-detail p {
-  margin: 12px 0;
-  color: #2c3e50;
-  font-weight: 500;
+  margin: 4px 0;
+  color: #222;
+  font-weight: normal;
 }
 
-/* Seat selection */
 .seat-selection {
-  margin-bottom: 28px;
+  margin-bottom: 8px;
 }
 
 .seat-selection label {
   display: block;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #1a1a1a;
-  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #111;
+  font-size: 0.95rem;
 }
 
-/* Seat map container */
 .seat-map {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 2px;
   align-items: center;
 }
 
-/* Each row of seats */
 .seat-row {
   display: flex;
   justify-content: center;
-  gap: 14px;
+  gap: 2px;
 }
 
-/* Individual seat styling */
 .seat {
   position: relative;
-  padding: 12px 0;
-  width: 54px;
-  height: 54px;
-  background-color: #fff;
-  border: 2.5px solid #0b5ed7;
-  border-radius: 8px;
-  color: #0b5ed7;
-  font-weight: 700;
-  font-size: 1.1rem;
+  padding: 2px 0;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 1px solid #1976d2;
+  color: #1976d2;
+  font-weight: bold;
+  font-size: 0.75rem;
   text-align: center;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(11, 94, 215, 0.15);
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.15s ease;
   user-select: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-/* Seat label */
 .seat .seat-label {
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
-/* Seat price */
 .seat .seat-price {
-  font-size: 0.85rem;
+  font-size: 0.6rem;
   color: #e67e22;
-  font-weight: 600;
+  font-weight: normal;
 }
 
-/* Hover effect for available seats */
 .seat:hover:not(.booked):not(.selected) {
-  background-color: #e6f0ff;
-  border-color: #0a58ca;
-  color: #0a58ca;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(10, 88, 202, 0.25);
+  background: #e3eefd;
+  border-color: #1976d2;
+  color: #1976d2;
 }
 
-/* Selected seat */
 .seat.selected {
-  background-color: #0b5ed7;
-  border-color: #084298;
+  background: #1976d2;
+  border-color: #1976d2;
   color: #fff;
-  transform: scale(1.1);
-  box-shadow: 0 6px 18px rgba(11, 94, 215, 0.4);
 }
 
-/* Booked seat */
 .seat.booked {
-  background-color: #d1d3d4;
-  border-color: #b0b3b5;
-  color: #7a7d7f;
+  background: #e0e0e0;
+  border-color: #bbb;
+  color: #888;
   cursor: not-allowed;
   pointer-events: none;
   text-decoration: line-through;
-  box-shadow: none;
-  transform: none;
 }
 
-/* Empty gap in seat layout */
 .seat-gap {
-  width: 54px;
-  height: 54px;
+  width: 22px;
+  height: 22px;
 }
 
-/* Selected seats summary */
 .selected-summary {
-  margin-top: 18px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #34495e;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #222;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 2px;
   align-items: center;
   justify-content: center;
 }
 
-/* Individual selected seat pill */
 .selected-seat {
-  background-color: #0b5ed7;
+  background: #1976d2;
   color: #fff;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 1px 4px;
+  border-radius: 0;
+  font-size: 0.78rem;
   user-select: none;
-  box-shadow: 0 2px 8px rgba(11, 94, 215, 0.3);
+  box-shadow: none;
 }
 
-/* Total price */
 .total-price {
-  margin-left: 18px;
-  font-size: 1.2rem;
+  margin-left: 5px;
+  font-size: 0.9rem;
   color: #e67e22;
-  font-weight: 700;
-  user-select: none;
+  font-weight: bold;
 }
 
-/* No seats selected text */
 .no-seat-selected {
   font-style: italic;
   color: #888;
-  font-weight: 500;
+  font-weight: normal;
   text-align: center;
   width: 100%;
 }
 
-/* Confirm button */
 .booking-page button {
   width: 100%;
-  background-color: #28a745;
-  color: white;
-  padding: 14px 0;
-  font-size: 17px;
-  font-weight: 700;
+  background: #28a745;
+  color: #fff;
+  padding: 7px 0;
+  font-size: 0.98rem;
+  font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 0;
   cursor: pointer;
-  margin-top: 16px;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
-  user-select: none;
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+  margin-top: 8px;
+  box-shadow: none;
 }
 
 .booking-page button:hover:enabled {
-  background-color: #218838;
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(33, 136, 56, 0.6);
+  background: #218838;
 }
 
 .booking-page button:disabled {
-  background-color: #ccc;
+  background: #ccc;
   color: #888;
   cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
 }
 
-/* No ticket found message */
 .no-ticket {
-  font-size: 1.3rem;
+  font-size: 0.95rem;
   color: #e74c3c;
   text-align: center;
-  margin-top: 100px;
-  font-weight: 600;
+  margin-top: 20px;
+  font-weight: bold;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
-  .seat-map {
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .seat-row {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .seat {
-    width: 44px;
-    height: 44px;
-    font-size: 1rem;
-    padding: 10px 0;
-  }
-
-  .seat .seat-price {
-    font-size: 0.75rem;
-  }
-
-  .selected-summary {
-    font-size: 0.95rem;
-  }
-
   .booking-page {
-    padding: 24px 18px;
-    margin: 30px 12px 50px 12px;
+    padding: 6px 2px;
+    margin: 8px 2px 10px 2px;
+  }
+  .seat-map {
+    gap: 2px;
+  }
+  .seat-row {
+    gap: 1px;
+  }
+  .seat {
+    width: 16px;
+    height: 16px;
+    font-size: 0.68rem;
+    padding: 1px 0;
+  }
+  .seat .seat-price {
+    font-size: 0.55rem;
+  }
+  .selected-summary {
+    font-size: 0.8rem;
   }
 }

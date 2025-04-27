@@ -200,11 +200,11 @@ function LoginUser() {
               </>
             )}
           </div>
-          <footer className="login-footer">
+          {/* <footer className="login-footer">
             <span>
               © {new Date().getFullYear()} MyTravel.com. All rights reserved.
             </span>
-          </footer>
+          </footer> */}
         </div>
       </div>
     </>

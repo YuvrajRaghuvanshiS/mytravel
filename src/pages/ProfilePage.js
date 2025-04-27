@@ -10,6 +10,7 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [userType, setUserType] = useState("");
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // Common fields
   const [name, setName] = useState("");
@@ -115,6 +116,45 @@ function ProfilePage() {
       alert("Failed to update profile.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    setDeleting(true);
+    try {
+      let url = "";
+      const token = localStorage.getItem("token");
+
+      if (userType === "agencies") {
+        url = `${process.env.REACT_APP_TRAVEL_AGENCY_API_BASE_URL}/api/agencies/delete-agency`;
+        await axios.delete(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } else {
+        url = `${process.env.REACT_APP_CUSTOMER_API_BASE_URL}/api/users/delete-account`;
+        await axios.delete(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+
+      // Clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("userType");
+
+      alert("Your account has been deleted successfully.");
+      navigate(userType === "agencies" ? "/login-agency" : "/login-user");
+    } catch (error) {
+      alert("Failed to delete account. Please try again later.");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -228,8 +268,19 @@ function ProfilePage() {
             )}
 
             <div className="profile-actions">
-              <button onClick={handleSave} disabled={saving}>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="save-button"
+              >
                 {saving ? "Saving..." : "Save Changes"}
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="delete-button"
+              >
+                {deleting ? "Deleting..." : "Delete Account"}
               </button>
             </div>
           </div>

@@ -33,7 +33,7 @@ function Home() {
         </div>
       </div>
 
-      <section className="homepage-testimonials">
+      {/* <section className="homepage-testimonials">
         <h2>What Our Users Say</h2>
         <div className="testimonials-grid">
           <div className="testimonial-card">
@@ -82,9 +82,9 @@ function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section className="homepage-features">
+      {/* <section className="homepage-features">
         <h2>Why Choose Us?</h2>
         <div className="features-grid">
           <div className="feature-card">
@@ -124,7 +124,7 @@ function Home() {
             <p>Get the best prices and exclusive offers on every booking.</p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="homepage-bottom-section">
         <h2>

@@ -1,223 +1,187 @@
 body {
-  background: #f3f6fa;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f7f7;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 
 .travel-hero {
-  min-height: 400px;
+  min-height: 220px;
   background-size: cover;
   background-position: center;
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  box-shadow: 0 4px 24px rgba(11, 94, 215, 0.09);
 }
 
 .travel-hero-content {
-  max-width: 600px;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 90px 0 32px 0;
+  padding: 30px 0 16px 0;
   text-align: center;
-  color: #fff;
-  position: relative;
-  z-index: 2;
+  color: #222;
 }
 
 .travel-navbar {
   display: flex;
   justify-content: center;
-  gap: 18px;
-  margin-bottom: 26px;
+  margin-bottom: 12px;
 }
 
 .travel-tab {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
-  border: none;
-  border-radius: 24px;
-  font-size: 1.04rem;
-  font-weight: 700;
-  padding: 10px 30px;
+  background: #eee;
+  color: #222;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 6px 12px;
   cursor: pointer;
-  transition: background 0.16s, color 0.16s, transform 0.13s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  margin: 0 4px;
 }
 
-.travel-tab.active,
-.travel-tab:hover {
-  background: #fff;
-  color: #0b5ed7;
-  transform: scale(1.08);
+.travel-tab.active {
+  background: #3498db;
+  color: #fff;
 }
 
 .travel-tab-icon {
-  font-size: 1.18rem;
+  font-size: 1rem;
+  margin-right: 4px;
 }
 
 .travel-hero-content h1 {
-  font-size: 2.3rem;
-  font-weight: 800;
-  margin-bottom: 12px;
-  letter-spacing: 1px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 .travel-hero-content p {
-  font-size: 1.18rem;
-  font-weight: 400;
-  margin-bottom: 28px;
-  color: #e3eefd;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  color: #444;
 }
 
 .travel-search-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  justify-content: center;
-  align-items: flex-end;
-  background: rgba(255, 255, 255, 0.97);
-  border-radius: 12px;
-  padding: 22px 18px 14px 18px;
-  box-shadow: 0 1px 8px rgba(11, 94, 215, 0.07);
+  display: block;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 4px;
+  margin: 0 auto;
 }
 
 .input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 160px;
+  margin-bottom: 8px;
+  text-align: left;
 }
 
 .input-group label {
-  font-size: 0.98rem;
-  color: #0b5ed7;
-  font-weight: 600;
+  font-size: 0.95rem;
+  color: #3498db;
+  font-weight: bold;
   margin-bottom: 2px;
-  letter-spacing: 0.02em;
+  display: block;
 }
 
 .input-group input[type="text"],
 .input-group input[type="date"] {
-  padding: 10px 12px;
-  border-radius: 6px;
-  border: 1.5px solid #bfc9d1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
   font-size: 1rem;
-  background: #f7f9fb;
+  background: #f7f7f7;
   color: #222;
-  transition: border-color 0.18s;
-}
-
-.input-group input:focus {
-  border-color: #0b5ed7;
-  outline: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .travel-search-form button[type="submit"] {
-  padding: 12px 32px;
-  background: #28a745;
+  padding: 8px 20px;
+  background: #2ecc40;
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 700;
+  border: 1px solid #27ae60;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s, transform 0.13s;
-  margin-top: 8px;
+  margin-top: 6px;
+  width: 100%;
 }
 
-.travel-search-form button[type="submit"]:hover {
-  background: #218838;
-  transform: scale(1.04);
-}
-
-/* Features section */
 .travel-features {
   background: #fff;
-  padding: 48px 0 36px 0;
+  padding: 20px 0 10px 0;
   text-align: center;
 }
 
 .travel-features h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #0b5ed7;
-  margin-bottom: 36px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #3498db;
+  margin-bottom: 14px;
 }
 
 .travel-features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 28px;
-  max-width: 950px;
+  display: block;
+  max-width: 700px;
   margin: 0 auto;
 }
 
 .feature-card {
-  background: #f3f6fa;
-  border-radius: 13px;
-  box-shadow: 0 2px 10px rgba(11, 94, 215, 0.07);
-  padding: 32px 18px 24px 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform 0.18s, box-shadow 0.18s;
-}
-
-.feature-card:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 6px 24px rgba(11, 94, 215, 0.13);
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  padding: 14px 6px;
+  margin: 10px auto;
+  max-width: 320px;
+  text-align: center;
 }
 
 .feature-icon {
-  font-size: 2.2rem;
-  margin-bottom: 14px;
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .feature-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #003366;
-  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 4px;
 }
 
 .feature-card p {
-  font-size: 1rem;
-  color: #333;
+  font-size: 0.95rem;
+  color: #444;
   margin: 0;
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 700px) {
   .travel-hero-content {
-    padding: 36px 0 22px 0;
+    padding: 14px 0 8px 0;
   }
   .travel-features {
-    padding: 32px 0 18px 0;
+    padding: 10px 0 6px 0;
+  }
+  .feature-card {
+    max-width: 98vw;
+    padding: 8px 2px;
   }
 }
 
-@media (max-width: 700px) {
-  .travel-hero-content h1 {
-    font-size: 1.3rem;
-  }
-  .travel-hero-content p {
-    font-size: 1rem;
-  }
-  .travel-navbar {
-    gap: 8px;
-  }
-
-  .travel-search-form {
-    flex-direction: column;
-    gap: 10px;
-    padding: 14px 4px 10px 4px;
-  }
-  .travel-features-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
+.hero-title-box {
+  border: 1px solid #bbb;
+  background: #fff;
+  padding: 12px 10px;
+  margin: 0 auto 18px auto;
+  max-width: 350px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.hero-title-box h1,
+.hero-title-box p {
+  margin: 0 0 8px 0;
+  color: #222;
+}
+.hero-title-box p {
+  margin-bottom: 0;
+  font-size: 1rem;
 }

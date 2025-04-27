@@ -129,8 +129,11 @@ function TravelPage() {
               </button>
             ))}
           </div>
-          <h1>{heroContent[mode].title}</h1>
-          <p>{heroContent[mode].desc}</p>
+          <div className="hero-title-box">
+            <h1>{heroContent[mode].title}</h1>
+            <p>{heroContent[mode].desc}</p>
+          </div>
+
           <form className="travel-search-form" onSubmit={handleSearch}>
             <div className="input-group">
               <label>FROM CITY</label>
@@ -165,7 +168,7 @@ function TravelPage() {
           </form>
         </div>
       </div>
-      <section className="travel-features">
+      {/* <section className="travel-features">
         <h2>Why Book With Us?</h2>
         <div className="travel-features-grid">
           <div className="feature-card">
@@ -189,7 +192,7 @@ function TravelPage() {
             <p>Get exclusive offers and the best prices on every booking.</p>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

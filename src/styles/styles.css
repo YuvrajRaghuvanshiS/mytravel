@@ -6,9 +6,9 @@
 }
 
 body {
-  font-family: "Arial", sans-serif;
-  color: white;
-  background-color: #000;
+  font-family: Arial, sans-serif;
+  color: #222;
+  background: #f5f5f5;
 }
 
 /* Navbar Styling */
@@ -16,126 +16,110 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 50px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  position: fixed;
+  padding: 10px 12px;
+  background: #222;
+  color: #fff;
   width: 100%;
-  top: 0;
-  z-index: 10;
+  position: static;
 }
 
 nav a {
-  color: white;
+  color: #fff;
   text-decoration: none;
-  margin-left: 20px;
-  font-size: 16px;
-  transition: color 0.3s ease;
+  margin-left: 10px;
+  font-size: 1rem;
 }
 
 nav a:hover {
-  color: #f39c12;
+  text-decoration: underline;
+  color: #e67e22;
 }
 
 /* Hero Section */
 .hero-container {
-  position: relative;
-  background-image: url("../images/travel.jpg"); /* Add your image here */
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
+  background: #e0e0e0;
+  height: 320px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 0 20px;
-}
-
-.hero-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.5
-  ); /* Black overlay with 50% transparency */
-  z-index: 1;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .hero-text {
+  z-index: 1;
   position: relative;
-  z-index: 2; /* To make sure text stays above the overlay */
 }
 
 .hero-text h1 {
-  font-size: 55px;
-  margin-bottom: 20px;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
   font-weight: bold;
+  color: #1976d2;
 }
 
 .hero-text p {
-  font-size: 20px;
-  margin-bottom: 30px;
-  color: #ddd;
+  font-size: 1rem;
+  margin-bottom: 14px;
+  color: #333;
 }
 
 /* Hero Buttons */
 .hero-buttons button {
-  padding: 12px 30px;
-  margin: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
+  padding: 7px 20px;
+  margin: 5px;
+  font-size: 1rem;
+  border: 1px solid #e67e22;
+  background: #e67e22;
+  color: #fff;
   cursor: pointer;
-  background-color: #e67e22;
-  color: white;
-  transition: 0.3s;
 }
 
 .hero-buttons button:hover {
-  background-color: #d35400;
-  transform: scale(1.05);
+  background: #d35400;
 }
 
-/* Bottom Trusted Section */
 .bottom-section {
-  padding: 60px 20px;
-  background-color: #f8f8f8;
+  padding: 24px 8px;
+  background: #fff;
   text-align: center;
-  color: #333;
+  color: #222;
+  border-top: 1px solid #ddd;
 }
 
 .bottom-section h2 {
-  font-weight: 400;
-  font-size: 24px;
-  max-width: 900px;
-  margin: auto;
+  font-weight: bold;
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   nav {
-    padding: 15px 25px;
+    padding: 6px 4px;
+    font-size: 0.95rem;
+  }
+
+  .hero-container {
+    height: 180px;
+    padding: 0 2px;
   }
 
   .hero-text h1 {
-    font-size: 35px;
+    font-size: 1rem;
   }
 
   .hero-text p {
-    font-size: 16px;
+    font-size: 0.92rem;
   }
 
   .hero-buttons button {
-    width: 80%;
+    width: 100%;
+    font-size: 0.95rem;
   }
 
   .bottom-section h2 {
-    font-size: 18px;
+    font-size: 0.9rem;
   }
 }

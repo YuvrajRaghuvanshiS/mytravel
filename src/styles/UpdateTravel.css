@@ -1,45 +1,55 @@
-/* src/styles/UpdateTravel.css */
-
 .update-travel-container {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  font-family: "Segoe UI", sans-serif;
+  max-width: 600px;
+  margin: 18px auto;
+  padding: 10px 6px;
+  background: #fff;
+  border: 1px solid #bbb;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 .update-travel-container h2 {
   text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
+  margin-bottom: 14px;
+  color: #1976d2;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .update-travel-form .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 10px;
 }
 
 .update-travel-form label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #222;
+  font-size: 0.97rem;
 }
 
 .update-travel-form input,
 .update-travel-form textarea {
   width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  font-size: 0.97rem;
+  background: #f8f8f8;
+  color: #222;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.update-travel-form textarea {
+  min-height: 40px;
+  resize: vertical;
 }
 
 .update-travel-form .seat-row {
   display: flex;
-  gap: 1rem;
+  gap: 6px;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 6px;
 }
 
 .update-travel-form .seat-row input[type="text"] {
@@ -51,55 +61,72 @@
 }
 
 .update-travel-form .seat-row button {
-  background-color: #dc3545;
+  background: #dc3545;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 6px 10px;
+  font-size: 0.97rem;
+  font-weight: bold;
+  padding: 3px 8px;
   cursor: pointer;
+  border-radius: 0;
 }
 
 .update-travel-form .seat-row button:hover {
-  background-color: #c82333;
+  opacity: 0.85;
 }
 
 .update-travel-form .add-seat-btn {
   display: inline-block;
-  background-color: #007bff;
+  background: #1976d2;
   color: white;
-  padding: 8px 14px;
+  padding: 5px 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: 8px;
+  font-size: 0.97rem;
+  font-weight: bold;
 }
 
 .update-travel-form .add-seat-btn:hover {
-  background-color: #0069d9;
+  opacity: 0.85;
 }
 
 .update-travel-form .submit-btn {
   width: 100%;
-  padding: 12px;
-  background-color: #28a745;
+  padding: 8px 0;
+  background: #28a745;
   color: white;
   font-weight: bold;
   font-size: 1rem;
   border: none;
-  border-radius: 8px;
-  margin-top: 2rem;
+  border-radius: 0;
+  margin-top: 14px;
   cursor: pointer;
 }
 
 .update-travel-form .submit-btn:hover {
-  background-color: #218838;
+  background: #218838;
 }
 
 .back-link {
   display: block;
   text-align: center;
-  margin-top: 1rem;
-  color: #007bff;
+  margin-top: 10px;
+  color: #1976d2;
   text-decoration: underline;
   cursor: pointer;
+  font-size: 0.97rem;
+}
+
+@media (max-width: 600px) {
+  .update-travel-container {
+    padding: 4px 1px;
+    max-width: 98vw;
+  }
+  .update-travel-form .seat-row {
+    flex-direction: column;
+    gap: 3px;
+    align-items: stretch;
+  }
 }

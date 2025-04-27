@@ -1,78 +1,79 @@
+body {
+  background: #f5f5f5;
+  color: #222;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .agency-dashboard {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: auto;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f1f3f5;
+  padding: 12px 4px;
+  max-width: 1100px;
+  margin: 12px auto;
+  background: #fff;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
 }
 
 .agency-profile,
 .agency-info,
 .travel-section {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 1.5rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  background: #f8f8f8;
+  border: 1px solid #bbb;
+  padding: 10px 8px;
+  margin-bottom: 14px;
 }
 
 .agency-profile h2,
 .travel-section h2,
 .agency-info h2 {
-  margin-bottom: 1rem;
-  color: #003366;
-  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #1976d2;
+  font-size: 1.05rem;
 }
 
 .agency-info p {
-  font-size: 1rem;
-  color: #333;
-  margin: 0.4rem 0;
-}
-
-.green-btn {
-  background: #007bff;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s;
-  font-size: 0.95rem;
+  font-size: 0.97rem;
+  color: #222;
+  margin: 2px 0;
 }
 
 .green-btn {
   background: #28a745;
+  color: #fff;
+  padding: 6px 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.97rem;
+  border-radius: 0;
 }
 
-.green-btn:hover,
+.green-btn:hover {
+  opacity: 0.85;
+}
+
 .travel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 8px;
 }
 
 .travel-list {
   list-style: none;
   padding: 0;
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
 .travel-card {
-  background: #ffffff;
-  padding: 1rem;
-  border-left: 5px solid #007bff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s;
-}
-
-.travel-card:hover {
-  transform: translateY(-3px);
+  background: #fff;
+  padding: 8px;
+  border-left: 3px solid #1976d2;
+  border: 1px solid #bbb;
+  box-sizing: border-box;
 }
 
 .travel-card .travel-header-row {
@@ -80,181 +81,148 @@
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-bottom: 4px;
 }
 
 .travel-card p {
-  margin: 0.3rem 0;
-  font-size: 0.95rem;
-  color: #333;
+  margin: 2px 0;
+  font-size: 0.97rem;
+  color: #222;
 }
 
 .tag {
   background: #e1f0ff;
-  color: #0056b3;
-  padding: 0.3rem 0.7rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  color: #1976d2;
+  padding: 2px 6px;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: bold;
 }
 
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .travel-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-}
-
-/*  this is for add travell router by agency */
 .profile-form input {
   width: 100%;
-  padding: 0.6rem 1rem;
-  margin-top: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
+  padding: 6px 8px;
+  margin-top: 2px;
+  border: 1px solid #bbb;
+  font-size: 0.97rem;
+  border-radius: 0;
 }
 
-/*  for seat mapping for travel router page */
 .seat-map {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 1rem;
+  gap: 4px;
+  margin-top: 6px;
 }
+
 .seat-row {
   display: flex;
-  gap: 12px;
+  gap: 5px;
 }
+
 .seat-box {
-  width: 50px;
-  height: 40px;
+  width: 28px;
+  height: 28px;
   background: #e0e0e0;
   color: #000;
   text-align: center;
-  line-height: 40px;
-  border-radius: 5px;
+  line-height: 28px;
+  border: 1px solid #999;
   cursor: pointer;
   font-weight: bold;
-}
-.seat-box.selected {
-  background-color: #28a745;
-  color: #fff;
-}
-.seat-space {
-  width: 50px;
-  height: 40px;
+  border-radius: 0;
+  box-sizing: border-box;
 }
 
-/*  this css is for delete button  */
+.seat-box.selected {
+  background: #28a745;
+  color: #fff;
+}
+
+.seat-space {
+  width: 28px;
+  height: 28px;
+}
+
 .delete-btn {
   background: #dc3545;
-  color: white;
+  color: #fff;
   border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
+  padding: 4px 10px;
+  border-radius: 0;
+  margin-top: 4px;
   cursor: pointer;
-  font-size: 0.85rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-  transition: background 0.3s ease;
+  font-size: 0.93rem;
 }
 
 .delete-btn:hover {
-  background: #c82333;
+  opacity: 0.85;
 }
-/* for update vbutton of travel router */
+
 .update-btn {
-  background-color: #ffc107;
+  background: #ffc107;
   color: #000;
   border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: 0;
   cursor: pointer;
-  font-weight: 500;
-  margin-left: 0.6rem;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  margin-left: 4px;
 }
 
 .update-btn:hover {
-  background-color: #e0a800;
+  opacity: 0.85;
 }
+
 .action-btns {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 0.8rem;
-  gap: 0.5rem;
-}
-.seat-map {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.seat-row {
-  display: flex;
-  gap: 10px;
-}
-
-.seat-box {
-  width: 40px;
-  height: 40px;
-  background-color: #d3d3d3;
-  border: 1px solid #999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.seat-box.selected {
-  background-color: #4caf50;
-  color: white;
-  font-weight: bold;
-}
-
-.seat-space {
-  width: 40px;
-  height: 40px;
+  margin-top: 6px;
+  gap: 4px;
 }
 
 .welcome-banner {
-  background-image: url("../images/mountains.jpg");
-  background-size: cover;
-  background-position: center;
+  background: #e0e0e0;
   width: 100%;
-  min-height: 350px;
+  background-image: url("../images/mountains.jpg");
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .welcome-section {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 40px;
-  border-radius: 10px;
+  background: #fff;
+  padding: 18px;
   text-align: center;
-  min-width: 450px;
-  position: relative;
+  min-width: 220px;
   margin: 0 auto;
 }
 
 .welcome-section h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 18px;
-  letter-spacing: 1px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
 }
 
 .travel-quote {
   font-style: italic;
-  font-size: 1.3rem;
-  margin-bottom: 24px;
-  color: #144c43;
-  line-height: 1.5;
+  font-size: 0.97rem;
+  margin-bottom: 10px;
+  color: #1976d2;
+  line-height: 1.3;
+}
+
+@media screen and (max-width: 768px) {
+  .travel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .travel-list {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }

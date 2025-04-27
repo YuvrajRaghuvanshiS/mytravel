@@ -400,7 +400,7 @@ function TicketsPage() {
                         </div>
                         <div>
                           <div className="time">
-                            {ticket.arrivalTime?.substring(11, 16)}
+                            {ticket.reachTime?.substring(11, 16)}
                           </div>
                           <div className="small">{ticket.destination}</div>
                         </div>

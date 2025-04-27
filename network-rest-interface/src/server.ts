@@ -49,17 +49,11 @@ export const createServer = async (): Promise<Application> => {
     // initialize passport js
     app.use(passport.initialize());
 
-    if (process.env.NODE_ENV === 'development') {
-        app.use(cors());
-    }
-
-    if (process.env.NODE_ENV === 'test') {
-        // TBC
-    }
-
-    if (process.env.NODE_ENV === 'production') {
-        app.use(helmet());
-    }
+    app.use(cors({
+        origin: "*", 
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "X-Api-Key"],
+    }));
 
     app.use('/', healthRouter);
     app.use('/api/bookings', authenticateApiKey, bookingsRouter);

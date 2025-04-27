@@ -327,6 +327,7 @@ function TicketsPage() {
               >
                 <option value="">None</option>
                 <option value="price">Price</option>
+                <option value="ratings">Ratings</option>
                 <option value="departureTime">Departure Time</option>
               </select>
             </div>

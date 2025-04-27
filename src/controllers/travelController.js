@@ -173,7 +173,7 @@ export const updateTravelOption = (req, res) => {
 
       if (isNaN(depTime) || isNaN(arrTime) || isNaN(rechTime))
         throw new Error();
-      if (depTime >= arrTime || arrTime >= rechTime) {
+      if (arrTime >= depTime || arrTime >= rechTime) {
         return res
           .status(400)
           .json({ success: false, message: "Invalid travel timings" });

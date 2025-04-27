@@ -10,6 +10,7 @@ function MyBookingsPage() {
   const [travelOptions, setTravelOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [verifyStatus, setVerifyStatus] = useState({}); // {bookingID: {loading, verified, details}}
+  const [blockchainBookings, setBlockchainBookings] = useState({}); // {bookingID: bookingObject}
 
   // API base URL
   const CUST_BASE_URL = process.env.REACT_APP_CUSTOMER_API_BASE_URL;
@@ -30,9 +31,9 @@ function MyBookingsPage() {
         setBookings(bookingsRes.data.data);
         setTravelOptions(travelRes.data.travelOptions);
 
-        // For each booking, fetch verification status
+        // For each booking, fetch verification status and blockchain booking
         bookingsRes.data.data.forEach((booking) => {
-          fetchVerifyStatus(booking.bookingID);
+          fetchVerifyStatusAndBlockchain(booking.bookingID);
         });
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -47,14 +48,15 @@ function MyBookingsPage() {
     // eslint-disable-next-line
   }, [navigate]);
 
-  // Fetch blockchain verification for a booking
-  const fetchVerifyStatus = async (bookingID) => {
+  // Fetch blockchain verification and blockchain booking for a booking
+  const fetchVerifyStatusAndBlockchain = async (bookingID) => {
     const token = localStorage.getItem("token");
     setVerifyStatus((prev) => ({
       ...prev,
       [bookingID]: { loading: true },
     }));
     try {
+      // Verification status
       const res = await axios.post(
         `${CUST_BASE_URL}/api/travel/verify`,
         { bookingID },
@@ -77,6 +79,30 @@ function MyBookingsPage() {
           details: null,
           error: true,
         },
+      }));
+    }
+
+    // Blockchain booking object
+    try {
+      const blockchainRes = await axios.get(
+        // `http://fabric-rest-sample.localho.st/api/bookings/${bookingID}`,
+        `http://127.0.0.1:8080/api/bookings/${bookingID}`,
+        {
+          headers: {
+            "X-Api-Key": "97834158-3224-4CE7-95F9-A148C886653E",
+          },
+        }
+      );
+      console.log(blockchainRes);
+      setBlockchainBookings((prev) => ({
+        ...prev,
+        [bookingID]: blockchainRes.data,
+      }));
+    } catch (err) {
+      console.log(err);
+      setBlockchainBookings((prev) => ({
+        ...prev,
+        [bookingID]: null,
       }));
     }
   };
@@ -218,35 +244,132 @@ function MyBookingsPage() {
                     </span>
                   </div>
 
-                  {expandedBooking === booking.bookingID && verify.details && (
+                  {/* Blockchain Details and Booking Object */}
+                  {expandedBooking === booking.bookingID && (
                     <div className="blockchain-details">
-                      <div>
-                        <strong>Blockchain TxID:</strong>{" "}
-                        <span className="mono">
-                          {verify.details.blockchainTxID}
-                        </span>
-                      </div>
-                      <div>
-                        <strong>Block Height:</strong>{" "}
-                        {verify.details.blockHeight}
-                      </div>
-                      <div>
-                        <strong>Blockchain Height:</strong>{" "}
-                        {verify.details.blockchainHeight}
-                      </div>
-                      <div>
-                        <strong>Confirmations:</strong>{" "}
-                        {verify.details.confirmationDepth} /{" "}
-                        {verify.details.verificationThreshold}
-                      </div>
-                      <div>
-                        <strong>Verified At:</strong>{" "}
-                        {verify.details.verificationTimestamp
-                          ? new Date(
-                              verify.details.verificationTimestamp
-                            ).toLocaleString()
-                          : "N/A"}
-                      </div>
+                      {verify.details && (
+                        <>
+                          <div>
+                            <strong>Blockchain TxID:</strong>{" "}
+                            <span className="mono">
+                              {verify.details.blockchainTxID}
+                            </span>
+                          </div>
+                          <div>
+                            <strong>Block Height:</strong>{" "}
+                            {verify.details.blockHeight}
+                          </div>
+                          <div>
+                            <strong>Blockchain Height:</strong>{" "}
+                            {verify.details.blockchainHeight}
+                          </div>
+                          <div>
+                            <strong>Confirmations:</strong>{" "}
+                            {verify.details.confirmationDepth} /{" "}
+                            {verify.details.verificationThreshold}
+                          </div>
+                          <div>
+                            <strong>Verified At:</strong>{" "}
+                            {verify.details.verificationTimestamp
+                              ? new Date(
+                                  verify.details.verificationTimestamp
+                                ).toLocaleString()
+                              : "N/A"}
+                          </div>
+                        </>
+                      )}
+
+                      {blockchainBookings[booking.bookingID] && (
+                        <div className="blockchain-booking-details">
+                          <h4>Booking Data on Blockchain</h4>
+                          <div>
+                            <strong>Agency ID:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].agencyID}
+                          </div>
+                          <div>
+                            <strong>Available Seats:</strong>{" "}
+                            {
+                              blockchainBookings[booking.bookingID]
+                                .availableSeats
+                            }
+                          </div>
+                          <div>
+                            <strong>Booking ID:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].bookingID}
+                          </div>
+                          <div>
+                            <strong>Status:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].status}
+                          </div>
+                          <div>
+                            <strong>Seat Numbers:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].seatNumbers}
+                          </div>
+                          <div>
+                            <strong>Total Price:</strong> ₹
+                            {blockchainBookings[booking.bookingID].totalPrice}
+                          </div>
+                          <div>
+                            <strong>Penalty:</strong> ₹
+                            {blockchainBookings[booking.bookingID].penalty}
+                          </div>
+                          <div>
+                            <strong>Refund Amount:</strong> ₹
+                            {blockchainBookings[booking.bookingID].refundAmount}
+                          </div>
+                          <div>
+                            <strong>Is User Anonymous:</strong>{" "}
+                            {blockchainBookings[booking.bookingID]
+                              .isUserAnonymous
+                              ? "Yes"
+                              : "No"}
+                          </div>
+                          <div>
+                            <strong>User Hash:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].userHash}
+                          </div>
+                          <div>
+                            <strong>Created At:</strong>{" "}
+                            {new Date(
+                              blockchainBookings[booking.bookingID].createdAt
+                            ).toLocaleString()}
+                          </div>
+                          <div>
+                            <strong>Updated At:</strong>{" "}
+                            {new Date(
+                              blockchainBookings[booking.bookingID].updatedAt
+                            ).toLocaleString()}
+                          </div>
+                          <div>
+                            <strong>Cancelled At:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].cancelledAt
+                              ? new Date(
+                                  blockchainBookings[
+                                    booking.bookingID
+                                  ].cancelledAt
+                                ).toLocaleString()
+                              : "N/A"}
+                          </div>
+                          <div>
+                            <strong>Travel ID:</strong>{" "}
+                            {blockchainBookings[booking.bookingID].travelID}
+                          </div>
+                          <div>
+                            <strong>Hyperledger TxID:</strong>{" "}
+                            {
+                              blockchainBookings[booking.bookingID]
+                                .hyperledgerTxId
+                            }
+                          </div>
+                          <div>
+                            <strong>Transaction ID:</strong>{" "}
+                            {
+                              blockchainBookings[booking.bookingID]
+                                .transactionID
+                            }
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 

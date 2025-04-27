@@ -6,11 +6,12 @@ This directory contains the smart contracts (chaincode) that implement the busin
 
 The chaincode is written in TypeScript using the Fabric Contract API. It provides functionality for:
 
-- Creating and maintaining travel records
-- Managing ticket bookings
-- Processing payments
-- Verifying ticket validity
-- Handling refunds
+- Creating booking
+- Updating booking
+- Checking if booking exists
+- Get all bookings
+- Delete bookings
+
 
 ## Chaincode Structure
 

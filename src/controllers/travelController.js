@@ -408,6 +408,7 @@ export const receiveBooking = async (req, res) => {
     status,
     refundAmount,
     penalty,
+    availableSeats,
   } = req.body;
 
   // Validate input
@@ -421,7 +422,8 @@ export const receiveBooking = async (req, res) => {
     !seatNumbers ||
     !totalPrice ||
     !transactionID ||
-    !status
+    !status ||
+    !availableSeats
   ) {
     return res
       .status(400)
@@ -441,7 +443,7 @@ export const receiveBooking = async (req, res) => {
     seatNumbers.forEach((seatNum) => {
       const seat = travelOption.seats.find((s) => s.seatNumber === seatNum);
       seat.booked = true;
-      seat.passenger = userID;
+      seat.passenger = userHash;
     });
 
     // Credit agency wallet
@@ -467,6 +469,7 @@ export const receiveBooking = async (req, res) => {
       status,
       refundAmount,
       penalty,
+      availableSeats,
     };
     bookings.push(booking);
 

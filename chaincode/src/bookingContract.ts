@@ -27,7 +27,8 @@ export class BookingContract extends Contract {
     transactionID: string,
     status: string,
     refundAmount: number,
-    penalty: number
+    penalty: number,
+    availableSeats: number
   ): Promise<void> {
     const booking = new Booking();
     booking.bookingID = bookingID;
@@ -45,6 +46,7 @@ export class BookingContract extends Contract {
     booking.status = status;
     booking.refundAmount = refundAmount;
     booking.penalty = penalty;
+    booking.availableSeats = availableSeats;
     booking.hyperledgerTxId = ctx.stub.getTxID();
 
     console.log("booking:", booking);

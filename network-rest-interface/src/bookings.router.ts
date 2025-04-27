@@ -114,6 +114,7 @@ bookingsRouter.post(
     body('status', 'must be a string').notEmpty().isString(),
     body('refundAmount', 'must be a number, can be empty').isNumeric(),
     body('penalty', 'must be a number, can be empty').isNumeric(),
+    body('availableSeats', 'must be a number, can be empty').isNumeric(),
     async (req: Request, res: Response) => {
         logger.debug(req.body, 'Create booking request received');
 
@@ -151,7 +152,8 @@ bookingsRouter.post(
                 req.body.transactionID,
                 req.body.status,
                 req.body.refundAmount,
-                req.body.penalty
+                req.body.penalty,
+                req.body.availableSeats,
             );
 
             return res.status(ACCEPTED).json({

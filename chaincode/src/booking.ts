@@ -52,6 +52,9 @@ export class Booking {
   public penalty: number = 0;
 
   @Property()
+  public availableSeats: number = 0;
+
+  @Property()
   public hyperledgerTxId: string =
     "8a0f66758c9ece3154d68fa173f9403de42ba6955f1e690e3de5df5f031c2...";
 }

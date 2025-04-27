@@ -73,6 +73,12 @@ export const travelOptionsFilter = (
       agencyTravels.sort(
         (a, b) => new Date(a.departureTime) - new Date(b.departureTime)
       );
+    } else if (sortBy === "ratings") {
+      agencyTravels.sort(
+        (a, b) =>
+          agencies[b.agencyId].rating.totalScore -
+          agencies[a.agencyId].rating.totalScore
+      );
     }
   }
 

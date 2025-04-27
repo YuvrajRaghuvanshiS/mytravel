@@ -53,3 +53,5 @@ sleep 5
 
 
 # kind load docker-image customer-backend-typescript:latest # After creating docker image, pull it inside kind
+
+kubectl -n test-network port-forward svc/fabric-rest-sample 3003:3000

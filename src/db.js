@@ -49,7 +49,7 @@ export const agencies = {
     agencyType: "private",
     balance: 1000,
     rating: {
-      totalRatings: 10,
+      totalRatings: 100,
       totalScore: 329,
     },
   },

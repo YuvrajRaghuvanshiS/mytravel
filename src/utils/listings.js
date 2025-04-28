@@ -74,11 +74,19 @@ export const travelOptionsFilter = (
         (a, b) => new Date(a.departureTime) - new Date(b.departureTime)
       );
     } else if (sortBy === "ratings") {
-      agencyTravels.sort(
-        (a, b) =>
-          agencies[b.agencyId].rating.totalScore -
-          agencies[a.agencyId].rating.totalScore
-      );
+      agencyTravels.sort((a, b) => {
+        const aRatings = agencies[a.agencyId].rating;
+        const bRatings = agencies[b.agencyId].rating;
+        const aAvg =
+          aRatings.totalRatings > 0
+            ? aRatings.totalScore / aRatings.totalRatings
+            : 0;
+        const bAvg =
+          bRatings.totalRatings > 0
+            ? bRatings.totalScore / bRatings.totalRatings
+            : 0;
+        return bAvg - aAvg;
+      });
     }
   }
 

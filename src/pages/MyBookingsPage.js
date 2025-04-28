@@ -86,7 +86,7 @@ function MyBookingsPage() {
     try {
       const blockchainRes = await axios.get(
         // `http://fabric-rest-sample.localho.st/api/bookings/${bookingID}`,
-        `http://206.1.53.15:3003/api/bookings/${bookingID}`,
+        `http://206.1.53.62:3003/api/bookings/${bookingID}`,
         {
           headers: {
             "X-Api-Key": "97834158-3224-4CE7-95F9-A148C886653E",

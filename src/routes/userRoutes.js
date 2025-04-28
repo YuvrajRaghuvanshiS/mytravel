@@ -9,5 +9,5 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 router.get("/me", authMiddleware, getCustomerInfo);
 router.put("/update-profile", authMiddleware, updateCustomerProfile);
-router.put("/delete-account", authMiddleware, deleteUserAccount);
+router.delete("/delete-account", authMiddleware, deleteUserAccount);
 export default router;

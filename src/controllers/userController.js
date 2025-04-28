@@ -1,4 +1,5 @@
-import { users } from "../db.js";
+import { users, bookings, travelOptions } from "../db.js";
+import axios from "axios";
 
 export const getCustomerInfo = (req, res) => {
   const userId = req.user.id;
